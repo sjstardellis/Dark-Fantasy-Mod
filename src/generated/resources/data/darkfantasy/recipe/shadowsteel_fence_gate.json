@@ -1,0 +1,16 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "category": "redstone",
+  "group": "shadowsteel",
+  "key": {
+    "#": "minecraft:stick",
+    "W": "darkfantasy:shadowsteel"
+  },
+  "pattern": [
+    "#W#",
+    "#W#"
+  ],
+  "result": {
+    "id": "darkfantasy:shadowsteel_fence_gate"
+  }
+}

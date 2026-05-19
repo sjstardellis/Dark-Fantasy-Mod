@@ -1,0 +1,13 @@
+{
+  "variants": {
+    "type=bottom": {
+      "model": "darkfantasy:block/shadowsteel_slab"
+    },
+    "type=double": {
+      "model": "darkfantasy:block/shadowsteel_block"
+    },
+    "type=top": {
+      "model": "darkfantasy:block/shadowsteel_slab_top"
+    }
+  }
+}

@@ -1,0 +1,11 @@
+{
+  "type": "minecraft:crafting_shapeless",
+  "category": "redstone",
+  "group": "shadowsteel",
+  "ingredients": [
+    "darkfantasy:shadowsteel"
+  ],
+  "result": {
+    "id": "darkfantasy:shadowsteel_button"
+  }
+}

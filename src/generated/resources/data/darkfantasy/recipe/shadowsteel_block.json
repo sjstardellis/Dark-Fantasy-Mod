@@ -1,0 +1,16 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "category": "building",
+  "group": "shadowsteel",
+  "key": {
+    "A": "darkfantasy:shadowsteel"
+  },
+  "pattern": [
+    "AAA",
+    "AAA",
+    "AAA"
+  ],
+  "result": {
+    "id": "darkfantasy:shadowsteel_block"
+  }
+}
