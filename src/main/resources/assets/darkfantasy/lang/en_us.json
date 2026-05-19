@@ -1,0 +1,13 @@
+{
+  "itemGroup.darkfantasy": "Example Mod Tab",
+  "block.darkfantasy.example_block": "Example Block",
+  "item.darkfantasy.example_item": "Example Item",
+
+  "darkfantasy.configuration.title": "Dark Fantasy Configs",
+  "darkfantasy.configuration.section.darkfantasy.common.toml": "Dark Fantasy Configs",
+  "darkfantasy.configuration.section.darkfantasy.common.toml.title": "Dark Fantasy Configs",
+  "darkfantasy.configuration.items": "Item List",
+  "darkfantasy.configuration.logDirtBlock": "Log Dirt Block",
+  "darkfantasy.configuration.magicNumberIntroduction": "Magic Number Text",
+  "darkfantasy.configuration.magicNumber": "Magic Number"
+}
