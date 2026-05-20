@@ -38,22 +38,12 @@ public class ModCreativeModeTabs {
                     .title(Component.translatable("creativetab.darkfantasy.darkfantasy_blocks"))
                     .displayItems((itemDisplayParameters, output) -> {
                         output.accept(ModBlocks.SHADOWSTEEL_BLOCK);
-                        output.accept(ModBlocks.RAW_SHADOWSTEEL_BLOCK);
 
                         output.accept(ModBlocks.SHADOWSTEEL_ORE);
                         output.accept(ModBlocks.SHADOWSTEEL_DEEPSLATE_ORE);
 
                         output.accept(ModBlocks.CURSED_BLOCK);
-
-                        output.accept(ModBlocks.SHADOWSTEEL_STAIRS);
-                        output.accept(ModBlocks.SHADOWSTEEL_SLAB);
-                        output.accept(ModBlocks.SHADOWSTEEL_PRESSURE_PLATE);
-                        output.accept(ModBlocks.SHADOWSTEEL_BUTTON);
-                        output.accept(ModBlocks.SHADOWSTEEL_FENCE);
-                        output.accept(ModBlocks.SHADOWSTEEL_FENCE_GATE);
-                        output.accept(ModBlocks.SHADOWSTEEL_WALL);
-                        output.accept(ModBlocks.SHADOWSTEEL_DOOR);
-                        output.accept(ModBlocks.SHADOWSTEEL_TRAPDOOR);
+                        output.accept(ModBlocks.ALCHEMY_STAND);
                     }).build());
 
 

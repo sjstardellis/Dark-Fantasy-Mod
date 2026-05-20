@@ -41,6 +41,7 @@ public class ModRecipeProvider extends RecipeProvider {
 
     @Override
     protected void buildRecipes() {
+        // Shadowsteel block <-> 9 ingots
         shaped(RecipeCategory.BUILDING_BLOCKS, ModBlocks.SHADOWSTEEL_BLOCK.get())
                 .pattern("AAA")
                 .pattern("AAA")
@@ -56,43 +57,16 @@ public class ModRecipeProvider extends RecipeProvider {
                 .group("shadowsteel")
                 .save(output);
 
-        shapeless(RecipeCategory.MISC, ModItems.SHADOWSTEEL.get(), 18)
-                .requires(ModBlocks.SHADOWSTEEL_BLOCK)
-                .requires(Items.BLAZE_POWDER)
-                .unlockedBy(getHasName(ModBlocks.SHADOWSTEEL_BLOCK.get()), has(ModBlocks.SHADOWSTEEL_BLOCK))
-                .group("shadowsteel")
-                .save(output, "darkfantasy:shadowsteel_from_blaze_powder");
-
-        List<ItemLike> SHADOWSTEEL_SMELTABLES = List.of(ModItems.RAW_SHADOWSTEEL, ModBlocks.SHADOWSTEEL_ORE,
+        // Smelt raw_shadowsteel or ores -> shadowsteel
+        List<ItemLike> SHADOWSTEEL_SMELTABLES = List.of(
+                ModItems.RAW_SHADOWSTEEL,
+                ModBlocks.SHADOWSTEEL_ORE,
                 ModBlocks.SHADOWSTEEL_DEEPSLATE_ORE);
 
-        oreSmelting(SHADOWSTEEL_SMELTABLES, RecipeCategory.MISC, CookingBookCategory.MISC, ModItems.SHADOWSTEEL.get(), 0.25f, 200, "shadowsteel");
-        oreBlasting(SHADOWSTEEL_SMELTABLES, RecipeCategory.MISC, CookingBookCategory.MISC, ModItems.SHADOWSTEEL.get(), 0.25f, 100, "shadowsteel");
-
-        stairBuilder(ModBlocks.SHADOWSTEEL_STAIRS.get(), Ingredient.of(ModBlocks.SHADOWSTEEL_BLOCK))
-                .unlockedBy(getHasName(ModBlocks.SHADOWSTEEL_BLOCK.get()), has(ModBlocks.SHADOWSTEEL_BLOCK))
-                .group("shadowsteel").save(output);
-        slab(RecipeCategory.BUILDING_BLOCKS, ModBlocks.SHADOWSTEEL_SLAB.get(), ModBlocks.SHADOWSTEEL_BLOCK.get());
-
-        buttonBuilder(ModBlocks.SHADOWSTEEL_BUTTON.get(), Ingredient.of(ModItems.SHADOWSTEEL.get()))
-                .unlockedBy(getHasName(ModItems.SHADOWSTEEL.get()), has(ModItems.SHADOWSTEEL))
-                .group("shadowsteel").save(output);
-        pressurePlate(ModBlocks.SHADOWSTEEL_PRESSURE_PLATE.get(), ModItems.SHADOWSTEEL.get());
-
-        fenceBuilder(ModBlocks.SHADOWSTEEL_FENCE.get(), Ingredient.of(ModItems.SHADOWSTEEL.get()))
-                .unlockedBy(getHasName(ModItems.SHADOWSTEEL.get()), has(ModItems.SHADOWSTEEL))
-                .group("shadowsteel").save(output);
-        fenceGateBuilder(ModBlocks.SHADOWSTEEL_FENCE_GATE.get(), Ingredient.of(ModItems.SHADOWSTEEL.get()))
-                .unlockedBy(getHasName(ModItems.SHADOWSTEEL.get()), has(ModItems.SHADOWSTEEL))
-                .group("shadowsteel").save(output);
-        wall(RecipeCategory.BUILDING_BLOCKS, ModBlocks.SHADOWSTEEL_WALL.get(), ModBlocks.SHADOWSTEEL_BLOCK.get());
-
-        doorBuilder(ModBlocks.SHADOWSTEEL_DOOR.get(), Ingredient.of(ModItems.SHADOWSTEEL.get()))
-                .unlockedBy(getHasName(ModItems.SHADOWSTEEL.get()), has(ModItems.SHADOWSTEEL))
-                .group("shadowsteel").save(output);
-        trapdoorBuilder(ModBlocks.SHADOWSTEEL_TRAPDOOR.get(), Ingredient.of(ModItems.SHADOWSTEEL.get()))
-                .unlockedBy(getHasName(ModItems.SHADOWSTEEL.get()), has(ModItems.SHADOWSTEEL))
-                .group("shadowsteel").save(output);
+        oreSmelting(SHADOWSTEEL_SMELTABLES, RecipeCategory.MISC, CookingBookCategory.MISC,
+                ModItems.SHADOWSTEEL.get(), 0.25f, 200, "shadowsteel");
+        oreBlasting(SHADOWSTEEL_SMELTABLES, RecipeCategory.MISC, CookingBookCategory.MISC,
+                ModItems.SHADOWSTEEL.get(), 0.25f, 100, "shadowsteel");
     }
 
     @Override
@@ -100,7 +74,8 @@ public class ModRecipeProvider extends RecipeProvider {
                                                                 RecipeCategory craftingCategory, CookingBookCategory cookingCategory, ItemLike result,
                                                                 float experience, int cookingTime, String group, String fromDesc) {
         for (ItemLike itemlike : smeltables) {
-            SimpleCookingRecipeBuilder.generic(Ingredient.of(itemlike), craftingCategory, cookingCategory, result, experience, cookingTime, factory).group(group).unlockedBy(getHasName(itemlike), has(itemlike))
+            SimpleCookingRecipeBuilder.generic(Ingredient.of(itemlike), craftingCategory, cookingCategory, result, experience, cookingTime, factory)
+                    .group(group).unlockedBy(getHasName(itemlike), has(itemlike))
                     .save(output, DarkFantasy.MOD_ID + ":" + getItemName(result) + fromDesc + "_" + getItemName(itemlike));
         }
     }

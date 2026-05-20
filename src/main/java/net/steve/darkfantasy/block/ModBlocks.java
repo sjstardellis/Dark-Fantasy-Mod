@@ -1,6 +1,7 @@
 package net.steve.darkfantasy.block;
 
 import net.steve.darkfantasy.DarkFantasy;
+import net.steve.darkfantasy.block.custom.AlchemyStandBlock;
 import net.steve.darkfantasy.block.custom.CursedBlock;
 import net.steve.darkfantasy.item.ModItems;
 import net.minecraft.network.chat.Component;
@@ -30,9 +31,6 @@ public class ModBlocks {
     public static final DeferredBlock<Block> SHADOWSTEEL_BLOCK = registerBlock("shadowsteel_block",
             properties -> new Block(properties.strength(4f)
                     .requiresCorrectToolForDrops().sound(SoundType.AMETHYST)));
-    public static final DeferredBlock<Block> RAW_SHADOWSTEEL_BLOCK = registerBlock("raw_shadowsteel_block",
-            properties -> new Block(properties.strength(4f)
-                    .requiresCorrectToolForDrops().sound(SoundType.AMETHYST)));
 
     public static final DeferredBlock<Block> SHADOWSTEEL_ORE = registerBlock("shadowsteel_ore",
             properties -> new DropExperienceBlock(UniformInt.of(2, 4), properties.strength(3f)
@@ -46,37 +44,9 @@ public class ModBlocks {
             properties -> new CursedBlock(properties.strength(2f)
                     .requiresCorrectToolForDrops().sound(SoundType.DECORATED_POT)), Component.translatable("tooltip.darkfantasy.cursed_block.tooltip"));
 
-    public static final DeferredBlock<Block> SHADOWSTEEL_STAIRS = registerBlock("shadowsteel_stairs",
-            properties -> new StairBlock(ModBlocks.SHADOWSTEEL_BLOCK.get().defaultBlockState(),
-                    properties.strength(3f).requiresCorrectToolForDrops().sound(SoundType.AMETHYST)));
-    public static final DeferredBlock<Block> SHADOWSTEEL_SLAB = registerBlock("shadowsteel_slab",
-            properties -> new SlabBlock(properties.strength(3f)
-                    .requiresCorrectToolForDrops().sound(SoundType.AMETHYST)));
-
-    public static final DeferredBlock<Block> SHADOWSTEEL_PRESSURE_PLATE = registerBlock("shadowsteel_pressure_plate",
-            properties -> new PressurePlateBlock(BlockSetType.IRON, properties
-                    .mapColor(MapColor.COLOR_BLACK).forceSolidOn().instrument(NoteBlockInstrument.BASS)
-                    .requiresCorrectToolForDrops().noCollision().strength(0.5F).pushReaction(PushReaction.DESTROY)));
-    public static final DeferredBlock<Block> SHADOWSTEEL_BUTTON = registerBlock("shadowsteel_button",
-            properties -> new ButtonBlock(BlockSetType.IRON, 20, properties
-                    .noCollision().strength(0.5F).pushReaction(PushReaction.DESTROY)));
-
-    public static final DeferredBlock<Block> SHADOWSTEEL_FENCE = registerBlock("shadowsteel_fence",
-            properties -> new FenceBlock(properties.strength(2F)
-                    .requiresCorrectToolForDrops().sound(SoundType.AMETHYST)));
-    public static final DeferredBlock<Block> SHADOWSTEEL_FENCE_GATE = registerBlock("shadowsteel_fence_gate",
-            properties -> new FenceGateBlock(WoodType.ACACIA, properties.strength(2F)
-                    .requiresCorrectToolForDrops().sound(SoundType.AMETHYST)));
-    public static final DeferredBlock<Block> SHADOWSTEEL_WALL = registerBlock("shadowsteel_wall",
-            properties -> new WallBlock(properties.strength(2F)
-                    .requiresCorrectToolForDrops().sound(SoundType.AMETHYST)));
-
-    public static final DeferredBlock<Block> SHADOWSTEEL_DOOR = registerBlock("shadowsteel_door",
-            properties -> new DoorBlock(BlockSetType.IRON, properties.strength(2F)
-                    .requiresCorrectToolForDrops().sound(SoundType.AMETHYST).noOcclusion()));
-    public static final DeferredBlock<Block> SHADOWSTEEL_TRAPDOOR = registerBlock("shadowsteel_trapdoor",
-            properties -> new TrapDoorBlock(BlockSetType.IRON, properties.strength(2F)
-                    .requiresCorrectToolForDrops().sound(SoundType.AMETHYST).noOcclusion()));
+    public static final DeferredBlock<Block> ALCHEMY_STAND = registerBlock("alchemy_stand",
+            properties -> new AlchemyStandBlock(properties.strength(2f)
+                    .requiresCorrectToolForDrops().sound(SoundType.STONE).noOcclusion()));
 
 
     private static <T extends Block> DeferredBlock<T> registerBlock(String name, Function<BlockBehaviour.Properties, T> function, Component... components) {

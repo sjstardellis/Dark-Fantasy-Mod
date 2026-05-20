@@ -27,7 +27,6 @@ public class ModBlockLootTableProvider extends BlockLootSubProvider {
     @Override
     protected void generate() {
         dropSelf(ModBlocks.SHADOWSTEEL_BLOCK.get());
-        dropSelf(ModBlocks.RAW_SHADOWSTEEL_BLOCK.get());
 
         add(ModBlocks.SHADOWSTEEL_ORE.get(),
                 createOreDrop(ModBlocks.SHADOWSTEEL_ORE.get(), ModItems.RAW_SHADOWSTEEL.get()));
@@ -35,17 +34,7 @@ public class ModBlockLootTableProvider extends BlockLootSubProvider {
                 createOreDrop(ModBlocks.SHADOWSTEEL_DEEPSLATE_ORE.get(), ModItems.RAW_SHADOWSTEEL.get()));
 
         dropSelf(ModBlocks.CURSED_BLOCK.get());
-        dropSelf(ModBlocks.SHADOWSTEEL_STAIRS.get());
-        add(ModBlocks.SHADOWSTEEL_SLAB.get(), this::createSlabItemTable);
-
-        dropSelf(ModBlocks.SHADOWSTEEL_PRESSURE_PLATE.get());
-        dropSelf(ModBlocks.SHADOWSTEEL_BUTTON.get());
-        dropSelf(ModBlocks.SHADOWSTEEL_FENCE.get());
-        dropSelf(ModBlocks.SHADOWSTEEL_FENCE_GATE.get());
-        dropSelf(ModBlocks.SHADOWSTEEL_WALL.get());
-        dropSelf(ModBlocks.SHADOWSTEEL_TRAPDOOR.get());
-
-        add(ModBlocks.SHADOWSTEEL_DOOR.get(), this::createDoorTable);
+        dropSelf(ModBlocks.ALCHEMY_STAND.get());
     }
 
     protected LootTable.Builder createMultipleOreDrops(Block block, Item item, float minDrops, float maxDrops) {

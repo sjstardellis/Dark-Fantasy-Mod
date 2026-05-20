@@ -1,12 +1,9 @@
 {
   "values": [
     "darkfantasy:shadowsteel_block",
-    "darkfantasy:raw_shadowsteel_block",
     "darkfantasy:shadowsteel_ore",
     "darkfantasy:shadowsteel_deepslate_ore",
     "darkfantasy:cursed_block",
-    "darkfantasy:shadowsteel_stairs",
-    "darkfantasy:shadowsteel_slab",
-    "darkfantasy:shadowsteel_pressure_plate"
+    "darkfantasy:alchemy_stand"
   ]
 }

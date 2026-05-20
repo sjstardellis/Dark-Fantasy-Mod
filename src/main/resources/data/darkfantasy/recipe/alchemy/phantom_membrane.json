@@ -1,0 +1,14 @@
+{
+  "type": "darkfantasy:alchemy",
+  "ingredients": [
+    "minecraft:nether_wart",
+    "minecraft:ghast_tear",
+    "minecraft:redstone"
+  ],
+  "result": {
+    "id": "minecraft:phantom_membrane",
+    "count": 1
+  },
+  "lava": 100,
+  "cook_time": 200
+}

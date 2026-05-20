@@ -3,6 +3,9 @@ package net.steve.darkfantasy;
 import com.mojang.logging.LogUtils;
 import net.steve.darkfantasy.block.ModBlocks;
 import net.steve.darkfantasy.creativemodetab.ModCreativeModeTabs;
+import net.steve.darkfantasy.init.ModBlockEntities;
+import net.steve.darkfantasy.init.ModMenuTypes;
+import net.steve.darkfantasy.init.ModRecipes;
 import net.steve.darkfantasy.item.ModItems;
 import net.minecraft.world.item.CreativeModeTabs;
 import net.neoforged.bus.api.IEventBus;
@@ -35,6 +38,9 @@ public class DarkFantasy {
 
         ModItems.register(modEventBus);
         ModBlocks.register(modEventBus);
+        ModBlockEntities.register(modEventBus);
+        ModMenuTypes.register(modEventBus);
+        ModRecipes.register(modEventBus);
 
         NeoForge.EVENT_BUS.register(this);
         // Register the item to a creative tab

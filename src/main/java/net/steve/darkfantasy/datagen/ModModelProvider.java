@@ -16,28 +16,18 @@ public class ModModelProvider extends ModelProvider {
 
     @Override
     protected void registerModels(BlockModelGenerators blockModels, ItemModelGenerators itemModels) {
+        /* ITEMS */
         itemModels.generateFlatItem(ModItems.SHADOWSTEEL.get(), ModelTemplates.FLAT_ITEM);
         itemModels.generateFlatItem(ModItems.RAW_SHADOWSTEEL.get(), ModelTemplates.FLAT_ITEM);
         itemModels.generateFlatItem(ModItems.SOUL_COMPASS.get(), ModelTemplates.FLAT_ITEM);
         itemModels.generateFlatItem(ModItems.NIGHTSHADE.get(), ModelTemplates.FLAT_ITEM);
         itemModels.generateFlatItem(ModItems.HELLFIRE_KINDLING.get(), ModelTemplates.FLAT_ITEM);
 
-
         /* BLOCKS */
-        blockModels.createTrivialCube(ModBlocks.RAW_SHADOWSTEEL_BLOCK.get());
+        blockModels.createTrivialCube(ModBlocks.SHADOWSTEEL_BLOCK.get());
         blockModels.createTrivialCube(ModBlocks.SHADOWSTEEL_ORE.get());
         blockModels.createTrivialCube(ModBlocks.SHADOWSTEEL_DEEPSLATE_ORE.get());
         blockModels.createTrivialCube(ModBlocks.CURSED_BLOCK.get());
-
-        blockModels.family(ModBlocks.SHADOWSTEEL_BLOCK.get())
-                .stairs(ModBlocks.SHADOWSTEEL_STAIRS.get())
-                .slab(ModBlocks.SHADOWSTEEL_SLAB.get())
-                .pressurePlate(ModBlocks.SHADOWSTEEL_PRESSURE_PLATE.get())
-                .button(ModBlocks.SHADOWSTEEL_BUTTON.get())
-                .fence(ModBlocks.SHADOWSTEEL_FENCE.get())
-                .fenceGate(ModBlocks.SHADOWSTEEL_FENCE_GATE.get())
-                .wall(ModBlocks.SHADOWSTEEL_WALL.get())
-                .door(ModBlocks.SHADOWSTEEL_DOOR.get())
-                .trapdoor(ModBlocks.SHADOWSTEEL_TRAPDOOR.get());
+        blockModels.createTrivialCube(ModBlocks.ALCHEMY_STAND.get());
     }
 }

@@ -1,8 +1,0 @@
-{
-  "parent": "minecraft:block/slab",
-  "textures": {
-    "bottom": "darkfantasy:block/shadowsteel_block",
-    "side": "darkfantasy:block/shadowsteel_block",
-    "top": "darkfantasy:block/shadowsteel_block"
-  }
-}
