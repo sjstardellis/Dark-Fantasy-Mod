@@ -46,21 +46,20 @@ public class AlchemyStandMenu extends AbstractContainerMenu {
         this.container = container;
         this.data = data;
 
-        // 3 input slots — vertical column on the left, to the right of the tank.
-        // Furnace-style layout so we can reuse vanilla furnace.png pixels verbatim.
-        this.addSlot(new Slot(container, 0, 44, 17));
-        this.addSlot(new Slot(container, 1, 44, 35));
-        this.addSlot(new Slot(container, 2, 44, 53));
+        // 3 input slots — horizontal row at the top.
+        this.addSlot(new Slot(container, 0, 52, 17));
+        this.addSlot(new Slot(container, 1, 80, 17));
+        this.addSlot(new Slot(container, 2, 108, 17));
 
-        // Output slot — to the right of the progress arrow. Players can extract but not insert.
-        this.addSlot(new Slot(container, OUTPUT_SLOT, 116, 35) {
+        // Output slot — centered below the inputs, beneath the progress arrow.
+        this.addSlot(new Slot(container, OUTPUT_SLOT, 80, 60) {
             @Override
             public boolean mayPlace(ItemStack stack) {
                 return false;
             }
         });
 
-        // Bucket slot — bottom-right (lava buckets only).
+        // Bucket slot — right side, mid-height (lava buckets only).
         this.addSlot(new Slot(container, BUCKET_SLOT, 140, 53) {
             @Override
             public boolean mayPlace(ItemStack stack) {

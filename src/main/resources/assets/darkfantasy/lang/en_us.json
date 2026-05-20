@@ -19,6 +19,9 @@
   "block.darkfantasy.alchemy_stand": "Alchemy Stand",
   "container.darkfantasy.alchemy_stand": "Alchemy Stand",
 
+  "tooltip.darkfantasy.alchemy_stand.tank": "Lava Tank",
+  "tooltip.darkfantasy.alchemy_stand.tank.amount": "§7%s / %s mB§r",
+
   "block.darkfantasy.shadowsteel_stairs": "Shadowsteel Stairs",
   "block.darkfantasy.shadowsteel_slab": "Shadowsteel Slab",
   "block.darkfantasy.shadowsteel_button": "Shadowsteel Button",

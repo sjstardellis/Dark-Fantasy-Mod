@@ -24,8 +24,9 @@ import net.minecraft.world.level.material.Fluids;
 import net.minecraft.world.level.storage.ValueInput;
 import net.minecraft.world.level.storage.ValueOutput;
 import net.neoforged.neoforge.fluids.FluidStack;
-import net.neoforged.neoforge.fluids.capability.IFluidHandler;
-import net.neoforged.neoforge.fluids.capability.templates.FluidTank;
+import net.neoforged.neoforge.transfer.fluid.FluidResource;
+import net.neoforged.neoforge.transfer.fluid.FluidStacksResourceHandler;
+import net.neoforged.neoforge.transfer.transaction.Transaction;
 
 import java.util.Optional;
 
@@ -37,8 +38,9 @@ public class AlchemyStandBlockEntity extends BaseContainerBlockEntity {
     public static final int OUTPUT_SLOT = 3;
     public static final int BUCKET_SLOT = 4;
 
-    public static final int TANK_CAPACITY = 4000; // mB (= 4 lava buckets)
+    public static final int TANK_CAPACITY = 4000;
     public static final int LAVA_PER_BUCKET = 1000;
+    private static final int TANK_INDEX = 0; // single-tank handler
 
     // ContainerData indices for client-server sync of progress + fluid amount.
     public static final int DATA_PROGRESS = 0;
@@ -50,32 +52,32 @@ public class AlchemyStandBlockEntity extends BaseContainerBlockEntity {
 
     private NonNullList<ItemStack> items = NonNullList.withSize(SLOT_COUNT, ItemStack.EMPTY);
 
-    /** Ticks of progress on the currently-cooking recipe. */
     private int progress = 0;
-    /** Ticks required to finish the current recipe. */
     private int maxProgress = 200;
 
-    /** Lava-only fluid tank. */
-    private final FluidTank tank = new FluidTank(TANK_CAPACITY) {
+    /**
+     * Lava-only fluid tank (single index). Uses NeoForge's modern transfer API
+     * ({@link FluidStacksResourceHandler}) instead of the deprecated {@code FluidTank}.
+     */
+    private final FluidStacksResourceHandler tank = new FluidStacksResourceHandler(1, TANK_CAPACITY) {
         @Override
-        public boolean isFluidValid(FluidStack stack) {
-            return stack.is(Fluids.LAVA);
+        public boolean isValid(int index, FluidResource resource) {
+            return resource.getFluid() == Fluids.LAVA;
         }
 
         @Override
-        protected void onContentsChanged() {
+        protected void onContentsChanged(int index, FluidStack previousContents) {
             setChanged();
         }
     };
 
-    /** Exposed for the menu so the client can read progress/lava. */
     public final ContainerData dataAccess = new ContainerData() {
         @Override
         public int get(int index) {
             return switch (index) {
                 case DATA_PROGRESS -> progress;
                 case DATA_MAX_PROGRESS -> maxProgress;
-                case DATA_LAVA -> tank.getFluidAmount();
+                case DATA_LAVA -> tank.getAmountAsInt(TANK_INDEX);
                 default -> 0;
             };
         }
@@ -88,9 +90,9 @@ public class AlchemyStandBlockEntity extends BaseContainerBlockEntity {
                 case DATA_LAVA -> {
                     // Client-side write — reconstruct as lava with the synced amount.
                     if (value > 0) {
-                        tank.setFluid(new FluidStack(Fluids.LAVA, value));
+                        tank.set(TANK_INDEX, FluidResource.of(Fluids.LAVA), Math.min(value, TANK_CAPACITY));
                     } else {
-                        tank.setFluid(FluidStack.EMPTY);
+                        tank.set(TANK_INDEX, FluidResource.EMPTY, 0);
                     }
                 }
             }
@@ -137,10 +139,6 @@ public class AlchemyStandBlockEntity extends BaseContainerBlockEntity {
         return this.maxProgress;
     }
 
-    public FluidTank getTank() {
-        return this.tank;
-    }
-
     @Override
     protected void loadAdditional(ValueInput input) {
         super.loadAdditional(input);
@@ -150,9 +148,9 @@ public class AlchemyStandBlockEntity extends BaseContainerBlockEntity {
         this.maxProgress = input.getIntOr("MaxProgress", 200);
         int lavaAmount = input.getIntOr("LavaAmount", 0);
         if (lavaAmount > 0) {
-            this.tank.setFluid(new FluidStack(Fluids.LAVA, Math.min(lavaAmount, TANK_CAPACITY)));
+            tank.set(TANK_INDEX, FluidResource.of(Fluids.LAVA), Math.min(lavaAmount, TANK_CAPACITY));
         } else {
-            this.tank.setFluid(FluidStack.EMPTY);
+            tank.set(TANK_INDEX, FluidResource.EMPTY, 0);
         }
     }
 
@@ -162,7 +160,7 @@ public class AlchemyStandBlockEntity extends BaseContainerBlockEntity {
         ContainerHelper.saveAllItems(output, this.items);
         output.putInt("Progress", this.progress);
         output.putInt("MaxProgress", this.maxProgress);
-        output.putInt("LavaAmount", this.tank.getFluidAmount());
+        output.putInt("LavaAmount", tank.getAmountAsInt(TANK_INDEX));
     }
 
     @Override
@@ -178,14 +176,19 @@ public class AlchemyStandBlockEntity extends BaseContainerBlockEntity {
     }
 
     /**
-     * Attempt to drain a lava bucket into the tank.
-     * @return true if a bucket was consumed (caller should shrink the source by 1 and give back an empty bucket).
+     * Attempt to drain a lava bucket into the tank. Uses a transaction so we don't
+     * commit the change unless we can fit the whole 1000 mB.
+     * @return true if a bucket was consumed.
      */
     public boolean tryFillFromBucket() {
-        int filled = tank.fill(new FluidStack(Fluids.LAVA, LAVA_PER_BUCKET), IFluidHandler.FluidAction.SIMULATE);
-        if (filled < LAVA_PER_BUCKET) return false;
-        tank.fill(new FluidStack(Fluids.LAVA, LAVA_PER_BUCKET), IFluidHandler.FluidAction.EXECUTE);
-        return true;
+        try (Transaction txn = Transaction.openRoot()) {
+            int filled = tank.insert(TANK_INDEX, FluidResource.of(Fluids.LAVA), LAVA_PER_BUCKET, txn);
+            if (filled < LAVA_PER_BUCKET) {
+                return false; // transaction auto-rolls back on close without commit
+            }
+            txn.commit();
+            return true;
+        }
     }
 
     // ---- Cook loop -----------------------------------------------------------
@@ -195,10 +198,8 @@ public class AlchemyStandBlockEntity extends BaseContainerBlockEntity {
             return;
         }
 
-        // 1. Drain a lava bucket from the bucket slot if possible.
         be.tickBucketSlot();
 
-        // 2. Find a matching recipe.
         AlchemyRecipeInput input = new AlchemyRecipeInput(
                 be.items.get(INPUT_SLOT_0),
                 be.items.get(INPUT_SLOT_1),
@@ -213,14 +214,12 @@ public class AlchemyStandBlockEntity extends BaseContainerBlockEntity {
         AlchemyRecipe recipe = recipeOpt.get().value();
         ItemStack result = recipe.assemble(input);
 
-        // 3. Output slot must be able to accept the result.
         if (!be.canFitOutput(result)) {
             be.resetProgressIfNeeded(level, pos, state);
             return;
         }
 
-        // 4. Tank must have enough lava to cover this recipe.
-        if (be.tank.getFluidAmount() < recipe.lava()) {
+        if (be.tank.getAmountAsInt(TANK_INDEX) < recipe.lava()) {
             be.resetProgressIfNeeded(level, pos, state);
             return;
         }
@@ -229,7 +228,7 @@ public class AlchemyStandBlockEntity extends BaseContainerBlockEntity {
         be.progress++;
         if (be.progress >= be.maxProgress) {
             be.craft(result);
-            be.tank.drain(recipe.lava(), IFluidHandler.FluidAction.EXECUTE);
+            be.drainLava(recipe.lava());
             be.progress = 0;
         }
         setChanged(level, pos, state);
@@ -240,14 +239,10 @@ public class AlchemyStandBlockEntity extends BaseContainerBlockEntity {
         if (!inBucketSlot.is(Items.LAVA_BUCKET)) return;
         if (!tryFillFromBucket()) return;
 
-        // Replace the lava bucket with an empty one (respect stack size).
         if (inBucketSlot.getCount() == 1) {
             items.set(BUCKET_SLOT, new ItemStack(Items.BUCKET));
         } else {
             inBucketSlot.shrink(1);
-            // Try to drop an empty bucket into the same slot if the stack was reduced.
-            // Otherwise, just leave the empty bucket out (player can right-click to retrieve via menu).
-            // For simplicity here, we simply shrink — players should put 1 bucket at a time.
         }
     }
 
@@ -267,6 +262,13 @@ public class AlchemyStandBlockEntity extends BaseContainerBlockEntity {
         }
         for (int i = INPUT_SLOT_0; i <= INPUT_SLOT_2; i++) {
             items.get(i).shrink(1);
+        }
+    }
+
+    private void drainLava(int amount) {
+        try (Transaction txn = Transaction.openRoot()) {
+            tank.extract(TANK_INDEX, FluidResource.of(Fluids.LAVA), amount, txn);
+            txn.commit();
         }
     }
 

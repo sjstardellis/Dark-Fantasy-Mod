@@ -3,7 +3,10 @@
     "allow": [
       "Bash(./gradlew runData)",
       "Bash(./gradlew build *)",
-      "Bash(unzip -q -o \"C:\\\\Users\\\\Steve\\\\Downloads\\\\DarkFantasyMod\\\\build\\\\moddev\\\\artifacts\\\\minecraft-patched-26.1.2.60-beta-sources.jar\" -d \"C:\\\\Users\\\\Steve\\\\Downloads\\\\DarkFantasyMod\\\\build\\\\moddev\\\\sources-extracted\")"
+      "Bash(unzip -q -o \"C:\\\\Users\\\\Steve\\\\Downloads\\\\DarkFantasyMod\\\\build\\\\moddev\\\\artifacts\\\\minecraft-patched-26.1.2.60-beta-sources.jar\" -d \"C:\\\\Users\\\\Steve\\\\Downloads\\\\DarkFantasyMod\\\\build\\\\moddev\\\\sources-extracted\")",
+      "Bash(find \"C:\\\\Users\\\\Steve\\\\.gradle\\\\caches\" -name \"neoforge-*-sources.jar\" 2>/dev/null | head -3)",
+      "Bash(unzip -l \"C:\\\\Users\\\\Steve\\\\.gradle\\\\caches/modules-2/files-2.1/net.neoforged/neoforge/26.1.2.60-beta/e6167c42ca536838db50f198c1ce339876570dc4/neoforge-26.1.2.60-beta-sources.jar\")",
+      "Bash(unzip -q -o \"C:\\\\Users\\\\Steve\\\\.gradle\\\\caches/modules-2/files-2.1/net.neoforged/neoforge/26.1.2.60-beta/e6167c42ca536838db50f198c1ce339876570dc4/neoforge-26.1.2.60-beta-sources.jar\" \"net/neoforged/neoforge/fluids/**\" \"net/neoforged/neoforge/transfer/**\" -d \"C:\\\\Users\\\\Steve\\\\Downloads\\\\DarkFantasyMod\\\\build\\\\moddev\\\\neoforge-sources\")"
     ]
   }
 }
