@@ -1,0 +1,8 @@
+{
+  "variants": {
+    "facing=north": { "model": "darkfantasy:block/alchemy_stand" },
+    "facing=east":  { "model": "darkfantasy:block/alchemy_stand", "y": 90 },
+    "facing=south": { "model": "darkfantasy:block/alchemy_stand", "y": 180 },
+    "facing=west":  { "model": "darkfantasy:block/alchemy_stand", "y": 270 }
+  }
+}

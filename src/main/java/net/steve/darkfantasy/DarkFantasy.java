@@ -60,9 +60,6 @@ public class DarkFantasy {
             event.accept(ModItems.RAW_SHADOWSTEEL);
         }
 
-        if (event.getTabKey() == CreativeModeTabs.BUILDING_BLOCKS) {
-            event.accept(ModBlocks.SHADOWSTEEL_BLOCK);
-        }
     }
 
     @SubscribeEvent

@@ -6,8 +6,13 @@ import net.steve.darkfantasy.menu.AlchemyStandMenu;
 import net.steve.darkfantasy.recipe.AlchemyRecipe;
 import net.steve.darkfantasy.recipe.AlchemyRecipeInput;
 import net.minecraft.core.BlockPos;
+import net.minecraft.core.HolderLookup;
 import net.minecraft.core.NonNullList;
+import net.minecraft.nbt.CompoundTag;
 import net.minecraft.network.chat.Component;
+import net.minecraft.network.protocol.Packet;
+import net.minecraft.network.protocol.game.ClientGamePacketListener;
+import net.minecraft.network.protocol.game.ClientboundBlockEntityDataPacket;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.world.ContainerHelper;
 import net.minecraft.world.entity.player.Inventory;
@@ -18,6 +23,7 @@ import net.minecraft.world.item.Items;
 import net.minecraft.world.item.crafting.RecipeHolder;
 import net.minecraft.world.item.crafting.RecipeManager;
 import net.minecraft.world.level.Level;
+import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.entity.BaseContainerBlockEntity;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.material.Fluids;
@@ -137,6 +143,35 @@ public class AlchemyStandBlockEntity extends BaseContainerBlockEntity {
 
     public int getMaxProgress() {
         return this.maxProgress;
+    }
+
+    public int getLavaAmount() {
+        return this.tank.getAmountAsInt(TANK_INDEX);
+    }
+
+    // Send the full save tag (items + lava + progress) when this BE is sent to the client.
+    @Override
+    public Packet<ClientGamePacketListener> getUpdatePacket() {
+        return ClientboundBlockEntityDataPacket.create(this);
+    }
+
+    @Override
+    public CompoundTag getUpdateTag(HolderLookup.Provider registries) {
+        return this.saveCustomOnly(registries);
+    }
+
+    /**
+     * Server-side broadcast so the in-world BER (items on top, lava level in the cauldron)
+     * stays in sync — slot moves and tank fills happen via menu/right-click and would
+     * otherwise only reach the client on chunk reload.
+     */
+    @Override
+    public void setChanged() {
+        super.setChanged();
+        if (this.level != null && !this.level.isClientSide()) {
+            this.level.sendBlockUpdated(this.worldPosition, this.getBlockState(),
+                    this.getBlockState(), Block.UPDATE_CLIENTS);
+        }
     }
 
     @Override

@@ -20,6 +20,13 @@ public class ModItems {
     public static final DeferredItem<Item> SHADOWSTEEL = ITEMS.registerSimpleItem("shadowsteel");
     public static final DeferredItem<Item> RAW_SHADOWSTEEL = ITEMS.registerSimpleItem("raw_shadowsteel");
 
+
+    public static final DeferredItem<Item> MOONSILVER = ITEMS.registerSimpleItem("moonsilver");
+    public static final DeferredItem<Item> RAW_MOONSILVER = ITEMS.registerSimpleItem("raw_moonsilver");
+
+    public static final DeferredItem<Item> DAWNMETAL = ITEMS.registerSimpleItem("dawnmetal");
+    public static final DeferredItem<Item> RAW_DAWNMETAL = ITEMS.registerSimpleItem("raw_dawnmetal");
+
     public static final DeferredItem<Item> SOUL_COMPASS = ITEMS.registerItem("soul_compass",
             properties -> new SoulCompassItem(properties.durability(64)));
 

@@ -1,6 +1,14 @@
 {
+  "biome.darkfantasy.twilight_forest": "Twilight Forest",
+
   "item.darkfantasy.shadowsteel": "Shadowsteel",
   "item.darkfantasy.raw_shadowsteel": "Raw Shadowsteel",
+
+  "item.darkfantasy.moonsilver": "Moonsilver",
+  "item.darkfantasy.raw_moonsilver": "Raw Moonsilver",
+
+  "item.darkfantasy.dawnmetal": "Dawnmetal",
+  "item.darkfantasy.raw_dawnmetal": "Raw Dawnmetal",
 
   "item.darkfantasy.soul_compass": "Soul Compass",
   "item.darkfantasy.soul_compass.no_valuables": "No Souls Found!",
@@ -8,30 +16,22 @@
   "item.darkfantasy.nightshade": "Nightshade",
   "item.darkfantasy.hellfire_kindling": "Hellfire Kindling",
 
+  "block.darkfantasy.dawnmetal_ore": "Dawnmetal Ore",
+  "block.darkfantasy.dawnmetal_deepslate_ore": "Dawnmetal Deepslate Ore",
 
-  "block.darkfantasy.shadowsteel_block": "Block of Shadowsteel",
-  "block.darkfantasy.raw_shadowsteel_block": "Block of Raw Shadowsteel",
+  "block.darkfantasy.moonsilver_ore": "Moonsilver Ore",
+  "block.darkfantasy.moonsilver_deepslate_ore": "Moonsilver Deepslate Ore",
+
   "block.darkfantasy.shadowsteel_ore": "Shadowsteel Ore",
   "block.darkfantasy.shadowsteel_deepslate_ore": "Shadowsteel Deepslate Ore",
-  "block.darkfantasy.shadowsteel_nether_ore": "Shadowsteel Nether Ore",
-  "block.darkfantasy.shadowsteel_end_ore": "Shadowsteel End Ore",
+
   "block.darkfantasy.cursed_block": "Cursed Block",
   "block.darkfantasy.alchemy_stand": "Alchemy Stand",
   "container.darkfantasy.alchemy_stand": "Alchemy Stand",
+  "block.darkfantasy.skylands_portal": "Skylands Portal",
 
   "tooltip.darkfantasy.alchemy_stand.tank": "Lava Tank",
   "tooltip.darkfantasy.alchemy_stand.tank.amount": "§7%s / %s mB§r",
-
-  "block.darkfantasy.shadowsteel_stairs": "Shadowsteel Stairs",
-  "block.darkfantasy.shadowsteel_slab": "Shadowsteel Slab",
-  "block.darkfantasy.shadowsteel_button": "Shadowsteel Button",
-  "block.darkfantasy.shadowsteel_pressure_plate": "Shadowsteel Pressure Plate",
-  "block.darkfantasy.shadowsteel_fence": "Shadowsteel Fence",
-  "block.darkfantasy.shadowsteel_fence_gate": "Shadowsteel Fence Gate",
-  "block.darkfantasy.shadowsteel_wall": "Shadowsteel Wall",
-  "block.darkfantasy.shadowsteel_door": "Shadowsteel Door",
-  "block.darkfantasy.shadowsteel_trapdoor": "Shadowsteel Trapdoor",
-
 
   "creativetab.darkfantasy.darkfantasy_items": "Dark Fantasy Items",
   "creativetab.darkfantasy.darkfantasy_blocks": "Dark Fantasy Blocks",

@@ -11,5 +11,5 @@ public class ModFoods {
     public static final FoodProperties NIGHTSHADE = new FoodProperties.Builder().nutrition(2).saturationModifier(0.3f).build();
 
     public static final Consumable NIGHTSHADE_CONSUMABLE = Consumables.defaultFood()
-            .consumeSeconds(2.1f).onConsume(new ApplyStatusEffectsConsumeEffect(new MobEffectInstance(MobEffects.WITHER, 200), 0.10f)).build();
+            .consumeSeconds(2.1f).onConsume(new ApplyStatusEffectsConsumeEffect(new MobEffectInstance(MobEffects.GLOWING, 200), 0.10f)).build();
 }

@@ -3,6 +3,8 @@ package net.steve.darkfantasy.block;
 import net.steve.darkfantasy.DarkFantasy;
 import net.steve.darkfantasy.block.custom.AlchemyStandBlock;
 import net.steve.darkfantasy.block.custom.CursedBlock;
+import net.steve.darkfantasy.block.custom.SkylandsPortalBlock;
+import net.steve.darkfantasy.block.custom.TwilightPortalBlock;
 import net.steve.darkfantasy.item.ModItems;
 import net.minecraft.network.chat.Component;
 import net.minecraft.util.valueproviders.UniformInt;
@@ -27,10 +29,7 @@ import java.util.function.Function;
 public class ModBlocks {
     public static final DeferredRegister.Blocks BLOCKS =
             DeferredRegister.createBlocks(DarkFantasy.MOD_ID);
-
-    public static final DeferredBlock<Block> SHADOWSTEEL_BLOCK = registerBlock("shadowsteel_block",
-            properties -> new Block(properties.strength(4f)
-                    .requiresCorrectToolForDrops().sound(SoundType.AMETHYST)));
+    
 
     public static final DeferredBlock<Block> SHADOWSTEEL_ORE = registerBlock("shadowsteel_ore",
             properties -> new DropExperienceBlock(UniformInt.of(2, 4), properties.strength(3f)
@@ -40,6 +39,20 @@ public class ModBlocks {
                     .requiresCorrectToolForDrops().sound(SoundType.DEEPSLATE)));
 
 
+    public static final DeferredBlock<Block> MOONSILVER_ORE = registerBlock("moonsilver_ore",
+            properties -> new DropExperienceBlock(UniformInt.of(3, 4), properties.strength(3f)
+                    .requiresCorrectToolForDrops().sound(SoundType.STONE)));
+    public static final DeferredBlock<Block> MOONSILVER_DEEPSLATE_ORE = registerBlock("moonsilver_deepslate_ore",
+            properties -> new DropExperienceBlock(UniformInt.of(3, 6), properties.strength(5f)
+                    .requiresCorrectToolForDrops().sound(SoundType.DEEPSLATE)));
+
+    public static final DeferredBlock<Block> DAWNMETAL_ORE = registerBlock("dawnmetal_ore",
+            properties -> new DropExperienceBlock(UniformInt.of(2, 5), properties.strength(3f)
+                    .requiresCorrectToolForDrops().sound(SoundType.STONE)));
+    public static final DeferredBlock<Block> DAWNMETAL_DEEPSLATE_ORE = registerBlock("dawnmetal_deepslate_ore",
+            properties -> new DropExperienceBlock(UniformInt.of(3, 7), properties.strength(5f)
+                    .requiresCorrectToolForDrops().sound(SoundType.DEEPSLATE)));
+
     public static final DeferredBlock<Block> CURSED_BLOCK = registerBlock("cursed_block",
             properties -> new CursedBlock(properties.strength(2f)
                     .requiresCorrectToolForDrops().sound(SoundType.DECORATED_POT)), Component.translatable("tooltip.darkfantasy.cursed_block.tooltip"));
@@ -47,6 +60,28 @@ public class ModBlocks {
     public static final DeferredBlock<Block> ALCHEMY_STAND = registerBlock("alchemy_stand",
             properties -> new AlchemyStandBlock(properties.strength(2f)
                     .requiresCorrectToolForDrops().sound(SoundType.STONE).noOcclusion()));
+
+    // Skylands portal — no BlockItem (not obtainable in survival).
+    public static final DeferredBlock<SkylandsPortalBlock> SKYLANDS_PORTAL = BLOCKS.registerBlock("skylands_portal",
+            SkylandsPortalBlock::new,
+            properties -> properties
+                    .noCollision()
+                    .strength(-1.0F)
+                    .sound(SoundType.GLASS)
+                    .lightLevel(state -> 11)
+                    .pushReaction(net.minecraft.world.level.material.PushReaction.BLOCK)
+                    .noOcclusion());
+
+    // Twilight Forest portal — also no BlockItem.
+    public static final DeferredBlock<TwilightPortalBlock> TWILIGHT_PORTAL = BLOCKS.registerBlock("twilight_portal",
+            TwilightPortalBlock::new,
+            properties -> properties
+                    .noCollision()
+                    .strength(-1.0F)
+                    .sound(SoundType.AMETHYST)
+                    .lightLevel(state -> 11)
+                    .pushReaction(net.minecraft.world.level.material.PushReaction.BLOCK)
+                    .noOcclusion());
 
 
     private static <T extends Block> DeferredBlock<T> registerBlock(String name, Function<BlockBehaviour.Properties, T> function, Component... components) {

@@ -27,6 +27,12 @@ public class ModCreativeModeTabs {
                         output.accept(ModItems.SHADOWSTEEL);
                         output.accept(ModItems.RAW_SHADOWSTEEL);
 
+                        output.accept(ModItems.MOONSILVER);
+                        output.accept(ModItems.RAW_MOONSILVER);
+
+                        output.accept(ModItems.DAWNMETAL);
+                        output.accept(ModItems.RAW_DAWNMETAL);
+
                         output.accept(ModItems.SOUL_COMPASS);
                         output.accept(ModItems.NIGHTSHADE);
                         output.accept(ModItems.HELLFIRE_KINDLING);
@@ -34,13 +40,16 @@ public class ModCreativeModeTabs {
 
 
     public static final Supplier<CreativeModeTab> DARKFANTASY_BLOCKS_TAB = CREATIVE_MODE_TABS.register("darkfantasy_blocks_tab",
-            () -> CreativeModeTab.builder().icon(() -> new ItemStack(ModBlocks.SHADOWSTEEL_BLOCK.get()))
+            () -> CreativeModeTab.builder().icon(() -> new ItemStack(ModBlocks.SHADOWSTEEL_ORE.get()))
                     .title(Component.translatable("creativetab.darkfantasy.darkfantasy_blocks"))
                     .displayItems((itemDisplayParameters, output) -> {
-                        output.accept(ModBlocks.SHADOWSTEEL_BLOCK);
-
                         output.accept(ModBlocks.SHADOWSTEEL_ORE);
                         output.accept(ModBlocks.SHADOWSTEEL_DEEPSLATE_ORE);
+
+                        output.accept(ModBlocks.DAWNMETAL_ORE);
+                        output.accept(ModBlocks.DAWNMETAL_DEEPSLATE_ORE);
+                        output.accept(ModBlocks.MOONSILVER_ORE);
+                        output.accept(ModBlocks.MOONSILVER_DEEPSLATE_ORE);
 
                         output.accept(ModBlocks.CURSED_BLOCK);
                         output.accept(ModBlocks.ALCHEMY_STAND);

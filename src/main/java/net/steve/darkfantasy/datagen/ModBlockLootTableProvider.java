@@ -26,15 +26,26 @@ public class ModBlockLootTableProvider extends BlockLootSubProvider {
 
     @Override
     protected void generate() {
-        dropSelf(ModBlocks.SHADOWSTEEL_BLOCK.get());
-
         add(ModBlocks.SHADOWSTEEL_ORE.get(),
                 createOreDrop(ModBlocks.SHADOWSTEEL_ORE.get(), ModItems.RAW_SHADOWSTEEL.get()));
         add(ModBlocks.SHADOWSTEEL_DEEPSLATE_ORE.get(),
                 createOreDrop(ModBlocks.SHADOWSTEEL_DEEPSLATE_ORE.get(), ModItems.RAW_SHADOWSTEEL.get()));
 
+        add(ModBlocks.MOONSILVER_ORE.get(),
+                createOreDrop(ModBlocks.MOONSILVER_ORE.get(), ModItems.RAW_MOONSILVER.get()));
+        add(ModBlocks.MOONSILVER_DEEPSLATE_ORE.get(),
+                createOreDrop(ModBlocks.MOONSILVER_DEEPSLATE_ORE.get(), ModItems.RAW_MOONSILVER.get()));
+
+        add(ModBlocks.DAWNMETAL_ORE.get(),
+                createOreDrop(ModBlocks.DAWNMETAL_ORE.get(), ModItems.RAW_DAWNMETAL.get()));
+        add(ModBlocks.DAWNMETAL_DEEPSLATE_ORE.get(),
+                createOreDrop(ModBlocks.DAWNMETAL_DEEPSLATE_ORE.get(), ModItems.RAW_DAWNMETAL.get()));
+
         dropSelf(ModBlocks.CURSED_BLOCK.get());
         dropSelf(ModBlocks.ALCHEMY_STAND.get());
+
+        // Skylands portal — never drops anything
+        add(ModBlocks.SKYLANDS_PORTAL.get(), noDrop());
     }
 
     protected LootTable.Builder createMultipleOreDrops(Block block, Item item, float minDrops, float maxDrops) {

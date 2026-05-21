@@ -9,7 +9,6 @@ import net.minecraft.data.recipes.RecipeCategory;
 import net.minecraft.data.recipes.RecipeOutput;
 import net.minecraft.data.recipes.RecipeProvider;
 import net.minecraft.data.recipes.SimpleCookingRecipeBuilder;
-import net.minecraft.world.item.Items;
 import net.minecraft.world.item.crafting.AbstractCookingRecipe;
 import net.minecraft.world.item.crafting.CookingBookCategory;
 import net.minecraft.world.item.crafting.Ingredient;
@@ -41,22 +40,6 @@ public class ModRecipeProvider extends RecipeProvider {
 
     @Override
     protected void buildRecipes() {
-        // Shadowsteel block <-> 9 ingots
-        shaped(RecipeCategory.BUILDING_BLOCKS, ModBlocks.SHADOWSTEEL_BLOCK.get())
-                .pattern("AAA")
-                .pattern("AAA")
-                .pattern("AAA")
-                .define('A', ModItems.SHADOWSTEEL.get())
-                .unlockedBy(getHasName(ModItems.SHADOWSTEEL.get()), has(ModItems.SHADOWSTEEL))
-                .group("shadowsteel")
-                .save(output);
-
-        shapeless(RecipeCategory.MISC, ModItems.SHADOWSTEEL.get(), 9)
-                .requires(ModBlocks.SHADOWSTEEL_BLOCK)
-                .unlockedBy(getHasName(ModBlocks.SHADOWSTEEL_BLOCK.get()), has(ModBlocks.SHADOWSTEEL_BLOCK))
-                .group("shadowsteel")
-                .save(output);
-
         // Smelt raw_shadowsteel or ores -> shadowsteel
         List<ItemLike> SHADOWSTEEL_SMELTABLES = List.of(
                 ModItems.RAW_SHADOWSTEEL,

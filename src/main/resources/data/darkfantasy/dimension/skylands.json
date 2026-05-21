@@ -1,0 +1,11 @@
+{
+  "type": "darkfantasy:skylands",
+  "generator": {
+    "type": "minecraft:noise",
+    "settings": "darkfantasy:skylands",
+    "biome_source": {
+      "type": "minecraft:fixed",
+      "biome": "darkfantasy:skylands"
+    }
+  }
+}
