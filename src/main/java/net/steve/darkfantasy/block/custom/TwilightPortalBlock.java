@@ -1,6 +1,7 @@
 package net.steve.darkfantasy.block.custom;
 
 import com.mojang.serialization.MapCodec;
+import net.minecraft.sounds.SoundEvents;
 import net.steve.darkfantasy.event.TwilightPortalIgnitionHandler;
 import net.steve.darkfantasy.worldgen.dimension.ModDimensions;
 import net.steve.darkfantasy.worldgen.dimension.TwilightTeleporter;
@@ -103,7 +104,7 @@ public class TwilightPortalBlock extends Block implements Portal {
         if (random.nextInt(100) == 0) {
             level.playLocalSound(
                     pos.getX() + 0.5, pos.getY() + 0.5, pos.getZ() + 0.5,
-                    net.minecraft.sounds.SoundEvents.PORTAL_AMBIENT,
+                    SoundEvents.ALLAY_AMBIENT_WITHOUT_ITEM,
                     net.minecraft.sounds.SoundSource.BLOCKS,
                     0.5F, random.nextFloat() * 0.4F + 0.8F, false);
         }

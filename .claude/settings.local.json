@@ -23,7 +23,9 @@
       "Bash(xargs grep -l \"canEntityDestroy\")",
       "Bash(unzip -p /c/Users/Steve/.gradle/caches/modules-2/files-2.1/net.neoforged/neoforge/26.1.2.60-beta/e6167c42ca536838db50f198c1ce339876570dc4/neoforge-26.1.2.60-beta-sources.jar)",
       "Bash(unzip -l /c/Users/Steve/.gradle/caches/modules-2/files-2.1/net.neoforged/neoforge/26.1.2.60-beta/e6167c42ca536838db50f198c1ce339876570dc4/neoforge-26.1.2.60-beta-sources.jar)",
-      "Bash(unzip -p /c/Users/Steve/.gradle/caches/modules-2/files-2.1/net.neoforged/neoforge/26.1.2.60-beta/e6167c42ca536838db50f198c1ce339876570dc4/neoforge-26.1.2.60-beta-sources.jar net/neoforged/neoforge/common/CommonHooks.java)"
+      "Bash(unzip -p /c/Users/Steve/.gradle/caches/modules-2/files-2.1/net.neoforged/neoforge/26.1.2.60-beta/e6167c42ca536838db50f198c1ce339876570dc4/neoforge-26.1.2.60-beta-sources.jar net/neoforged/neoforge/common/CommonHooks.java)",
+      "Bash(unzip -p /c/Users/Steve/.gradle/caches/modules-2/files-2.1/net.neoforged/neoforge/26.1.2.60-beta/e6167c42ca536838db50f198c1ce339876570dc4/neoforge-26.1.2.60-beta-sources.jar net/neoforged/neoforge/event/entity/living/FinalizeSpawnEvent.java)",
+      "Bash(unzip -p /c/Users/Steve/.gradle/caches/modules-2/files-2.1/net.neoforged/neoforge/26.1.2.60-beta/e6167c42ca536838db50f198c1ce339876570dc4/neoforge-26.1.2.60-beta-sources.jar net/neoforged/neoforge/event/entity/living/MobSpawnEvent.java)"
     ]
   }
 }

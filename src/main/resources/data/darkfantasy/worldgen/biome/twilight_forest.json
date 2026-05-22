@@ -19,6 +19,10 @@
       {
         "particle": {"type": "minecraft:warped_spore"},
         "probability": 0.008
+      },
+      {
+        "particle": {"type": "minecraft:firefly"},
+        "probability": 0.012
       }
     ]
   },
@@ -40,7 +44,8 @@
       "minecraft:lake_lava_surface"
     ],
     [
-      "minecraft:amethyst_geode"
+      "minecraft:amethyst_geode",
+      "minecraft:forest_rock"
     ],
     [
       "minecraft:monster_room",
@@ -77,16 +82,22 @@
     ],
     [
       "minecraft:glow_lichen",
+      "minecraft:pale_moss_patch",
       "darkfantasy:giant_dark_oak",
       "minecraft:trees_plains",
       "minecraft:flower_default",
       "minecraft:flower_plains",
       "minecraft:wildflowers_meadow",
+      "minecraft:flower_cherry",
       "minecraft:patch_grass_plain",
       "minecraft:patch_tall_grass_2",
+      "minecraft:patch_berry_bush",
       "minecraft:patch_firefly_bush_near_water",
+      "minecraft:brown_mushroom_swamp",
+      "minecraft:red_mushroom_swamp",
       "minecraft:brown_mushroom_normal",
-      "minecraft:red_mushroom_normal"
+      "minecraft:red_mushroom_normal",
+      "minecraft:mushroom_island_vegetation"
     ],
     []
   ],
@@ -120,6 +131,12 @@
         "maxCount": 2,
         "minCount": 1,
         "weight": 4
+      },
+      {
+        "type": "minecraft:mooshroom",
+        "maxCount": 2,
+        "minCount": 1,
+        "weight": 5
       }
     ],
     "misc": [],

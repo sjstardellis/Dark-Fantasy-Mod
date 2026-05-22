@@ -32,8 +32,7 @@ public class DarkFantasyClient {
     @SubscribeEvent
     static void onClientSetup(FMLClientSetupEvent event) {
         // Some client setup code
-        DarkFantasy.LOGGER.info("HELLO FROM CLIENT SETUP");
-        DarkFantasy.LOGGER.info("MINECRAFT NAME >> {}", Minecraft.getInstance().getUser().getName());
+//        DarkFantasy.LOGGER.info("MINECRAFT NAME >> {}", Minecraft.getInstance().getUser().getName());
     }
 
     @SubscribeEvent

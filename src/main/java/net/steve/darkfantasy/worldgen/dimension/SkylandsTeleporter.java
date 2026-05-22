@@ -100,6 +100,11 @@ public final class SkylandsTeleporter {
         int targetX = sourcePortalPos.getX();
         int targetZ = sourcePortalPos.getZ();
 
+        // Force-load the destination chunk so the heightmap is computed — createTransition
+        // runs before the engine has loaded the chunk.
+        level.getChunk(net.minecraft.core.SectionPos.blockToSectionCoord(targetX),
+                net.minecraft.core.SectionPos.blockToSectionCoord(targetZ));
+
         int topY = Math.min(level.getMaxY(),
                 level.getHeight(Heightmap.Types.MOTION_BLOCKING, targetX, targetZ));
         BlockPos.MutableBlockPos cursor = new BlockPos.MutableBlockPos();
