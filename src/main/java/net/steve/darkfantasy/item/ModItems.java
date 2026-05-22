@@ -1,5 +1,6 @@
 package net.steve.darkfantasy.item;
 
+import net.minecraft.world.item.Rarity;
 import net.steve.darkfantasy.DarkFantasy;
 import net.steve.darkfantasy.food.ModFoods;
 import net.steve.darkfantasy.item.custom.SoulCompassItem;
@@ -20,6 +21,9 @@ public class ModItems {
     public static final DeferredItem<Item> SHADOWSTEEL = ITEMS.registerSimpleItem("shadowsteel");
     public static final DeferredItem<Item> RAW_SHADOWSTEEL = ITEMS.registerSimpleItem("raw_shadowsteel");
 
+
+    public static final DeferredItem<Item> ECLIPSIUM = ITEMS.registerItem("eclipsium",
+            properties -> new Item(properties.rarity(Rarity.EPIC)));
 
     public static final DeferredItem<Item> MOONSILVER = ITEMS.registerSimpleItem("moonsilver");
     public static final DeferredItem<Item> RAW_MOONSILVER = ITEMS.registerSimpleItem("raw_moonsilver");

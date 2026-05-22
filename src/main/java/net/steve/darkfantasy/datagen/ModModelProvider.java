@@ -26,6 +26,7 @@ public class ModModelProvider extends ModelProvider {
         itemModels.generateFlatItem(ModItems.SOUL_COMPASS.get(), ModelTemplates.FLAT_ITEM);
         itemModels.generateFlatItem(ModItems.NIGHTSHADE.get(), ModelTemplates.FLAT_ITEM);
         itemModels.generateFlatItem(ModItems.HELLFIRE_KINDLING.get(), ModelTemplates.FLAT_ITEM);
+        itemModels.generateFlatItem(ModItems.ECLIPSIUM.get(), ModelTemplates.FLAT_ITEM);
 
 
         itemModels.generateFlatItem(ModItems.MOONSILVER.get(), ModelTemplates.FLAT_ITEM);
@@ -60,6 +61,7 @@ public class ModModelProvider extends ModelProvider {
     protected Stream<? extends Holder<Block>> getKnownBlocks() {
         return super.getKnownBlocks()
                 .filter(holder -> holder.value() != ModBlocks.SKYLANDS_PORTAL.get()
+                               && holder.value() != ModBlocks.TWILIGHT_PORTAL.get()
                                && holder.value() != ModBlocks.ALCHEMY_STAND.get());
     }
 

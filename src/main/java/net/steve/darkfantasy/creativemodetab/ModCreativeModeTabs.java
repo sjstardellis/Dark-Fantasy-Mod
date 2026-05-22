@@ -18,15 +18,14 @@ public class ModCreativeModeTabs {
     public static final DeferredRegister<CreativeModeTab> CREATIVE_MODE_TABS =
             DeferredRegister.create(Registries.CREATIVE_MODE_TAB, DarkFantasy.MOD_ID);
 
-    public static final Supplier<CreativeModeTab> DARKFANTASY_ITEMS_TAB = CREATIVE_MODE_TABS.register("darkfantasy_items_tab",
+    public static final Supplier<CreativeModeTab> DARKFANTASY_TAB = CREATIVE_MODE_TABS.register("darkfantasy_tab",
             () -> CreativeModeTab.builder().icon(() -> new ItemStack(ModItems.SHADOWSTEEL.get()))
-                    .title(Component.translatable("creativetab.darkfantasy.darkfantasy_items"))
+                    .title(Component.translatable("creativetab.darkfantasy.darkfantasy_tab"))
                     .withTabsBefore(CreativeModeTabs.INGREDIENTS)
-                    .withTabsAfter(Identifier.fromNamespaceAndPath(DarkFantasy.MOD_ID, "darkfantasy_blocks_tab"))
                     .displayItems((itemDisplayParameters, output) -> {
                         output.accept(ModItems.SHADOWSTEEL);
                         output.accept(ModItems.RAW_SHADOWSTEEL);
-
+                        output.accept(ModItems.ECLIPSIUM);
                         output.accept(ModItems.MOONSILVER);
                         output.accept(ModItems.RAW_MOONSILVER);
 
@@ -36,13 +35,6 @@ public class ModCreativeModeTabs {
                         output.accept(ModItems.SOUL_COMPASS);
                         output.accept(ModItems.NIGHTSHADE);
                         output.accept(ModItems.HELLFIRE_KINDLING);
-                    }).build());
-
-
-    public static final Supplier<CreativeModeTab> DARKFANTASY_BLOCKS_TAB = CREATIVE_MODE_TABS.register("darkfantasy_blocks_tab",
-            () -> CreativeModeTab.builder().icon(() -> new ItemStack(ModBlocks.SHADOWSTEEL_ORE.get()))
-                    .title(Component.translatable("creativetab.darkfantasy.darkfantasy_blocks"))
-                    .displayItems((itemDisplayParameters, output) -> {
                         output.accept(ModBlocks.SHADOWSTEEL_ORE);
                         output.accept(ModBlocks.SHADOWSTEEL_DEEPSLATE_ORE);
 

@@ -44,8 +44,10 @@ public class ModBlockLootTableProvider extends BlockLootSubProvider {
         dropSelf(ModBlocks.CURSED_BLOCK.get());
         dropSelf(ModBlocks.ALCHEMY_STAND.get());
 
-        // Skylands portal — never drops anything
+        // Portals - never drops anything
         add(ModBlocks.SKYLANDS_PORTAL.get(), noDrop());
+        add(ModBlocks.TWILIGHT_PORTAL.get(), noDrop());
+
     }
 
     protected LootTable.Builder createMultipleOreDrops(Block block, Item item, float minDrops, float maxDrops) {

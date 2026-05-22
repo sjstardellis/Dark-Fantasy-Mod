@@ -1,7 +1,6 @@
 package net.steve.darkfantasy.block.custom;
 
 import com.mojang.serialization.MapCodec;
-import net.steve.darkfantasy.block.entity.TwilightPortalBlockEntity;
 import net.steve.darkfantasy.event.TwilightPortalIgnitionHandler;
 import net.steve.darkfantasy.worldgen.dimension.ModDimensions;
 import net.steve.darkfantasy.worldgen.dimension.TwilightTeleporter;
@@ -16,29 +15,39 @@ import net.minecraft.world.level.BlockGetter;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.LevelReader;
 import net.minecraft.world.level.ScheduledTickAccess;
-import net.minecraft.world.level.block.BaseEntityBlock;
+import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.Blocks;
 import net.minecraft.world.level.block.Portal;
-import net.minecraft.world.level.block.entity.BlockEntity;
 import net.minecraft.world.level.block.state.BlockBehaviour;
 import net.minecraft.world.level.block.state.BlockState;
+import net.minecraft.world.level.block.state.StateDefinition;
+import net.minecraft.world.level.block.state.properties.BlockStateProperties;
+import net.minecraft.world.level.block.state.properties.EnumProperty;
 import net.minecraft.world.level.portal.TeleportTransition;
 import net.minecraft.world.phys.shapes.CollisionContext;
 import net.minecraft.world.phys.shapes.Shapes;
 import net.minecraft.world.phys.shapes.VoxelShape;
 import org.jspecify.annotations.Nullable;
 
+import java.util.Map;
+
 /**
- * Twilight Forest portal. Sits in the center column of a 3D bookshelf+amethyst+glowstone
- * frame, visible from all four horizontal sides. Mirrors {@link SkylandsPortalBlock}'s
- * structure — only the frame composition and destination dimension differ.
+ * Twilight Forest portal — flat nether-portal-style block with a horizontal AXIS property
+ * so it can stand in either X- or Z-oriented 5×5 bookshelf frames. Drops the 3D end-portal
+ * starfield used by the Skylands portal.
  */
-public class TwilightPortalBlock extends BaseEntityBlock implements Portal {
+public class TwilightPortalBlock extends Block implements Portal {
     public static final MapCodec<TwilightPortalBlock> CODEC = simpleCodec(TwilightPortalBlock::new);
-    private static final VoxelShape SHAPE = Shapes.block();
+
+    public static final EnumProperty<Direction.Axis> AXIS = BlockStateProperties.HORIZONTAL_AXIS;
+
+    // Same 4-pixel-thick slab as the nether portal, rotated to the active axis.
+    private static final Map<Direction.Axis, VoxelShape> SHAPES =
+            Shapes.rotateHorizontalAxis(Block.column(4.0, 16.0, 0.0, 16.0));
 
     public TwilightPortalBlock(BlockBehaviour.Properties properties) {
         super(properties);
+        this.registerDefaultState(this.stateDefinition.any().setValue(AXIS, Direction.Axis.X));
     }
 
     @Override
@@ -47,13 +56,13 @@ public class TwilightPortalBlock extends BaseEntityBlock implements Portal {
     }
 
     @Override
-    public @Nullable BlockEntity newBlockEntity(BlockPos pos, BlockState state) {
-        return new TwilightPortalBlockEntity(pos, state);
+    protected void createBlockStateDefinition(StateDefinition.Builder<Block, BlockState> builder) {
+        builder.add(AXIS);
     }
 
     @Override
     protected VoxelShape getShape(BlockState state, BlockGetter level, BlockPos pos, CollisionContext context) {
-        return SHAPE;
+        return SHAPES.get(state.getValue(AXIS));
     }
 
     @Override
@@ -64,12 +73,16 @@ public class TwilightPortalBlock extends BaseEntityBlock implements Portal {
         }
     }
 
+    /**
+     * Self-destruct if a neighbouring change leaves the bookshelf frame incomplete. Catches
+     * both portal-block removal (the other portal blocks see the neighbour change and run
+     * the same check, so the whole portal collapses together) and frame-block removal.
+     */
     @Override
     protected BlockState updateShape(BlockState state, LevelReader level, ScheduledTickAccess ticks,
                                      BlockPos pos, Direction directionToNeighbour, BlockPos neighbourPos,
                                      BlockState neighbourState, RandomSource random) {
-        BlockPos anchorPos = TwilightPortalIgnitionHandler.findAmethystBelow(level, pos);
-        if (anchorPos == null || !TwilightPortalIgnitionHandler.isFrameStructureIntact(level, anchorPos)) {
+        if (!TwilightPortalIgnitionHandler.isFrameStillValid(level, pos, state.getValue(AXIS))) {
             return Blocks.AIR.defaultBlockState();
         }
         return super.updateShape(state, level, ticks, pos, directionToNeighbour, neighbourPos, neighbourState, random);
@@ -94,7 +107,7 @@ public class TwilightPortalBlock extends BaseEntityBlock implements Portal {
                     net.minecraft.sounds.SoundSource.BLOCKS,
                     0.5F, random.nextFloat() * 0.4F + 0.8F, false);
         }
-        // Twilight portal: enchant-style swirls drifting upward for the magical feel.
+        // Enchant-style swirls drifting upward inside the portal column.
         for (int i = 0; i < 4; ++i) {
             double x = pos.getX() + random.nextDouble();
             double y = pos.getY() + random.nextDouble();

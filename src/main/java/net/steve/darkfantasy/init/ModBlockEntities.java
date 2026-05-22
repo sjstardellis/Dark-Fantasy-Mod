@@ -4,7 +4,6 @@ import net.steve.darkfantasy.DarkFantasy;
 import net.steve.darkfantasy.block.ModBlocks;
 import net.steve.darkfantasy.block.entity.AlchemyStandBlockEntity;
 import net.steve.darkfantasy.block.entity.SkylandsPortalBlockEntity;
-import net.steve.darkfantasy.block.entity.TwilightPortalBlockEntity;
 import net.minecraft.core.registries.Registries;
 import net.minecraft.world.level.block.entity.BlockEntityType;
 import net.neoforged.bus.api.IEventBus;
@@ -25,11 +24,6 @@ public class ModBlockEntities {
             BLOCK_ENTITIES.register("skylands_portal_be",
                     () -> new BlockEntityType<>(SkylandsPortalBlockEntity::new,
                             ModBlocks.SKYLANDS_PORTAL.get()));
-
-    public static final Supplier<BlockEntityType<TwilightPortalBlockEntity>> TWILIGHT_PORTAL_BE =
-            BLOCK_ENTITIES.register("twilight_portal_be",
-                    () -> new BlockEntityType<>(TwilightPortalBlockEntity::new,
-                            ModBlocks.TWILIGHT_PORTAL.get()));
 
     public static void register(IEventBus eventBus) {
         BLOCK_ENTITIES.register(eventBus);

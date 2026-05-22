@@ -1,0 +1,14 @@
+{
+  "type": "darkfantasy:alchemy",
+  "ingredients": [
+    "darkfantasy:moonsilver",
+    "darkfantasy:dawnmetal",
+    "minecraft:blaze_rod"
+  ],
+  "result": {
+    "id": "darkfantasy:eclipsium",
+    "count": 1
+  },
+  "lava": 1000,
+  "cook_time": 300
+}

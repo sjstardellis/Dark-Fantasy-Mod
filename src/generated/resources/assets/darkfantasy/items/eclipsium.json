@@ -1,6 +1,6 @@
 {
   "model": {
     "type": "minecraft:model",
-    "model": "darkfantasy:block/shadowsteel_block"
+    "model": "darkfantasy:item/eclipsium"
   }
 }

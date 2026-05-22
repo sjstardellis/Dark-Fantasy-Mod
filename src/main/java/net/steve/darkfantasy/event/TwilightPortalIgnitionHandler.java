@@ -2,7 +2,9 @@ package net.steve.darkfantasy.event;
 
 import net.steve.darkfantasy.DarkFantasy;
 import net.steve.darkfantasy.block.ModBlocks;
+import net.steve.darkfantasy.block.custom.TwilightPortalBlock;
 import net.minecraft.core.BlockPos;
+import net.minecraft.core.Direction;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.sounds.SoundEvents;
 import net.minecraft.sounds.SoundSource;
@@ -22,53 +24,92 @@ import net.neoforged.neoforge.event.level.block.BreakBlockEvent;
 import org.jspecify.annotations.Nullable;
 
 /**
- * Validates the Twilight Forest portal frame on flint+steel and extinguishes the portal
- * when any frame block is destroyed. Mirrors {@link PortalIgnitionHandler}'s shape (the
- * 25 nether-bricks-or-bookshelves + center anchor + capstone layout) so the portal scales
- * match across dimensions.
+ * Validates a flat, nether-portal-style 5×5 bookshelf frame and lights it with flint+steel.
+ * Frame orientations: vertical, on either the X or Z horizontal axis.
  *
- * <p>Frame layout (relative to amethyst block at origin (0,0,0)):
+ * <p>Layout (frame coordinate {@code (w, h)}, with {@code w} along the chosen axis and
+ * {@code h} vertical):
  * <pre>
- *   y=0 (base — 3x3 bookshelf perimeter with amethyst in the center)
- *   y=1, y=2 (only the 4 corner pillars; cardinal sides + center are AIR)
- *   y=3 (top ring — mirror of base but with glowstone in the center)
- *   y=4 (capstone — single bookshelf above the glowstone)
+ *   B B B B B   ← h=4
+ *   B P P P B
+ *   B P P P B
+ *   B P P P B
+ *   B B B B B   ← h=0
+ *   w=0 ..... w=4
  * </pre>
- *
- * Totals: 25 bookshelves + 1 glowstone + 1 amethyst block = 27 placed frame blocks.
+ * 16 bookshelves form the perimeter, 9 portal blocks fill the inner 3×3.
  */
 @EventBusSubscriber(modid = DarkFantasy.MOD_ID)
 public class TwilightPortalIgnitionHandler {
 
-    /** All 25 required bookshelf positions, relative to the amethyst anchor at origin. */
-    public static final int[][] REQUIRED_BOOKSHELVES = {
-            {-1, 0, -1}, {0, 0, -1}, {1, 0, -1},
-            {-1, 0,  0},               {1, 0,  0},
-            {-1, 0,  1}, {0, 0,  1}, {1, 0,  1},
+    public static final int FRAME_SIZE = 5;
 
-            {-1, 1, -1}, {1, 1, -1},
-            {-1, 1,  1}, {1, 1,  1},
+    // ---- Frame geometry helpers --------------------------------------------
 
-            {-1, 2, -1}, {1, 2, -1},
-            {-1, 2,  1}, {1, 2,  1},
+    private static boolean isPerimeter(int w, int h) {
+        return w == 0 || w == FRAME_SIZE - 1 || h == 0 || h == FRAME_SIZE - 1;
+    }
 
-            {-1, 3, -1}, {0, 3, -1}, {1, 3, -1},
-            {-1, 3,  0},               {1, 3,  0},
-            {-1, 3,  1}, {0, 3,  1}, {1, 3,  1},
+    private static boolean isInterior(int w, int h) {
+        return w >= 1 && w <= FRAME_SIZE - 2 && h >= 1 && h <= FRAME_SIZE - 2;
+    }
 
-            {0, 4, 0}
-    };
+    /** World position of frame coordinate {@code (w, h)} given the bottom-left origin and axis. */
+    private static BlockPos frameToWorld(BlockPos origin, Direction.Axis axis, int w, int h) {
+        return axis == Direction.Axis.X
+                ? origin.offset(w, h, 0)
+                : origin.offset(0, h, w);
+    }
 
-    /** Glowstone capstone position relative to the amethyst anchor. */
-    public static final int[] GLOWSTONE_POS = {0, 3, 0};
+    // ---- Validators --------------------------------------------------------
 
-    /** Positions that must be air pre-ignition and become portal blocks post-ignition. */
-    public static final int[][] PORTAL_POSITIONS = {
-            {0, 1, 0},
-            {0, 2, 0}
-    };
+    /** Both perimeter (bookshelves) and interior (air) constraints must be satisfied. */
+    private static boolean isValidEmptyFrame(LevelReader level, BlockPos origin, Direction.Axis axis) {
+        for (int w = 0; w < FRAME_SIZE; w++) {
+            for (int h = 0; h < FRAME_SIZE; h++) {
+                BlockState state = level.getBlockState(frameToWorld(origin, axis, w, h));
+                if (isPerimeter(w, h)) {
+                    if (!state.is(Blocks.BOOKSHELF)) return false;
+                } else if (isInterior(w, h)) {
+                    if (!state.isAir()) return false;
+                }
+            }
+        }
+        return true;
+    }
 
-    // ---- Ignition ------------------------------------------------------------
+    /** Perimeter-only check, used by an active portal block to confirm its frame is still intact. */
+    private static boolean isPerimeterIntact(LevelReader level, BlockPos origin, Direction.Axis axis) {
+        for (int w = 0; w < FRAME_SIZE; w++) {
+            for (int h = 0; h < FRAME_SIZE; h++) {
+                if (isPerimeter(w, h)
+                        && !level.getBlockState(frameToWorld(origin, axis, w, h)).is(Blocks.BOOKSHELF)) {
+                    return false;
+                }
+            }
+        }
+        return true;
+    }
+
+    // ---- Frame search ------------------------------------------------------
+
+    /** Given a bookshelf at {@code clickedPos}, find a valid empty frame it could be part of. */
+    private static @Nullable BlockPos findEmptyFrameOrigin(LevelReader level, BlockPos clickedPos, Direction.Axis axis) {
+        for (int w = 0; w < FRAME_SIZE; w++) {
+            for (int h = 0; h < FRAME_SIZE; h++) {
+                if (!isPerimeter(w, h)) continue;
+                BlockPos origin = axis == Direction.Axis.X
+                        ? clickedPos.offset(-w, -h, 0)
+                        : clickedPos.offset(0, -h, -w);
+                if (isValidEmptyFrame(level, origin, axis)) {
+                    return origin;
+                }
+            }
+        }
+        return null;
+    }
+
+    // ---- Ignition ----------------------------------------------------------
 
     @SubscribeEvent
     public static void onRightClickBlock(PlayerInteractEvent.RightClickBlock event) {
@@ -79,100 +120,104 @@ public class TwilightPortalIgnitionHandler {
         ItemStack stack = event.getItemStack();
         if (!stack.is(Items.FLINT_AND_STEEL)) return;
 
-        BlockPos pos = event.getPos();
-        BlockState state = level.getBlockState(pos);
-        if (!state.is(Blocks.AMETHYST_BLOCK)) return;
+        BlockPos clickedPos = event.getPos();
+        if (!level.getBlockState(clickedPos).is(Blocks.BOOKSHELF)) return;
 
-        if (!isFrameStructureIntact(serverLevel, pos)) return;
-        if (!arePortalSlotsClear(serverLevel, pos)) return;
-
-        ignitePortal(serverLevel, pos);
-
-        Player player = event.getEntity();
-        InteractionHand hand = event.getHand();
-        EquipmentSlot slot = hand == InteractionHand.MAIN_HAND ? EquipmentSlot.MAINHAND : EquipmentSlot.OFFHAND;
-        stack.hurtAndBreak(1, player, slot);
-
-        level.playSound(null, pos, SoundEvents.FLINTANDSTEEL_USE, SoundSource.BLOCKS, 1.0F, 1.0F);
-        event.setCanceled(true);
-    }
-
-    /** Returns true iff the 25 bookshelves + glowstone are in their required positions. */
-    public static boolean isFrameStructureIntact(LevelReader level, BlockPos amethystPos) {
-        for (int[] offset : REQUIRED_BOOKSHELVES) {
-            if (!level.getBlockState(amethystPos.offset(offset[0], offset[1], offset[2])).is(Blocks.BOOKSHELF)) {
-                return false;
+        for (Direction.Axis axis : new Direction.Axis[]{Direction.Axis.X, Direction.Axis.Z}) {
+            BlockPos origin = findEmptyFrameOrigin(serverLevel, clickedPos, axis);
+            if (origin != null) {
+                ignitePortal(serverLevel, origin, axis);
+                Player player = event.getEntity();
+                InteractionHand hand = event.getHand();
+                EquipmentSlot slot = hand == InteractionHand.MAIN_HAND ? EquipmentSlot.MAINHAND : EquipmentSlot.OFFHAND;
+                stack.hurtAndBreak(1, player, slot);
+                level.playSound(null, clickedPos, SoundEvents.FLINTANDSTEEL_USE, SoundSource.BLOCKS, 1.0F, 1.0F);
+                event.setCanceled(true);
+                return;
             }
         }
-        BlockPos glowstonePos = amethystPos.offset(GLOWSTONE_POS[0], GLOWSTONE_POS[1], GLOWSTONE_POS[2]);
-        return level.getBlockState(glowstonePos).is(Blocks.GLOWSTONE);
     }
 
-    private static boolean arePortalSlotsClear(LevelReader level, BlockPos amethystPos) {
-        for (int[] offset : PORTAL_POSITIONS) {
-            if (!level.getBlockState(amethystPos.offset(offset[0], offset[1], offset[2])).isAir()) {
-                return false;
-            }
-        }
-        return true;
-    }
-
-    private static void ignitePortal(ServerLevel level, BlockPos amethystPos) {
-        BlockState portalState = ModBlocks.TWILIGHT_PORTAL.get().defaultBlockState();
-        for (int[] offset : PORTAL_POSITIONS) {
-            BlockPos pos = amethystPos.offset(offset[0], offset[1], offset[2]);
-            level.setBlock(pos, portalState, 3);
-        }
-    }
-
-    // ---- Extinguish on frame destruction ------------------------------------
-
-    @SubscribeEvent
-    public static void onBlockBreak(BreakBlockEvent event) {
-        if (!(event.getLevel() instanceof ServerLevel level)) return;
-
-        BlockState broken = event.getState();
-        BlockPos brokenPos = event.getPos();
-
-        if (broken.is(Blocks.AMETHYST_BLOCK)) {
-            extinguishPortalIfActive(level, brokenPos);
-        } else if (broken.is(Blocks.GLOWSTONE)) {
-            BlockPos candidate = brokenPos.offset(-GLOWSTONE_POS[0], -GLOWSTONE_POS[1], -GLOWSTONE_POS[2]);
-            if (level.getBlockState(candidate).is(Blocks.AMETHYST_BLOCK)) {
-                extinguishPortalIfActive(level, candidate);
-            }
-        } else if (broken.is(Blocks.BOOKSHELF)) {
-            for (int[] offset : REQUIRED_BOOKSHELVES) {
-                BlockPos candidate = brokenPos.offset(-offset[0], -offset[1], -offset[2]);
-                if (level.getBlockState(candidate).is(Blocks.AMETHYST_BLOCK)) {
-                    extinguishPortalIfActive(level, candidate);
+    /** Fills the 3×3 interior with portal blocks oriented along {@code axis}. */
+    public static void ignitePortal(ServerLevel level, BlockPos origin, Direction.Axis axis) {
+        BlockState portalState = ModBlocks.TWILIGHT_PORTAL.get().defaultBlockState()
+                .setValue(TwilightPortalBlock.AXIS, axis);
+        for (int w = 0; w < FRAME_SIZE; w++) {
+            for (int h = 0; h < FRAME_SIZE; h++) {
+                if (isInterior(w, h)) {
+                    level.setBlock(frameToWorld(origin, axis, w, h), portalState, 3);
                 }
             }
         }
     }
 
-    public static void extinguishPortalIfActive(ServerLevel level, BlockPos amethystPos) {
-        boolean anyExtinguished = false;
-        for (int[] offset : PORTAL_POSITIONS) {
-            BlockPos pos = amethystPos.offset(offset[0], offset[1], offset[2]);
-            if (level.getBlockState(pos).is(ModBlocks.TWILIGHT_PORTAL.get())) {
-                level.setBlock(pos, Blocks.AIR.defaultBlockState(), 3);
-                anyExtinguished = true;
+    // ---- Frame-still-valid (called from the portal block's updateShape) ----
+
+    /**
+     * Given an active portal block at {@code pos} with {@code axis}, look for a valid
+     * surrounding frame perimeter — the portal block could be at any of 9 interior positions.
+     */
+    public static boolean isFrameStillValid(LevelReader level, BlockPos pos, Direction.Axis axis) {
+        for (int w = 1; w <= FRAME_SIZE - 2; w++) {
+            for (int h = 1; h <= FRAME_SIZE - 2; h++) {
+                BlockPos origin = axis == Direction.Axis.X
+                        ? pos.offset(-w, -h, 0)
+                        : pos.offset(0, -h, -w);
+                if (isPerimeterIntact(level, origin, axis)) {
+                    return true;
+                }
             }
         }
-        if (anyExtinguished) {
-            level.playSound(null, amethystPos,
-                    SoundEvents.FIRE_EXTINGUISH, SoundSource.BLOCKS,
-                    0.8F, 1.2F);
+        return false;
+    }
+
+    // ---- Extinguish on frame destruction -----------------------------------
+
+    /**
+     * Corner bookshelf breaks don't propagate via {@code updateShape} (no portal block is
+     * adjacent), so we listen for bookshelf breaks explicitly. For each candidate frame
+     * the broken position could belong to, if there's an active portal in the interior,
+     * extinguish it.
+     */
+    @SubscribeEvent
+    public static void onBlockBreak(BreakBlockEvent event) {
+        if (!(event.getLevel() instanceof ServerLevel level)) return;
+        if (!event.getState().is(Blocks.BOOKSHELF)) return;
+
+        BlockPos brokenPos = event.getPos();
+        for (Direction.Axis axis : new Direction.Axis[]{Direction.Axis.X, Direction.Axis.Z}) {
+            for (int w = 0; w < FRAME_SIZE; w++) {
+                for (int h = 0; h < FRAME_SIZE; h++) {
+                    if (!isPerimeter(w, h)) continue;
+                    BlockPos origin = axis == Direction.Axis.X
+                            ? brokenPos.offset(-w, -h, 0)
+                            : brokenPos.offset(0, -h, -w);
+                    BlockPos interiorCenter = frameToWorld(origin, axis, 2, 2);
+                    if (level.getBlockState(interiorCenter).is(ModBlocks.TWILIGHT_PORTAL.get())) {
+                        extinguishPortal(level, origin, axis);
+                    }
+                }
+            }
         }
     }
 
-    /** Searches 1 or 2 blocks below a portal block for the amethyst anchor. */
-    public static @Nullable BlockPos findAmethystBelow(LevelReader level, BlockPos portalPos) {
-        BlockPos below = portalPos.below();
-        if (level.getBlockState(below).is(Blocks.AMETHYST_BLOCK)) return below;
-        BlockPos below2 = portalPos.below(2);
-        if (level.getBlockState(below2).is(Blocks.AMETHYST_BLOCK)) return below2;
-        return null;
+    public static void extinguishPortal(ServerLevel level, BlockPos origin, Direction.Axis axis) {
+        boolean anyExtinguished = false;
+        for (int w = 0; w < FRAME_SIZE; w++) {
+            for (int h = 0; h < FRAME_SIZE; h++) {
+                if (isInterior(w, h)) {
+                    BlockPos pos = frameToWorld(origin, axis, w, h);
+                    if (level.getBlockState(pos).is(ModBlocks.TWILIGHT_PORTAL.get())) {
+                        level.setBlock(pos, Blocks.AIR.defaultBlockState(), 3);
+                        anyExtinguished = true;
+                    }
+                }
+            }
+        }
+        if (anyExtinguished) {
+            level.playSound(null, origin,
+                    SoundEvents.FIRE_EXTINGUISH, SoundSource.BLOCKS,
+                    0.8F, 1.2F);
+        }
     }
 }

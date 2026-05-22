@@ -2,7 +2,6 @@ package net.steve.darkfantasy;
 
 import net.steve.darkfantasy.client.renderer.AlchemyStandRenderer;
 import net.steve.darkfantasy.client.renderer.SkylandsPortalRenderer;
-import net.steve.darkfantasy.client.renderer.TwilightPortalRenderer;
 import net.steve.darkfantasy.client.screen.AlchemyStandScreen;
 import net.steve.darkfantasy.init.ModBlockEntities;
 import net.steve.darkfantasy.init.ModMenuTypes;
@@ -46,8 +45,6 @@ public class DarkFantasyClient {
     static void onRegisterBlockEntityRenderers(EntityRenderersEvent.RegisterRenderers event) {
         event.registerBlockEntityRenderer(ModBlockEntities.SKYLANDS_PORTAL_BE.get(),
                 ctx -> new SkylandsPortalRenderer());
-        event.registerBlockEntityRenderer(ModBlockEntities.TWILIGHT_PORTAL_BE.get(),
-                ctx -> new TwilightPortalRenderer());
         event.registerBlockEntityRenderer(ModBlockEntities.ALCHEMY_STAND_BE.get(),
                 AlchemyStandRenderer::new);
     }

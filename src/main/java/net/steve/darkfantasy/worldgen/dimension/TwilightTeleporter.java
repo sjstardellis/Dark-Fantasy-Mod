@@ -1,8 +1,10 @@
 package net.steve.darkfantasy.worldgen.dimension;
 
 import net.steve.darkfantasy.block.ModBlocks;
+import net.steve.darkfantasy.block.custom.TwilightPortalBlock;
 import net.steve.darkfantasy.event.TwilightPortalIgnitionHandler;
 import net.minecraft.core.BlockPos;
+import net.minecraft.core.Direction;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.level.block.Blocks;
@@ -13,9 +15,10 @@ import net.minecraft.world.phys.Vec3;
 import org.jspecify.annotations.Nullable;
 
 /**
- * Twilight Forest portal teleporter. Lands the player on the natural ground (rolling
- * overworld-style terrain in the Twilight Forest) and auto-builds a return portal on
- * first arrival so the player is never stranded.
+ * Twilight Forest portal teleporter. Auto-builds a flat 5×5 bookshelf-framed nether-style
+ * portal on the ground at the landing site so the player has a way home. The frame is
+ * X-axis-oriented (spans east/west, faces north/south) by convention; the player lands
+ * two blocks south of it, facing into the portal.
  */
 public final class TwilightTeleporter {
     private TwilightTeleporter() {}
@@ -39,44 +42,56 @@ public final class TwilightTeleporter {
     }
 
     /**
-     * Idempotently builds the return portal on the Twilight Forest surface. Returns the
-     * spot the player should land on (one cardinal step west of the amethyst anchor).
+     * Idempotently builds a 5×5 bookshelf frame with an ignited portal at the heightmap
+     * surface for {@code (x, z)}. The frame is X-axis-oriented and sits at z = {@code z};
+     * the player lands two blocks south (z + 2). Returns the player's landing position.
      */
     private static BlockPos ensureTwilightPortal(ServerLevel level, int x, int z) {
         int groundY = level.getHeight(Heightmap.Types.MOTION_BLOCKING_NO_LEAVES, x, z);
-        BlockPos amethystPos = new BlockPos(x, groundY, z);
-        BlockPos landingPos = amethystPos.offset(-1, 1, 0);
+        // Frame bottom-left origin: 2 west of the center column, 1 below the player's feet,
+        // so the bottom row of bookshelves embeds into the surface (vanilla nether-portal style).
+        BlockPos origin = new BlockPos(x - 2, groundY - 1, z);
+        BlockPos landingPos = new BlockPos(x, groundY, z + 2);
 
-        if (level.getBlockState(amethystPos).is(Blocks.AMETHYST_BLOCK)) {
+        // If the center interior portal block is already lit, the portal exists — reuse it.
+        BlockPos interiorCenter = origin.offset(2, 2, 0);
+        if (level.getBlockState(interiorCenter).is(ModBlocks.TWILIGHT_PORTAL.get())) {
             return landingPos;
         }
 
-        // Clear 3×3 × 5-tall airspace so trees / hills don't block the portal or smother the player.
+        // Clear the frame interior + a 2-block-deep approach corridor in front of it, so
+        // a tree or hillside can't suffocate the player on arrival.
         BlockState air = Blocks.AIR.defaultBlockState();
-        for (int dx = -1; dx <= 1; dx++) {
-            for (int dz = -1; dz <= 1; dz++) {
-                for (int dy = 1; dy <= 5; dy++) {
-                    level.setBlock(amethystPos.offset(dx, dy, dz), air, 3);
+        for (int dx = 0; dx < TwilightPortalIgnitionHandler.FRAME_SIZE; dx++) {
+            for (int dy = 0; dy < TwilightPortalIgnitionHandler.FRAME_SIZE; dy++) {
+                for (int dz = 0; dz <= 2; dz++) {
+                    // dz == 0 is the frame plane itself — bookshelves overwrite below.
+                    level.setBlock(origin.offset(dx, dy, dz), air, 3);
                 }
             }
         }
 
-        BlockState bookshelf = Blocks.BOOKSHELF.defaultBlockState();
-        level.setBlock(amethystPos, Blocks.AMETHYST_BLOCK.defaultBlockState(), 3);
-        for (int[] offset : TwilightPortalIgnitionHandler.REQUIRED_BOOKSHELVES) {
-            level.setBlock(amethystPos.offset(offset[0], offset[1], offset[2]), bookshelf, 3);
+        // Ensure solid ground beneath the player's landing spot.
+        for (int dz = 1; dz <= 2; dz++) {
+            BlockPos under = origin.offset(2, -1, dz);
+            if (!level.getBlockState(under).isSolid()) {
+                level.setBlock(under, Blocks.DIRT.defaultBlockState(), 3);
+            }
         }
-        BlockPos glowstonePos = amethystPos.offset(
-                TwilightPortalIgnitionHandler.GLOWSTONE_POS[0],
-                TwilightPortalIgnitionHandler.GLOWSTONE_POS[1],
-                TwilightPortalIgnitionHandler.GLOWSTONE_POS[2]);
-        level.setBlock(glowstonePos, Blocks.GLOWSTONE.defaultBlockState(), 3);
 
-        // Portal blocks last so updateShape sees the completed frame.
-        BlockState portal = ModBlocks.TWILIGHT_PORTAL.get().defaultBlockState();
-        for (int[] offset : TwilightPortalIgnitionHandler.PORTAL_POSITIONS) {
-            level.setBlock(amethystPos.offset(offset[0], offset[1], offset[2]), portal, 3);
+        // Lay the 16 perimeter bookshelves.
+        BlockState bookshelf = Blocks.BOOKSHELF.defaultBlockState();
+        for (int dx = 0; dx < TwilightPortalIgnitionHandler.FRAME_SIZE; dx++) {
+            for (int dy = 0; dy < TwilightPortalIgnitionHandler.FRAME_SIZE; dy++) {
+                boolean isPerimeter = dx == 0 || dx == 4 || dy == 0 || dy == 4;
+                if (isPerimeter) {
+                    level.setBlock(origin.offset(dx, dy, 0), bookshelf, 3);
+                }
+            }
         }
+
+        // Ignite the interior. Portal blocks placed last so updateShape sees a finished frame.
+        TwilightPortalIgnitionHandler.ignitePortal(level, origin, Direction.Axis.X);
 
         return landingPos;
     }
@@ -85,13 +100,15 @@ public final class TwilightTeleporter {
         int targetX = sourcePortalPos.getX();
         int targetZ = sourcePortalPos.getZ();
 
+        // The overworld portal is identified by an active twilight portal block in its center.
+        // Scan downward at the same X/Z to find one, then land 2 blocks south of it (frame plane + 2).
         int topY = Math.min(level.getMaxY(),
                 level.getHeight(Heightmap.Types.MOTION_BLOCKING, targetX, targetZ));
         BlockPos.MutableBlockPos cursor = new BlockPos.MutableBlockPos();
         for (int y = topY; y >= level.getMinY(); y--) {
             cursor.set(targetX, y, targetZ);
-            if (level.getBlockState(cursor).is(Blocks.AMETHYST_BLOCK)) {
-                return new BlockPos(targetX - 1, y + 1, targetZ);
+            if (level.getBlockState(cursor).is(ModBlocks.TWILIGHT_PORTAL.get())) {
+                return new BlockPos(targetX, y - 1, targetZ + 2);
             }
         }
 

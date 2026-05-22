@@ -1,13 +1,16 @@
 {
   "biome.darkfantasy.twilight_forest": "Twilight Forest",
 
-  "item.darkfantasy.shadowsteel": "Shadowsteel",
+  "item.darkfantasy.shadowsteel": "Shadowsteel Ingot",
   "item.darkfantasy.raw_shadowsteel": "Raw Shadowsteel",
 
-  "item.darkfantasy.moonsilver": "Moonsilver",
+  "item.darkfantasy.eclipsium": "Eclipsium Ingot",
+
+
+  "item.darkfantasy.moonsilver": "Moonsilver Ingot",
   "item.darkfantasy.raw_moonsilver": "Raw Moonsilver",
 
-  "item.darkfantasy.dawnmetal": "Dawnmetal",
+  "item.darkfantasy.dawnmetal": "Dawnmetal Ingot",
   "item.darkfantasy.raw_dawnmetal": "Raw Dawnmetal",
 
   "item.darkfantasy.soul_compass": "Soul Compass",
@@ -33,8 +36,7 @@
   "tooltip.darkfantasy.alchemy_stand.tank": "Lava Tank",
   "tooltip.darkfantasy.alchemy_stand.tank.amount": "§7%s / %s mB§r",
 
-  "creativetab.darkfantasy.darkfantasy_items": "Dark Fantasy Items",
-  "creativetab.darkfantasy.darkfantasy_blocks": "Dark Fantasy Blocks",
+  "creativetab.darkfantasy.darkfantasy_tab": "Dark Fantasy",
 
   "tooltip.darkfantasy.nightshade.tooltip": "Bitter and accursed...",
   "tooltip.darkfantasy.cursed_block.tooltip": "It's deeply §8CURSED§r",

@@ -1,0 +1,10 @@
+{
+  "variants": {
+    "axis=x": {
+      "model": "darkfantasy:block/twilight_portal_ns"
+    },
+    "axis=z": {
+      "model": "darkfantasy:block/twilight_portal_ew"
+    }
+  }
+}
