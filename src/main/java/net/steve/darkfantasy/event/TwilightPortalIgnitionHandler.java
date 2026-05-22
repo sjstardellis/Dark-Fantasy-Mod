@@ -3,9 +3,12 @@ package net.steve.darkfantasy.event;
 import net.steve.darkfantasy.DarkFantasy;
 import net.steve.darkfantasy.block.ModBlocks;
 import net.steve.darkfantasy.block.custom.TwilightPortalBlock;
+import net.steve.darkfantasy.tags.ModTags;
+import net.steve.darkfantasy.worldgen.dimension.ModDimensions;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.server.level.ServerLevel;
+import net.minecraft.world.level.Level;
 import net.minecraft.sounds.SoundEvents;
 import net.minecraft.sounds.SoundSource;
 import net.minecraft.world.InteractionHand;
@@ -69,7 +72,7 @@ public class TwilightPortalIgnitionHandler {
             for (int h = 0; h < FRAME_SIZE; h++) {
                 BlockState state = level.getBlockState(frameToWorld(origin, axis, w, h));
                 if (isPerimeter(w, h)) {
-                    if (!state.is(Blocks.BOOKSHELF)) return false;
+                    if (!state.is(ModTags.Blocks.TWILIGHT_PORTAL_FRAME)) return false;
                 } else if (isInterior(w, h)) {
                     if (!state.isAir()) return false;
                 }
@@ -83,7 +86,7 @@ public class TwilightPortalIgnitionHandler {
         for (int w = 0; w < FRAME_SIZE; w++) {
             for (int h = 0; h < FRAME_SIZE; h++) {
                 if (isPerimeter(w, h)
-                        && !level.getBlockState(frameToWorld(origin, axis, w, h)).is(Blocks.BOOKSHELF)) {
+                        && !level.getBlockState(frameToWorld(origin, axis, w, h)).is(ModTags.Blocks.TWILIGHT_PORTAL_FRAME)) {
                     return false;
                 }
             }
@@ -121,7 +124,7 @@ public class TwilightPortalIgnitionHandler {
         if (!stack.is(Items.FLINT_AND_STEEL)) return;
 
         BlockPos clickedPos = event.getPos();
-        if (!level.getBlockState(clickedPos).is(Blocks.BOOKSHELF)) return;
+        if (!level.getBlockState(clickedPos).is(ModTags.Blocks.TWILIGHT_PORTAL_FRAME)) return;
 
         for (Direction.Axis axis : new Direction.Axis[]{Direction.Axis.X, Direction.Axis.Z}) {
             BlockPos origin = findEmptyFrameOrigin(serverLevel, clickedPos, axis);
@@ -187,7 +190,11 @@ public class TwilightPortalIgnitionHandler {
     @SubscribeEvent
     public static void onBlockBreak(BreakBlockEvent event) {
         if (!(event.getLevel() instanceof ServerLevel level)) return;
-        if (!event.getState().is(Blocks.BOOKSHELF)) return;
+        if (!event.getState().is(ModTags.Blocks.TWILIGHT_PORTAL_FRAME)) return;
+        // Twilight portals only exist in the overworld and the Twilight Forest. Skipping
+        // the 9×9×9 scan in every other dimension keeps mass-bookshelf-breaks cheap.
+        var dim = level.dimension();
+        if (dim != Level.OVERWORLD && dim != ModDimensions.TWILIGHT_FOREST) return;
 
         BlockPos brokenPos = event.getPos();
         int reach = FRAME_SIZE - 1; // 4 — covers any portal block reachable from this bookshelf

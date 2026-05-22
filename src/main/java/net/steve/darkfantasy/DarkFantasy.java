@@ -3,11 +3,17 @@ package net.steve.darkfantasy;
 import com.mojang.logging.LogUtils;
 import net.steve.darkfantasy.block.ModBlocks;
 import net.steve.darkfantasy.creativemodetab.ModCreativeModeTabs;
+import net.steve.darkfantasy.entity.custom.FairyEntity;
+import net.steve.darkfantasy.entity.custom.WizardEntity;
 import net.steve.darkfantasy.init.ModBlockEntities;
+import net.steve.darkfantasy.init.ModEntities;
 import net.steve.darkfantasy.init.ModMenuTypes;
+import net.steve.darkfantasy.init.ModPoiTypes;
 import net.steve.darkfantasy.init.ModRecipes;
 import net.steve.darkfantasy.item.ModItems;
-import net.minecraft.world.item.CreativeModeTabs;
+import net.minecraft.world.entity.SpawnPlacementTypes;
+import net.minecraft.world.entity.monster.Monster;
+import net.minecraft.world.level.levelgen.Heightmap;
 import net.neoforged.bus.api.IEventBus;
 import net.neoforged.bus.api.SubscribeEvent;
 import net.neoforged.fml.ModContainer;
@@ -15,7 +21,8 @@ import net.neoforged.fml.common.Mod;
 import net.neoforged.fml.config.ModConfig;
 import net.neoforged.fml.event.lifecycle.FMLCommonSetupEvent;
 import net.neoforged.neoforge.common.NeoForge;
-import net.neoforged.neoforge.event.BuildCreativeModeTabContentsEvent;
+import net.neoforged.neoforge.event.entity.EntityAttributeCreationEvent;
+import net.neoforged.neoforge.event.entity.RegisterSpawnPlacementsEvent;
 import net.neoforged.neoforge.event.server.ServerStartingEvent;
 import org.slf4j.Logger;
 
@@ -36,15 +43,19 @@ public class DarkFantasy {
 
         ModCreativeModeTabs.register(modEventBus);
 
+        ModEntities.register(modEventBus);
         ModItems.register(modEventBus);
         ModBlocks.register(modEventBus);
         ModBlockEntities.register(modEventBus);
         ModMenuTypes.register(modEventBus);
         ModRecipes.register(modEventBus);
+        ModPoiTypes.register(modEventBus);
+
+        // Mod-bus listeners for entity attributes + spawn placement.
+        modEventBus.addListener(DarkFantasy::onEntityAttributeCreation);
+        modEventBus.addListener(DarkFantasy::onRegisterSpawnPlacements);
 
         NeoForge.EVENT_BUS.register(this);
-        // Register the item to a creative tab
-        modEventBus.addListener(this::addCreative);
         // Register our mod's ModConfigSpec so that FML can create and load the config file for us
         modContainer.registerConfig(ModConfig.Type.COMMON, Config.SPEC);
     }
@@ -53,13 +64,28 @@ public class DarkFantasy {
 
     }
 
-    // Add items/blocks to vanilla tabs
-    private void addCreative(BuildCreativeModeTabContentsEvent event) {
-        if (event.getTabKey() == CreativeModeTabs.INGREDIENTS) {
-            event.accept(ModItems.SHADOWSTEEL);
-            event.accept(ModItems.RAW_SHADOWSTEEL);
-        }
+    private static void onEntityAttributeCreation(EntityAttributeCreationEvent event) {
+        event.put(ModEntities.FAIRY.get(), FairyEntity.createAttributes().build());
+        event.put(ModEntities.WIZARD.get(), WizardEntity.createAttributes().build());
+    }
 
+    /**
+     * Fairies and wizards both spawn under the standard monster light rules. The Twilight
+     * Forest is always at midnight tick so natural light stays below threshold, but using
+     * vanilla's predicate means torches still suppress spawns. Wizards need a solid block
+     * to stand on; fairies fly so they have no placement restriction.
+     */
+    private static void onRegisterSpawnPlacements(RegisterSpawnPlacementsEvent event) {
+        event.register(ModEntities.FAIRY.get(),
+                SpawnPlacementTypes.NO_RESTRICTIONS,
+                Heightmap.Types.MOTION_BLOCKING_NO_LEAVES,
+                Monster::checkAnyLightMonsterSpawnRules,
+                RegisterSpawnPlacementsEvent.Operation.REPLACE);
+        event.register(ModEntities.WIZARD.get(),
+                SpawnPlacementTypes.ON_GROUND,
+                Heightmap.Types.MOTION_BLOCKING_NO_LEAVES,
+                Monster::checkAnyLightMonsterSpawnRules,
+                RegisterSpawnPlacementsEvent.Operation.REPLACE);
     }
 
     @SubscribeEvent

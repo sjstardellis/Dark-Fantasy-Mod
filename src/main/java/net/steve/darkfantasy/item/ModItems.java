@@ -3,10 +3,12 @@ package net.steve.darkfantasy.item;
 import net.minecraft.world.item.Rarity;
 import net.steve.darkfantasy.DarkFantasy;
 import net.steve.darkfantasy.food.ModFoods;
+import net.steve.darkfantasy.init.ModEntities;
 import net.steve.darkfantasy.item.custom.SoulCompassItem;
 import net.minecraft.network.chat.Component;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.item.SpawnEggItem;
 import net.minecraft.world.item.TooltipFlag;
 import net.minecraft.world.item.component.TooltipDisplay;
 import net.neoforged.bus.api.IEventBus;
@@ -45,6 +47,17 @@ public class ModItems {
 
     public static final DeferredItem<Item> HELLFIRE_KINDLING = ITEMS.registerItem("hellfire_kindling",
             properties -> new Item(properties.stacksTo(32)));
+
+    public static final DeferredItem<Item> FAIRY_DUST = ITEMS.registerSimpleItem("fairy_dust");
+
+    // Spawn egg is tinted automatically via Item.Properties.spawnEgg(EntityType).
+    public static final DeferredItem<SpawnEggItem> FAIRY_SPAWN_EGG = ITEMS.registerItem(
+            "fairy_spawn_egg",
+            properties -> new SpawnEggItem(properties.spawnEgg(ModEntities.FAIRY.get())));
+
+    public static final DeferredItem<SpawnEggItem> WIZARD_SPAWN_EGG = ITEMS.registerItem(
+            "wizard_spawn_egg",
+            properties -> new SpawnEggItem(properties.spawnEgg(ModEntities.WIZARD.get())));
 
 
     public static void register(IEventBus eventBus) {

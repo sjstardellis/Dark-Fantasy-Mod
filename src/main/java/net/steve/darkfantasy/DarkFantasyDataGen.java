@@ -1,6 +1,11 @@
 package net.steve.darkfantasy;
 
-import net.steve.darkfantasy.datagen.*;
+import net.steve.darkfantasy.datagen.ModBlockLootTableProvider;
+import net.steve.darkfantasy.datagen.ModBlockTagsProvider;
+import net.steve.darkfantasy.datagen.ModDataMapProvider;
+import net.steve.darkfantasy.datagen.ModItemTagsProvider;
+import net.steve.darkfantasy.datagen.ModModelProvider;
+import net.steve.darkfantasy.datagen.ModRecipeProvider;
 import net.minecraft.data.DataGenerator;
 import net.minecraft.data.PackOutput;
 import net.minecraft.data.loot.LootTableProvider;

@@ -27,6 +27,7 @@ public class ModModelProvider extends ModelProvider {
         itemModels.generateFlatItem(ModItems.NIGHTSHADE.get(), ModelTemplates.FLAT_ITEM);
         itemModels.generateFlatItem(ModItems.HELLFIRE_KINDLING.get(), ModelTemplates.FLAT_ITEM);
         itemModels.generateFlatItem(ModItems.ECLIPSIUM.get(), ModelTemplates.FLAT_ITEM);
+        itemModels.generateFlatItem(ModItems.FAIRY_DUST.get(), ModelTemplates.FLAT_ITEM);
 
 
         itemModels.generateFlatItem(ModItems.MOONSILVER.get(), ModelTemplates.FLAT_ITEM);
@@ -62,13 +63,17 @@ public class ModModelProvider extends ModelProvider {
         return super.getKnownBlocks()
                 .filter(holder -> holder.value() != ModBlocks.SKYLANDS_PORTAL.get()
                                && holder.value() != ModBlocks.TWILIGHT_PORTAL.get()
-                               && holder.value() != ModBlocks.ALCHEMY_STAND.get());
+                               && holder.value() != ModBlocks.ALCHEMY_STAND.get()
+                               && holder.value() != ModBlocks.ENCHANTED_BOOKSHELF.get());
     }
 
-    /** Exclude the alchemy stand's BlockItem too — its item model is hand-written. */
+    /** Exclude items whose models are hand-written under src/main/resources. */
     @Override
     protected Stream<? extends Holder<net.minecraft.world.item.Item>> getKnownItems() {
         return super.getKnownItems()
-                .filter(holder -> holder.value() != ModBlocks.ALCHEMY_STAND.get().asItem());
+                .filter(holder -> holder.value() != ModBlocks.ALCHEMY_STAND.get().asItem()
+                               && holder.value() != ModBlocks.ENCHANTED_BOOKSHELF.get().asItem()
+                               && holder.value() != net.steve.darkfantasy.item.ModItems.FAIRY_SPAWN_EGG.get()
+                               && holder.value() != net.steve.darkfantasy.item.ModItems.WIZARD_SPAWN_EGG.get());
     }
 }

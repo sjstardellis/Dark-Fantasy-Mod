@@ -1,0 +1,17 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "category": "misc",
+  "key": {
+    "B": "minecraft:bookshelf",
+    "E": "minecraft:experience_bottle",
+    "P": "minecraft:oak_planks"
+  },
+  "pattern": [
+    "PPP",
+    "EBE",
+    "PPP"
+  ],
+  "result": {
+    "id": "darkfantasy:enchanted_bookshelf"
+  }
+}

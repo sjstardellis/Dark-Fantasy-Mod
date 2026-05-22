@@ -45,6 +45,11 @@ public class ModCreativeModeTabs {
 
                         output.accept(ModBlocks.CURSED_BLOCK);
                         output.accept(ModBlocks.ALCHEMY_STAND);
+                        output.accept(ModBlocks.ENCHANTED_BOOKSHELF);
+
+                        output.accept(ModItems.FAIRY_DUST);
+                        output.accept(ModItems.FAIRY_SPAWN_EGG);
+                        output.accept(ModItems.WIZARD_SPAWN_EGG);
                     }).build());
 
 

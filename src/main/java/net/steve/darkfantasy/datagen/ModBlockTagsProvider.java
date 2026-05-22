@@ -28,6 +28,15 @@ public class ModBlockTagsProvider extends BlockTagsProvider {
                 .add(ModBlocks.MOONSILVER_ORE.get())
                 .add(ModBlocks.MOONSILVER_DEEPSLATE_ORE.get());
 
+        tag(BlockTags.MINEABLE_WITH_AXE)
+                .add(ModBlocks.ENCHANTED_BOOKSHELF.get());
+
+        tag(BlockTags.ENCHANTMENT_POWER_PROVIDER)
+                .add(ModBlocks.ENCHANTED_BOOKSHELF.get());
+
+        tag(ModTags.Blocks.TWILIGHT_PORTAL_FRAME)
+                .add(ModBlocks.ENCHANTED_BOOKSHELF.get());
+
 
         tag(BlockTags.NEEDS_IRON_TOOL)
                 .add(ModBlocks.SHADOWSTEEL_DEEPSLATE_ORE.get());

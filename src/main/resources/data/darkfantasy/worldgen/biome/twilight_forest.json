@@ -164,6 +164,18 @@
         "maxCount": 2,
         "minCount": 1,
         "weight": 15
+      },
+      {
+        "type": "darkfantasy:fairy",
+        "maxCount": 4,
+        "minCount": 2,
+        "weight": 18
+      },
+      {
+        "type": "darkfantasy:wizard",
+        "maxCount": 1,
+        "minCount": 1,
+        "weight": 6
       }
     ],
     "underground_water_creature": [],

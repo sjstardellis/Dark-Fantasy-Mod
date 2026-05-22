@@ -1,0 +1,43 @@
+{
+  "parent": "minecraft:recipes/root",
+  "criteria": {
+    "has_bookshelf": {
+      "conditions": {
+        "items": [
+          {
+            "items": "minecraft:bookshelf"
+          }
+        ]
+      },
+      "trigger": "minecraft:inventory_changed"
+    },
+    "has_experience_bottle": {
+      "conditions": {
+        "items": [
+          {
+            "items": "minecraft:experience_bottle"
+          }
+        ]
+      },
+      "trigger": "minecraft:inventory_changed"
+    },
+    "has_the_recipe": {
+      "conditions": {
+        "recipe": "darkfantasy:enchanted_bookshelf"
+      },
+      "trigger": "minecraft:recipe_unlocked"
+    }
+  },
+  "requirements": [
+    [
+      "has_the_recipe",
+      "has_bookshelf",
+      "has_experience_bottle"
+    ]
+  ],
+  "rewards": {
+    "recipes": [
+      "darkfantasy:enchanted_bookshelf"
+    ]
+  }
+}

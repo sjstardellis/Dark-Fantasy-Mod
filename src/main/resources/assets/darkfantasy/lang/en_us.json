@@ -19,6 +19,13 @@
   "item.darkfantasy.nightshade": "Nightshade",
   "item.darkfantasy.hellfire_kindling": "Hellfire Kindling",
 
+  "item.darkfantasy.fairy_dust": "Fairy Dust",
+  "item.darkfantasy.fairy_spawn_egg": "Fairy Spawn Egg",
+  "entity.darkfantasy.fairy": "Fairy",
+
+  "item.darkfantasy.wizard_spawn_egg": "Wizard Spawn Egg",
+  "entity.darkfantasy.wizard": "Wizard",
+
   "block.darkfantasy.dawnmetal_ore": "Dawnmetal Ore",
   "block.darkfantasy.dawnmetal_deepslate_ore": "Dawnmetal Deepslate Ore",
 
@@ -32,6 +39,7 @@
   "block.darkfantasy.alchemy_stand": "Alchemy Stand",
   "container.darkfantasy.alchemy_stand": "Alchemy Stand",
   "block.darkfantasy.skylands_portal": "Skylands Portal",
+  "block.darkfantasy.enchanted_bookshelf": "Enchanted Bookshelf",
 
   "tooltip.darkfantasy.alchemy_stand.tank": "Lava Tank",
   "tooltip.darkfantasy.alchemy_stand.tank.amount": "§7%s / %s mB§r",

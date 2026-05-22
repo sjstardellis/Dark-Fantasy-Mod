@@ -43,6 +43,7 @@ public class ModBlockLootTableProvider extends BlockLootSubProvider {
 
         dropSelf(ModBlocks.CURSED_BLOCK.get());
         dropSelf(ModBlocks.ALCHEMY_STAND.get());
+        dropSelf(ModBlocks.ENCHANTED_BOOKSHELF.get());
 
         // Portals - never drops anything
         add(ModBlocks.SKYLANDS_PORTAL.get(), noDrop());

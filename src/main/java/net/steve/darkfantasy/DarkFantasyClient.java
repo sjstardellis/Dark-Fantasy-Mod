@@ -1,9 +1,12 @@
 package net.steve.darkfantasy;
 
 import net.steve.darkfantasy.client.renderer.AlchemyStandRenderer;
+import net.steve.darkfantasy.client.renderer.FairyRenderer;
 import net.steve.darkfantasy.client.renderer.SkylandsPortalRenderer;
+import net.steve.darkfantasy.client.renderer.WizardRenderer;
 import net.steve.darkfantasy.client.screen.AlchemyStandScreen;
 import net.steve.darkfantasy.init.ModBlockEntities;
+import net.steve.darkfantasy.init.ModEntities;
 import net.steve.darkfantasy.init.ModMenuTypes;
 import net.minecraft.client.Minecraft;
 import net.neoforged.api.distmarker.Dist;
@@ -46,5 +49,8 @@ public class DarkFantasyClient {
                 ctx -> new SkylandsPortalRenderer());
         event.registerBlockEntityRenderer(ModBlockEntities.ALCHEMY_STAND_BE.get(),
                 AlchemyStandRenderer::new);
+
+        event.registerEntityRenderer(ModEntities.FAIRY.get(), FairyRenderer::new);
+        event.registerEntityRenderer(ModEntities.WIZARD.get(), WizardRenderer::new);
     }
 }

@@ -9,10 +9,12 @@ import net.minecraft.data.recipes.RecipeCategory;
 import net.minecraft.data.recipes.RecipeOutput;
 import net.minecraft.data.recipes.RecipeProvider;
 import net.minecraft.data.recipes.SimpleCookingRecipeBuilder;
+import net.minecraft.world.item.Items;
 import net.minecraft.world.item.crafting.AbstractCookingRecipe;
 import net.minecraft.world.item.crafting.CookingBookCategory;
 import net.minecraft.world.item.crafting.Ingredient;
 import net.minecraft.world.level.ItemLike;
+import net.minecraft.world.level.block.Blocks;
 
 import java.util.List;
 import java.util.concurrent.CompletableFuture;
@@ -50,6 +52,19 @@ public class ModRecipeProvider extends RecipeProvider {
                 ModItems.SHADOWSTEEL.get(), 0.25f, 200, "shadowsteel");
         oreBlasting(SHADOWSTEEL_SMELTABLES, RecipeCategory.MISC, CookingBookCategory.MISC,
                 ModItems.SHADOWSTEEL.get(), 0.25f, 100, "shadowsteel");
+
+        // Enchanted bookshelf: oak planks on top and bottom rows, bottle of enchanting
+        // flanking a regular bookshelf in the middle.
+        this.shaped(RecipeCategory.DECORATIONS, ModBlocks.ENCHANTED_BOOKSHELF.get())
+                .define('P', Items.OAK_PLANKS)
+                .define('E', Items.EXPERIENCE_BOTTLE)
+                .define('B', Blocks.BOOKSHELF)
+                .pattern("PPP")
+                .pattern("EBE")
+                .pattern("PPP")
+                .unlockedBy("has_bookshelf", has(Blocks.BOOKSHELF))
+                .unlockedBy("has_experience_bottle", has(Items.EXPERIENCE_BOTTLE))
+                .save(output);
     }
 
     @Override

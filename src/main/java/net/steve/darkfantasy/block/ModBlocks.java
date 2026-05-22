@@ -3,6 +3,7 @@ package net.steve.darkfantasy.block;
 import net.steve.darkfantasy.DarkFantasy;
 import net.steve.darkfantasy.block.custom.AlchemyStandBlock;
 import net.steve.darkfantasy.block.custom.CursedBlock;
+import net.steve.darkfantasy.block.custom.EnchantedBookshelfBlock;
 import net.steve.darkfantasy.block.custom.SkylandsPortalBlock;
 import net.steve.darkfantasy.block.custom.TwilightPortalBlock;
 import net.steve.darkfantasy.item.ModItems;
@@ -14,11 +15,6 @@ import net.minecraft.world.item.TooltipFlag;
 import net.minecraft.world.item.component.TooltipDisplay;
 import net.minecraft.world.level.block.*;
 import net.minecraft.world.level.block.state.BlockBehaviour;
-import net.minecraft.world.level.block.state.properties.BlockSetType;
-import net.minecraft.world.level.block.state.properties.NoteBlockInstrument;
-import net.minecraft.world.level.block.state.properties.WoodType;
-import net.minecraft.world.level.material.MapColor;
-import net.minecraft.world.level.material.PushReaction;
 import net.neoforged.bus.api.IEventBus;
 import net.neoforged.neoforge.registries.DeferredBlock;
 import net.neoforged.neoforge.registries.DeferredRegister;
@@ -29,7 +25,8 @@ import java.util.function.Function;
 public class ModBlocks {
     public static final DeferredRegister.Blocks BLOCKS =
             DeferredRegister.createBlocks(DarkFantasy.MOD_ID);
-    
+
+
 
     public static final DeferredBlock<Block> SHADOWSTEEL_ORE = registerBlock("shadowsteel_ore",
             properties -> new DropExperienceBlock(UniformInt.of(2, 4), properties.strength(3f)
@@ -37,7 +34,7 @@ public class ModBlocks {
     public static final DeferredBlock<Block> SHADOWSTEEL_DEEPSLATE_ORE = registerBlock("shadowsteel_deepslate_ore",
             properties -> new DropExperienceBlock(UniformInt.of(3, 5), properties.strength(5f)
                     .requiresCorrectToolForDrops().sound(SoundType.DEEPSLATE)));
-
+    
 
     public static final DeferredBlock<Block> MOONSILVER_ORE = registerBlock("moonsilver_ore",
             properties -> new DropExperienceBlock(UniformInt.of(3, 4), properties.strength(3f)
@@ -60,6 +57,10 @@ public class ModBlocks {
     public static final DeferredBlock<Block> ALCHEMY_STAND = registerBlock("alchemy_stand",
             properties -> new AlchemyStandBlock(properties.strength(2f)
                     .requiresCorrectToolForDrops().sound(SoundType.STONE).noOcclusion()));
+
+    public static final DeferredBlock<Block> ENCHANTED_BOOKSHELF = registerBlock("enchanted_bookshelf",
+            properties -> new EnchantedBookshelfBlock(properties.strength(1.8f)
+                    .sound(SoundType.WOOD).lightLevel(state -> 4).ignitedByLava()));
 
     // Skylands portal — no BlockItem (not obtainable in survival).
     public static final DeferredBlock<SkylandsPortalBlock> SKYLANDS_PORTAL = BLOCKS.registerBlock("skylands_portal",
@@ -84,32 +85,18 @@ public class ModBlocks {
                     .noOcclusion());
 
 
-    private static <T extends Block> DeferredBlock<T> registerBlock(String name, Function<BlockBehaviour.Properties, T> function, Component... components) {
-        DeferredBlock<T> toReturn = BLOCKS.registerBlock(name, function);
-        registerBlockItem(name, toReturn, components);
-        return toReturn;
-    }
-
-    private static <T extends Block> void registerBlockItem(String name, DeferredBlock<T> block, Component... components) {
+    private static <T extends Block> DeferredBlock<T> registerBlock(String name, Function<BlockBehaviour.Properties, T> function, Component... tooltipLines) {
+        DeferredBlock<T> block = BLOCKS.registerBlock(name, function);
         ModItems.ITEMS.registerItem(name, properties -> new BlockItem(block.get(), properties.useBlockDescriptionPrefix()) {
             @Override
             public void appendHoverText(ItemStack itemStack, TooltipContext context, TooltipDisplay display, Consumer<Component> builder, TooltipFlag tooltipFlag) {
-                for (var component : components) {
-                    builder.accept(component);
+                for (Component line : tooltipLines) {
+                    builder.accept(line);
                 }
                 super.appendHoverText(itemStack, context, display, builder, tooltipFlag);
             }
         });
-    }
-
-    private static <T extends Block> DeferredBlock<T> registerBlock(String name, Function<BlockBehaviour.Properties, T> function) {
-        DeferredBlock<T> toReturn = BLOCKS.registerBlock(name, function);
-        registerBlockItem(name, toReturn);
-        return toReturn;
-    }
-
-    private static <T extends Block> void registerBlockItem(String name, DeferredBlock<T> block) {
-        ModItems.ITEMS.registerItem(name, properties -> new BlockItem(block.get(), properties.useBlockDescriptionPrefix()));
+        return block;
     }
 
     public static void register(IEventBus eventBus) {
