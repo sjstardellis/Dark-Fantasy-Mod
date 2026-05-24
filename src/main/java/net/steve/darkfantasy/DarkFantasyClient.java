@@ -1,10 +1,13 @@
 package net.steve.darkfantasy;
 
 import net.steve.darkfantasy.client.renderer.AlchemyStandRenderer;
+import net.steve.darkfantasy.client.renderer.ElectroDragonRenderer;
 import net.steve.darkfantasy.client.renderer.FairyRenderer;
+import net.steve.darkfantasy.client.renderer.GoblinRenderer;
 import net.steve.darkfantasy.client.renderer.SkylandsPortalRenderer;
 import net.steve.darkfantasy.client.renderer.WizardRenderer;
 import net.steve.darkfantasy.client.screen.AlchemyStandScreen;
+import net.steve.darkfantasy.client.screen.BrewingKegScreen;
 import net.steve.darkfantasy.init.ModBlockEntities;
 import net.steve.darkfantasy.init.ModEntities;
 import net.steve.darkfantasy.init.ModMenuTypes;
@@ -41,6 +44,7 @@ public class DarkFantasyClient {
     @SubscribeEvent
     static void onRegisterMenuScreens(RegisterMenuScreensEvent event) {
         event.register(ModMenuTypes.ALCHEMY_STAND_MENU.get(), AlchemyStandScreen::new);
+        event.register(ModMenuTypes.BREWING_KEG_MENU.get(), BrewingKegScreen::new);
     }
 
     @SubscribeEvent
@@ -52,5 +56,17 @@ public class DarkFantasyClient {
 
         event.registerEntityRenderer(ModEntities.FAIRY.get(), FairyRenderer::new);
         event.registerEntityRenderer(ModEntities.WIZARD.get(), WizardRenderer::new);
+        // Lightning projectile is intentionally invisible — its trail is pure particles
+        // and its impact is a real LightningBolt entity. NoopRenderer draws nothing.
+        event.registerEntityRenderer(ModEntities.LIGHTNING_PROJECTILE.get(),
+                net.minecraft.client.renderer.entity.NoopRenderer::new);
+        event.registerEntityRenderer(ModEntities.ELECTRO_DRAGON.get(), ElectroDragonRenderer::new);
+        event.registerEntityRenderer(ModEntities.GOBLIN.get(), GoblinRenderer::new);
+        // Goblin rocks render as a thrown item (vanilla projectile look) — using the
+        // built-in ThrownItemRenderer keyed to a "stone" item gives a free pebble visual.
+        // ThrownItemRenderer pulls the item to render from the projectile's
+        // ItemSupplier.getItem() — GoblinRockProjectile returns a cobblestone.
+        event.registerEntityRenderer(ModEntities.GOBLIN_ROCK.get(),
+                net.minecraft.client.renderer.entity.ThrownItemRenderer::new);
     }
 }

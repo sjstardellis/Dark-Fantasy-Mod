@@ -1,0 +1,43 @@
+{
+  "type": "minecraft:block",
+  "pools": [
+    {
+      "bonus_rolls": 0.0,
+      "rolls": 1.0,
+      "entries": [
+        {
+          "type": "minecraft:alternatives",
+          "children": [
+            {
+              "type": "minecraft:item",
+              "name": "darkfantasy:hops",
+              "conditions": [
+                {
+                  "condition": "minecraft:block_state_property",
+                  "block": "darkfantasy:hops_crop",
+                  "properties": { "age": "3" }
+                }
+              ],
+              "functions": [
+                {
+                  "function": "minecraft:set_count",
+                  "count": { "type": "minecraft:uniform", "min": 2, "max": 4 },
+                  "add": false
+                },
+                { "function": "minecraft:explosion_decay" }
+              ]
+            },
+            {
+              "type": "minecraft:item",
+              "name": "darkfantasy:hops",
+              "functions": [
+                { "function": "minecraft:explosion_decay" }
+              ]
+            }
+          ]
+        }
+      ]
+    }
+  ],
+  "random_sequence": "darkfantasy:blocks/hops_crop"
+}

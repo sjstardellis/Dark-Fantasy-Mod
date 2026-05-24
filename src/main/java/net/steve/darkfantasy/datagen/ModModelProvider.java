@@ -28,6 +28,8 @@ public class ModModelProvider extends ModelProvider {
         itemModels.generateFlatItem(ModItems.HELLFIRE_KINDLING.get(), ModelTemplates.FLAT_ITEM);
         itemModels.generateFlatItem(ModItems.ECLIPSIUM.get(), ModelTemplates.FLAT_ITEM);
         itemModels.generateFlatItem(ModItems.FAIRY_DUST.get(), ModelTemplates.FLAT_ITEM);
+        itemModels.generateFlatItem(ModItems.LIGHTNING_STAFF.get(), ModelTemplates.FLAT_HANDHELD_ITEM);
+        itemModels.generateFlatItem(ModItems.FIREBALL_STAFF.get(), ModelTemplates.FLAT_HANDHELD_ITEM);
 
 
         itemModels.generateFlatItem(ModItems.MOONSILVER.get(), ModelTemplates.FLAT_ITEM);
@@ -74,6 +76,7 @@ public class ModModelProvider extends ModelProvider {
                 .filter(holder -> holder.value() != ModBlocks.ALCHEMY_STAND.get().asItem()
                                && holder.value() != ModBlocks.ENCHANTED_BOOKSHELF.get().asItem()
                                && holder.value() != net.steve.darkfantasy.item.ModItems.FAIRY_SPAWN_EGG.get()
-                               && holder.value() != net.steve.darkfantasy.item.ModItems.WIZARD_SPAWN_EGG.get());
+                               && holder.value() != net.steve.darkfantasy.item.ModItems.WIZARD_SPAWN_EGG.get()
+                               && holder.value() != net.steve.darkfantasy.item.ModItems.ELECTRO_DRAGON_SPAWN_EGG.get());
     }
 }

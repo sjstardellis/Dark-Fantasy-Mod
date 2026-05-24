@@ -48,8 +48,16 @@ public class ModCreativeModeTabs {
                         output.accept(ModBlocks.ENCHANTED_BOOKSHELF);
 
                         output.accept(ModItems.FAIRY_DUST);
+                        output.accept(ModItems.HOPS);
+                        output.accept(ModItems.BEER);
+                        output.accept(ModItems.STEIN_GLASS);
+                        output.accept(ModBlocks.BREWING_KEG);
+                        output.accept(ModItems.LIGHTNING_STAFF);
+                        output.accept(ModItems.FIREBALL_STAFF);
                         output.accept(ModItems.FAIRY_SPAWN_EGG);
                         output.accept(ModItems.WIZARD_SPAWN_EGG);
+                        output.accept(ModItems.ELECTRO_DRAGON_SPAWN_EGG);
+                        output.accept(ModItems.GOBLIN_SPAWN_EGG);
                     }).build());
 
 

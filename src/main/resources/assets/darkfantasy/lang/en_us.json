@@ -20,11 +20,32 @@
   "item.darkfantasy.hellfire_kindling": "Hellfire Kindling",
 
   "item.darkfantasy.fairy_dust": "Fairy Dust",
+
+  "item.darkfantasy.hops": "Hops",
+  "item.darkfantasy.beer": "Beer",
+  "item.darkfantasy.stein_glass": "Stein Glass",
+  "block.darkfantasy.hops_crop": "Hops",
+  "block.darkfantasy.brewing_keg": "Brewing Keg",
+  "container.darkfantasy.brewing_keg": "Brewing Keg",
+  "tooltip.darkfantasy.brewing_keg.tank": "Beer Tank",
+  "tooltip.darkfantasy.brewing_keg.tank.amount": "§7%s / %s mB§r",
+
   "item.darkfantasy.fairy_spawn_egg": "Fairy Spawn Egg",
   "entity.darkfantasy.fairy": "Fairy",
 
+  "item.darkfantasy.lightning_staff": "Lightning Staff",
+  "item.darkfantasy.fireball_staff": "Fireball Staff",
+  "entity.darkfantasy.lightning_projectile": "Lightning Bolt",
+
   "item.darkfantasy.wizard_spawn_egg": "Wizard Spawn Egg",
   "entity.darkfantasy.wizard": "Wizard",
+
+  "item.darkfantasy.electro_dragon_spawn_egg": "Electrodragon Spawn Egg",
+  "entity.darkfantasy.electro_dragon": "Electrodragon",
+
+  "item.darkfantasy.goblin_spawn_egg": "Goblin Spawn Egg",
+  "entity.darkfantasy.goblin": "Goblin",
+  "entity.darkfantasy.goblin_rock": "Goblin Rock",
 
   "block.darkfantasy.dawnmetal_ore": "Dawnmetal Ore",
   "block.darkfantasy.dawnmetal_deepslate_ore": "Dawnmetal Deepslate Ore",

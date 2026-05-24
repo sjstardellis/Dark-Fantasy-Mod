@@ -1,0 +1,9 @@
+{
+  "variants": {
+    "stage=0": { "model": "darkfantasy:block/brewing_keg" },
+    "stage=1": { "model": "darkfantasy:block/brewing_keg" },
+    "stage=2": { "model": "darkfantasy:block/brewing_keg" },
+    "stage=3": { "model": "darkfantasy:block/brewing_keg" },
+    "stage=4": { "model": "darkfantasy:block/brewing_keg" }
+  }
+}

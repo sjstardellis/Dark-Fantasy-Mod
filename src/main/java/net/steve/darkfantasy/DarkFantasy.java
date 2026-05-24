@@ -3,7 +3,9 @@ package net.steve.darkfantasy;
 import com.mojang.logging.LogUtils;
 import net.steve.darkfantasy.block.ModBlocks;
 import net.steve.darkfantasy.creativemodetab.ModCreativeModeTabs;
+import net.steve.darkfantasy.entity.custom.ElectroDragonEntity;
 import net.steve.darkfantasy.entity.custom.FairyEntity;
+import net.steve.darkfantasy.entity.custom.GoblinEntity;
 import net.steve.darkfantasy.entity.custom.WizardEntity;
 import net.steve.darkfantasy.init.ModBlockEntities;
 import net.steve.darkfantasy.init.ModEntities;
@@ -67,6 +69,8 @@ public class DarkFantasy {
     private static void onEntityAttributeCreation(EntityAttributeCreationEvent event) {
         event.put(ModEntities.FAIRY.get(), FairyEntity.createAttributes().build());
         event.put(ModEntities.WIZARD.get(), WizardEntity.createAttributes().build());
+        event.put(ModEntities.ELECTRO_DRAGON.get(), ElectroDragonEntity.createAttributes().build());
+        event.put(ModEntities.GOBLIN.get(), GoblinEntity.createAttributes().build());
     }
 
     /**
@@ -82,6 +86,14 @@ public class DarkFantasy {
                 Monster::checkAnyLightMonsterSpawnRules,
                 RegisterSpawnPlacementsEvent.Operation.REPLACE);
         event.register(ModEntities.WIZARD.get(),
+                SpawnPlacementTypes.ON_GROUND,
+                Heightmap.Types.MOTION_BLOCKING_NO_LEAVES,
+                Monster::checkAnyLightMonsterSpawnRules,
+                RegisterSpawnPlacementsEvent.Operation.REPLACE);
+        // Goblins follow standard ground-mob spawning: solid block beneath, dark
+        // enough light level. Twilight Forest is permanently night, so light-level
+        // gating means torches still suppress goblin packs as expected.
+        event.register(ModEntities.GOBLIN.get(),
                 SpawnPlacementTypes.ON_GROUND,
                 Heightmap.Types.MOTION_BLOCKING_NO_LEAVES,
                 Monster::checkAnyLightMonsterSpawnRules,

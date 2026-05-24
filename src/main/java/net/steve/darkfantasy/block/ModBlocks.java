@@ -2,8 +2,10 @@ package net.steve.darkfantasy.block;
 
 import net.steve.darkfantasy.DarkFantasy;
 import net.steve.darkfantasy.block.custom.AlchemyStandBlock;
+import net.steve.darkfantasy.block.custom.BrewingKegBlock;
 import net.steve.darkfantasy.block.custom.CursedBlock;
 import net.steve.darkfantasy.block.custom.EnchantedBookshelfBlock;
+import net.steve.darkfantasy.block.custom.HopsBlock;
 import net.steve.darkfantasy.block.custom.SkylandsPortalBlock;
 import net.steve.darkfantasy.block.custom.TwilightPortalBlock;
 import net.steve.darkfantasy.item.ModItems;
@@ -72,6 +74,24 @@ public class ModBlocks {
                     .lightLevel(state -> 11)
                     .pushReaction(net.minecraft.world.level.material.PushReaction.BLOCK)
                     .noOcclusion());
+
+    // Brewing keg — beer fermentation. State + ingredient flags live in
+    // BrewingKegBlockEntity; brewing only progresses while a heat source sits below.
+    public static final DeferredBlock<Block> BREWING_KEG = registerBlock("brewing_keg",
+            properties -> new BrewingKegBlock(properties.strength(2.0f)
+                    .sound(SoundType.WOOD).ignitedByLava()));
+
+    // Hops — 4-stage farmland crop. Planting is via the Hops item (registered as
+    // BlockItem(HOPS_CROP) in ModItems), matching the vanilla wheat-seeds → wheat-block
+    // pattern.
+    public static final DeferredBlock<HopsBlock> HOPS_CROP = BLOCKS.registerBlock("hops_crop",
+            HopsBlock::new,
+            properties -> properties
+                    .noCollision()
+                    .randomTicks()
+                    .instabreak()
+                    .sound(SoundType.CROP)
+                    .pushReaction(net.minecraft.world.level.material.PushReaction.DESTROY));
 
     // Twilight Forest portal — also no BlockItem.
     public static final DeferredBlock<TwilightPortalBlock> TWILIGHT_PORTAL = BLOCKS.registerBlock("twilight_portal",
