@@ -1,12 +1,16 @@
 package net.steve.darkfantasy.entity.custom;
 
 import net.steve.darkfantasy.init.ModEntities;
+import net.steve.darkfantasy.item.ModItems;
 import net.minecraft.core.particles.ParticleTypes;
 import net.minecraft.resources.Identifier;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.sounds.SoundEvent;
 import net.minecraft.sounds.SoundEvents;
+import net.minecraft.world.InteractionHand;
+import net.minecraft.world.InteractionResult;
 import net.minecraft.world.damagesource.DamageSource;
+import net.minecraft.world.entity.AnimationState;
 import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.ai.attributes.AttributeModifier;
@@ -19,14 +23,17 @@ import net.minecraft.world.entity.ai.goal.MeleeAttackGoal;
 import net.minecraft.world.entity.ai.goal.RandomLookAroundGoal;
 import net.minecraft.world.entity.ai.goal.WaterAvoidingRandomStrollGoal;
 import net.minecraft.world.entity.ai.goal.target.HurtByTargetGoal;
-import net.minecraft.world.entity.ai.goal.target.NearestAttackableTargetGoal;
 import net.minecraft.world.entity.monster.Monster;
 import net.minecraft.world.entity.player.Player;
+import net.minecraft.world.item.Item;
+import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.item.Items;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.phys.Vec3;
 import org.jspecify.annotations.Nullable;
 
 import java.util.EnumSet;
+import java.util.List;
 
 /**
  * Small, scrappy melee+ranged mob designed as a Twilight Forest encounter. Uses the
@@ -83,6 +90,50 @@ public class GoblinEntity extends Monster {
     /** True once the goblin has entered berserk mode this lifetime. Never resets. */
     private boolean berserkApplied = false;
 
+    // Animation event IDs — broadcast via Level.broadcastEntityEvent so client viewers
+    // start their AnimationStates in sync with server-side actions. Values are in the
+    // mod-safe 60+ range to avoid collisions with vanilla LivingEntity event constants.
+    private static final byte EVENT_MELEE_SWING = 60;
+    private static final byte EVENT_ROCK_THROW = 61;
+    private static final byte EVENT_TRADE_ACCEPT = 62;
+
+    /**
+     * Client-side animation states. The renderer copies these into the matching
+     * CopperGolemRenderState interaction slots so {@link net.minecraft.client.model.animal.golem.CopperGolemModel#setupAnim}
+     * plays them. Server only mutates them indirectly by broadcasting the matching
+     * entity event below.
+     */
+    public final AnimationState meleeSwingState = new AnimationState();
+    public final AnimationState rockThrowState = new AnimationState();
+    public final AnimationState tradeAcceptState = new AnimationState();
+
+    @Override
+    public void handleEntityEvent(byte event) {
+        if (event == EVENT_MELEE_SWING) {
+            this.meleeSwingState.start(this.tickCount);
+        } else if (event == EVENT_ROCK_THROW) {
+            this.rockThrowState.start(this.tickCount);
+        } else if (event == EVENT_TRADE_ACCEPT) {
+            this.tradeAcceptState.start(this.tickCount);
+        } else {
+            super.handleEntityEvent(event);
+        }
+    }
+
+    /**
+     * Override the swing hook so every melee attempt (hit OR miss) plays the animation.
+     * MeleeAttackGoal calls {@code swing(MAIN_HAND)} just before {@code doHurtTarget},
+     * so this fires on the visual moment of the strike rather than only on successful
+     * damage application.
+     */
+    @Override
+    public void swing(InteractionHand hand) {
+        super.swing(hand);
+        if (this.level() instanceof ServerLevel server) {
+            server.broadcastEntityEvent(this, EVENT_MELEE_SWING);
+        }
+    }
+
     public GoblinEntity(EntityType<? extends GoblinEntity> type, Level level) {
         super(type, level);
         this.xpReward = 3;
@@ -108,8 +159,23 @@ public class GoblinEntity extends Monster {
         this.goalSelector.addGoal(8, new LookAtPlayerGoal(this, Player.class, 8.0F));
         this.goalSelector.addGoal(9, new RandomLookAroundGoal(this));
 
+        // Default-neutral: no unconditional NearestAttackableTargetGoal on players.
+        // The HurtByTargetGoal makes the goblin retaliate when struck (and alerts
+        // pack mates). Aggro from other triggers — chest-opening (handled by
+        // GoblinChestAggroHandler) — calls aggroOn(...) directly.
         this.targetSelector.addGoal(1, new HurtByTargetGoal(this).setAlertOthers(GoblinEntity.class));
-        this.targetSelector.addGoal(2, new NearestAttackableTargetGoal<>(this, Player.class, true));
+    }
+
+    /**
+     * Public hook for external triggers (chest-open handler, future scripted events)
+     * to make this goblin attack a specific target. Idempotent — calling twice with the
+     * same target has no extra effect; calling while already targeting someone else
+     * leaves the existing target alone so the goblin doesn't constantly retarget mid-fight.
+     */
+    public void aggroOn(LivingEntity target) {
+        if (this.getTarget() != null && this.getTarget().isAlive()) return;
+        this.setTarget(target);
+        this.setLastHurtByMob(target); // makes HurtByTargetGoal's alert path fire so packmates join
     }
 
     // ---- Sounds (zombie villager fits the "small humanoid muttering" vibe) ---
@@ -268,6 +334,9 @@ public class GoblinEntity extends Monster {
 
         this.playSound(SoundEvents.SNOWBALL_THROW, 0.9F,
                 0.85F + this.random.nextFloat() * 0.3F);
+        if (level instanceof ServerLevel server) {
+            server.broadcastEntityEvent(this, EVENT_ROCK_THROW);
+        }
     }
 
     /** Stable identifier used in error messages / debug. */
@@ -278,5 +347,125 @@ public class GoblinEntity extends Monster {
     @Override
     public @Nullable LivingEntity getTarget() {
         return super.getTarget();
+    }
+
+    // ---- Trading -----------------------------------------------------------
+
+    /**
+     * One possible trade outcome. {@code weight} is relative within a pool; counts are
+     * inclusive uniform random in [{@code minCount}, {@code maxCount}].
+     */
+    private record TradeOption(Item item, int weight, int minCount, int maxCount) {}
+
+    /**
+     * "Cheap" loot pool — fired by gold-ingot trades. Mundane utility drops that a
+     * forager-tier mob plausibly hoards. Weights skew toward sticks/bones/string so
+     * jackpot trades feel meaningful when they hit.
+     */
+    private static final List<TradeOption> GOLD_TRADES = List.of(
+            new TradeOption(Items.STICK, 12, 2, 4),
+            new TradeOption(Items.BONE, 10, 1, 2),
+            new TradeOption(Items.STRING, 8, 1, 3),
+            new TradeOption(Items.GOLD_NUGGET, 8, 1, 3),
+            new TradeOption(Items.ARROW, 7, 2, 4),
+            new TradeOption(Items.GUNPOWDER, 5, 1, 2),
+            new TradeOption(Items.LEATHER, 5, 1, 2),
+            new TradeOption(Items.GLASS_BOTTLE, 4, 1, 2),
+            new TradeOption(Items.REDSTONE, 4, 1, 3));
+
+    /**
+     * "Premium" loot pool — fired by fairy-dust trades. Includes a couple mod-specific
+     * ingots so trading is also a route to mod content. Diamond and golden apple are
+     * the trophy outcomes; iron/gold ingots are the floor.
+     */
+    private static final List<TradeOption> FAIRY_DUST_TRADES = List.of(
+            new TradeOption(Items.IRON_INGOT, 10, 2, 4),
+            new TradeOption(Items.GOLD_INGOT, 8, 1, 3),
+            new TradeOption(Items.EMERALD, 6, 1, 2),
+            new TradeOption(Items.LAPIS_LAZULI, 5, 2, 4),
+            new TradeOption(Items.EXPERIENCE_BOTTLE, 5, 1, 2),
+            new TradeOption(Items.ENDER_PEARL, 4, 1, 1),
+            new TradeOption(ModItems.MOONSILVER.get(), 3, 1, 1),
+            new TradeOption(ModItems.ECLIPSIUM.get(), 1, 1, 1),
+            new TradeOption(Items.DIAMOND, 2, 1, 1),
+            new TradeOption(Items.GOLDEN_APPLE, 1, 1, 1));
+
+    /**
+     * Right-click interaction. While the goblin is neutral (no current target AND no
+     * recent damage attacker), accepts a gold ingot OR a fairy dust as a one-shot trade
+     * and hands back an item from the matching pool.
+     *
+     * <p>Made {@code public} to match the vanilla pattern ({@link net.minecraft.world.entity.animal.pig.Pig#mobInteract})
+     * — protected works too but some interaction code paths (e.g. NeoForge events) are
+     * defensively coded around the public form.
+     *
+     * <p>Returns {@link InteractionResult#SUCCESS_SERVER} from the server so we don't
+     * rely on client-side prediction of the inventory change — the reward only appears
+     * once the server has actually added it.
+     */
+    @Override
+    public InteractionResult mobInteract(Player player, InteractionHand hand) {
+        // Check ingredient first — if the player isn't even offering gold/dust, fall
+        // through to vanilla immediately so we don't accidentally swallow unrelated
+        // interactions (lead, name tag, spawn egg) above.
+        ItemStack offered = player.getItemInHand(hand);
+        List<TradeOption> pool;
+        if (offered.is(Items.GOLD_INGOT)) {
+            pool = GOLD_TRADES;
+        } else if (offered.is(ModItems.FAIRY_DUST.get())) {
+            pool = FAIRY_DUST_TRADES;
+        } else {
+            return super.mobInteract(player, hand);
+        }
+
+        // Refuse if currently hostile — can't bribe a charging goblin.
+        if (this.getTarget() != null) {
+            // SUCCESS_SERVER so we still consume the click (player won't see a place-block
+            // or attack from the missed interaction), but no inventory change happens.
+            if (!this.level().isClientSide()) {
+                this.playSound(SoundEvents.VILLAGER_NO, 0.8F, 0.9F);
+            }
+            return InteractionResult.SUCCESS_SERVER;
+        }
+
+        if (this.level().isClientSide()) {
+            // Client-side: report success so the player's hand swings immediately and
+            // no other interaction handler tries to run. Actual reward arrives via the
+            // next server sync.
+            return InteractionResult.SUCCESS;
+        }
+
+        // ----- Server-side: perform the trade -----
+        ItemStack reward = rollTrade(pool);
+        if (!player.getAbilities().instabuild) offered.shrink(1);
+        if (!player.getInventory().add(reward)) {
+            player.drop(reward, false);
+        }
+        this.playSound(SoundEvents.PIGLIN_AMBIENT, 0.8F, 1.3F);
+        this.playSound(SoundEvents.ITEM_PICKUP, 0.6F, 1.1F);
+        if (this.level() instanceof ServerLevel server) {
+            server.sendParticles(ParticleTypes.HAPPY_VILLAGER,
+                    this.getX(), this.getY() + this.getBbHeight() * 0.9, this.getZ(),
+                    6, 0.25, 0.2, 0.25, 0.02);
+            server.broadcastEntityEvent(this, EVENT_TRADE_ACCEPT);
+        }
+        return InteractionResult.SUCCESS_SERVER;
+    }
+
+    /** Weighted random pick from a trade pool. Count is uniform within the option's range. */
+    private ItemStack rollTrade(List<TradeOption> pool) {
+        int totalWeight = 0;
+        for (TradeOption opt : pool) totalWeight += opt.weight();
+        int pick = this.random.nextInt(totalWeight);
+        int cursor = 0;
+        for (TradeOption opt : pool) {
+            cursor += opt.weight();
+            if (pick < cursor) {
+                int count = opt.minCount() + this.random.nextInt(opt.maxCount() - opt.minCount() + 1);
+                return new ItemStack(opt.item(), count);
+            }
+        }
+        // Unreachable in practice — pick < totalWeight is guaranteed by nextInt(totalWeight).
+        return ItemStack.EMPTY;
     }
 }

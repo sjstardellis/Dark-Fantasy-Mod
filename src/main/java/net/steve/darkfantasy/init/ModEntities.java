@@ -3,6 +3,7 @@ package net.steve.darkfantasy.init;
 import net.steve.darkfantasy.DarkFantasy;
 import net.steve.darkfantasy.entity.custom.ElectroDragonEntity;
 import net.steve.darkfantasy.entity.custom.FairyEntity;
+import net.steve.darkfantasy.entity.custom.GnomeEntity;
 import net.steve.darkfantasy.entity.custom.GoblinEntity;
 import net.steve.darkfantasy.entity.custom.GoblinRockProjectile;
 import net.steve.darkfantasy.entity.custom.LightningBoltProjectile;
@@ -32,6 +33,8 @@ public class ModEntities {
             Registries.ENTITY_TYPE, Identifier.fromNamespaceAndPath(DarkFantasy.MOD_ID, "goblin"));
     private static final ResourceKey<EntityType<?>> GOBLIN_ROCK_KEY = ResourceKey.create(
             Registries.ENTITY_TYPE, Identifier.fromNamespaceAndPath(DarkFantasy.MOD_ID, "goblin_rock"));
+    private static final ResourceKey<EntityType<?>> GNOME_KEY = ResourceKey.create(
+            Registries.ENTITY_TYPE, Identifier.fromNamespaceAndPath(DarkFantasy.MOD_ID, "gnome"));
 
     public static final DeferredHolder<EntityType<?>, EntityType<FairyEntity>> FAIRY =
             ENTITY_TYPES.register("fairy",
@@ -79,6 +82,24 @@ public class ModEntities {
                             .sized(0.6F, 1.2F)
                             .clientTrackingRange(8)
                             .build(GOBLIN_KEY));
+
+    /**
+     * Gnome — tiny splash-potion-throwing menace that uses the witch model at 5%
+     * scale. Neutral toward players wearing any leather armor; hostile to everyone
+     * else. Render: {@link net.steve.darkfantasy.client.renderer.GnomeRenderer}.
+     */
+    public static final DeferredHolder<EntityType<?>, EntityType<GnomeEntity>> GNOME =
+            ENTITY_TYPES.register("gnome",
+                    () -> EntityType.Builder.<GnomeEntity>of(GnomeEntity::new, MobCategory.MONSTER)
+                            // Tightened hitbox: was (0.6, 1.95) × 0.5 SCALE = 0.3 × 0.975.
+                            // Now (0.5, 0.65) × 0.5 SCALE = 0.25 × 0.325 — XZ slightly
+                            // narrower (0.3 → 0.25), Y is ~1/3 of its old value
+                            // (0.975 → 0.325). Note: the witch model still renders at
+                            // its full half-height, so the visible mesh extends well
+                            // above the collision/hit box — deliberate.
+                            .sized(0.5F, 0.65F)
+                            .clientTrackingRange(8)
+                            .build(GNOME_KEY));
 
     /** Thrown stone projectile fired by the goblin's ranged attack. */
     public static final DeferredHolder<EntityType<?>, EntityType<GoblinRockProjectile>> GOBLIN_ROCK =

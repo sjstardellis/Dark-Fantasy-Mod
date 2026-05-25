@@ -49,10 +49,21 @@ public class GoblinRenderer extends MobRenderer<GoblinEntity, CopperGolemRenderS
         super.extractRenderState(entity, state, partialTicks);
         // CopperGolemRenderState defaults: weathering=UNAFFECTED (we ignore for our
         // own texture path), copperGolemState=IDLE (drives no interaction anim since
-        // those states are empty), idle/interaction AnimationStates stay empty so
-        // the model's setupAnim no-ops those branches. Walk animation is driven by
-        // the LivingEntityRenderState fields (walkAnimationPos, walkAnimationSpeed)
-        // which super.extractRenderState already filled.
+        // those states are empty). Walk animation is driven by the
+        // LivingEntityRenderState fields (walkAnimationPos, walkAnimationSpeed) which
+        // super.extractRenderState already filled.
         state.weathering = WeatheringCopper.WeatherState.UNAFFECTED;
+
+        // Map our combat + trade AnimationStates onto the copper golem's interaction slots:
+        //   - melee swing  → interactionGetNoItem  (vanilla "reach forward to pick up")
+        //   - rock throw   → interactionDropNoItem (vanilla "arm-swing to drop")
+        //   - trade accept → interactionGetItem    (vanilla "received an item" pose)
+        // CopperGolemModel.setupAnim already invokes all four per-tick; we just need
+        // them populated. AnimationState.copyFrom carries the start-tick so the elapsed
+        // time (and therefore the keyframe position) stays in sync between server-
+        // triggered start and client-side play.
+        state.interactionGetNoItem.copyFrom(entity.meleeSwingState);
+        state.interactionDropNoItem.copyFrom(entity.rockThrowState);
+        state.interactionGetItem.copyFrom(entity.tradeAcceptState);
     }
 }

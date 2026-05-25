@@ -77,9 +77,12 @@ public class ModBlocks {
 
     // Brewing keg — beer fermentation. State + ingredient flags live in
     // BrewingKegBlockEntity; brewing only progresses while a heat source sits below.
+    // noOcclusion() is critical: the custom model is smaller than 16x16x16, and
+    // without this flag the engine assumes a full cube and culls adjacent faces
+    // (causing the floor under the keg to look transparent / see-through).
     public static final DeferredBlock<Block> BREWING_KEG = registerBlock("brewing_keg",
             properties -> new BrewingKegBlock(properties.strength(2.0f)
-                    .sound(SoundType.WOOD).ignitedByLava()));
+                    .sound(SoundType.WOOD).ignitedByLava().noOcclusion()));
 
     // Hops — 4-stage farmland crop. Planting is via the Hops item (registered as
     // BlockItem(HOPS_CROP) in ModItems), matching the vanilla wheat-seeds → wheat-block

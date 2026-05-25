@@ -58,6 +58,7 @@ public class ModCreativeModeTabs {
                         output.accept(ModItems.WIZARD_SPAWN_EGG);
                         output.accept(ModItems.ELECTRO_DRAGON_SPAWN_EGG);
                         output.accept(ModItems.GOBLIN_SPAWN_EGG);
+                        output.accept(ModItems.GNOME_SPAWN_EGG);
                     }).build());
 
 

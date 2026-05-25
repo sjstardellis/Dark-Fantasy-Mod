@@ -189,6 +189,12 @@
         "weight": 12
       },
       {
+        "type": "darkfantasy:gnome",
+        "maxCount": 3,
+        "minCount": 1,
+        "weight": 10
+      },
+      {
         "type": "darkfantasy:electro_dragon",
         "maxCount": 1,
         "minCount": 1,

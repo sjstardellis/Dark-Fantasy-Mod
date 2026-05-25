@@ -3,6 +3,8 @@ package net.steve.darkfantasy;
 import net.steve.darkfantasy.client.renderer.AlchemyStandRenderer;
 import net.steve.darkfantasy.client.renderer.ElectroDragonRenderer;
 import net.steve.darkfantasy.client.renderer.FairyRenderer;
+import net.steve.darkfantasy.client.model.GnomeModel;
+import net.steve.darkfantasy.client.renderer.GnomeRenderer;
 import net.steve.darkfantasy.client.renderer.GoblinRenderer;
 import net.steve.darkfantasy.client.renderer.SkylandsPortalRenderer;
 import net.steve.darkfantasy.client.renderer.WizardRenderer;
@@ -41,6 +43,16 @@ public class DarkFantasyClient {
 //        DarkFantasy.LOGGER.info("MINECRAFT NAME >> {}", Minecraft.getInstance().getUser().getName());
     }
 
+    /**
+     * Bake custom model-part hierarchies so renderers can look them up. The gnome
+     * uses a custom Blockbench-authored model; its layer is registered here before
+     * {@code GnomeRenderer}'s constructor bakes it.
+     */
+    @SubscribeEvent
+    static void onRegisterLayerDefinitions(EntityRenderersEvent.RegisterLayerDefinitions event) {
+        event.registerLayerDefinition(GnomeModel.LAYER_LOCATION, GnomeModel::createBodyLayer);
+    }
+
     @SubscribeEvent
     static void onRegisterMenuScreens(RegisterMenuScreensEvent event) {
         event.register(ModMenuTypes.ALCHEMY_STAND_MENU.get(), AlchemyStandScreen::new);
@@ -62,6 +74,7 @@ public class DarkFantasyClient {
                 net.minecraft.client.renderer.entity.NoopRenderer::new);
         event.registerEntityRenderer(ModEntities.ELECTRO_DRAGON.get(), ElectroDragonRenderer::new);
         event.registerEntityRenderer(ModEntities.GOBLIN.get(), GoblinRenderer::new);
+        event.registerEntityRenderer(ModEntities.GNOME.get(), GnomeRenderer::new);
         // Goblin rocks render as a thrown item (vanilla projectile look) — using the
         // built-in ThrownItemRenderer keyed to a "stone" item gives a free pebble visual.
         // ThrownItemRenderer pulls the item to render from the projectile's

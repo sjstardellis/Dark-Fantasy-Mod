@@ -5,6 +5,7 @@ import net.steve.darkfantasy.block.ModBlocks;
 import net.steve.darkfantasy.creativemodetab.ModCreativeModeTabs;
 import net.steve.darkfantasy.entity.custom.ElectroDragonEntity;
 import net.steve.darkfantasy.entity.custom.FairyEntity;
+import net.steve.darkfantasy.entity.custom.GnomeEntity;
 import net.steve.darkfantasy.entity.custom.GoblinEntity;
 import net.steve.darkfantasy.entity.custom.WizardEntity;
 import net.steve.darkfantasy.init.ModBlockEntities;
@@ -71,6 +72,7 @@ public class DarkFantasy {
         event.put(ModEntities.WIZARD.get(), WizardEntity.createAttributes().build());
         event.put(ModEntities.ELECTRO_DRAGON.get(), ElectroDragonEntity.createAttributes().build());
         event.put(ModEntities.GOBLIN.get(), GoblinEntity.createAttributes().build());
+        event.put(ModEntities.GNOME.get(), GnomeEntity.createAttributes().build());
     }
 
     /**
@@ -94,6 +96,13 @@ public class DarkFantasy {
         // enough light level. Twilight Forest is permanently night, so light-level
         // gating means torches still suppress goblin packs as expected.
         event.register(ModEntities.GOBLIN.get(),
+                SpawnPlacementTypes.ON_GROUND,
+                Heightmap.Types.MOTION_BLOCKING_NO_LEAVES,
+                Monster::checkAnyLightMonsterSpawnRules,
+                RegisterSpawnPlacementsEvent.Operation.REPLACE);
+        // Gnomes spawn on ground with the same light gating as other monsters —
+        // Twilight Forest is permanent night so torches are the only deterrent.
+        event.register(ModEntities.GNOME.get(),
                 SpawnPlacementTypes.ON_GROUND,
                 Heightmap.Types.MOTION_BLOCKING_NO_LEAVES,
                 Monster::checkAnyLightMonsterSpawnRules,

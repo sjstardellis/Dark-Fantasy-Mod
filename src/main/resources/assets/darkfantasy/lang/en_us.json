@@ -22,7 +22,7 @@
   "item.darkfantasy.fairy_dust": "Fairy Dust",
 
   "item.darkfantasy.hops": "Hops",
-  "item.darkfantasy.beer": "Beer",
+  "item.darkfantasy.beer": "Stein of Beer",
   "item.darkfantasy.stein_glass": "Stein Glass",
   "block.darkfantasy.hops_crop": "Hops",
   "block.darkfantasy.brewing_keg": "Brewing Keg",
@@ -46,6 +46,9 @@
   "item.darkfantasy.goblin_spawn_egg": "Goblin Spawn Egg",
   "entity.darkfantasy.goblin": "Goblin",
   "entity.darkfantasy.goblin_rock": "Goblin Rock",
+
+  "item.darkfantasy.gnome_spawn_egg": "Gnome Spawn Egg",
+  "entity.darkfantasy.gnome": "Gnome",
 
   "block.darkfantasy.dawnmetal_ore": "Dawnmetal Ore",
   "block.darkfantasy.dawnmetal_deepslate_ore": "Dawnmetal Deepslate Ore",

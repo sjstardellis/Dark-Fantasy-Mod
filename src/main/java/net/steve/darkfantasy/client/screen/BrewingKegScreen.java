@@ -49,7 +49,7 @@ public class BrewingKegScreen extends AbstractContainerScreen<BrewingKegMenu> {
     // Progress arrow — placed between the input row (y=17–33) and the tank.
     // Background PNG includes the empty arrow outline; this overlays the filled
     // portion from the right-edge "extras" zone of the texture.
-    private static final int ARROW_X = 74;
+    private static final int ARROW_X = 84;
     private static final int ARROW_Y = 39;
     private static final int ARROW_W = 24;
     private static final int ARROW_H = 17;
@@ -59,9 +59,9 @@ public class BrewingKegScreen extends AbstractContainerScreen<BrewingKegMenu> {
     // Countdown timer (MM:SS) — drawn centered below the arrow, only while brewing.
     // y=58 sits just under the arrow (which ends at 39+17=56) without crowding the
     // player inventory that starts at y=84.
-    private static final int TIMER_CENTER_X = ARROW_X + ARROW_W / 2;
+    private static final int TIMER_CENTER_X = (ARROW_X- 5) + ARROW_W / 2;
     private static final int TIMER_Y = 58;
-    private static final int TIMER_COLOR = 0x555555; // warm amber so it reads on dark woodgrain
+    private static final int TIMER_COLOR = 0xFF444444;
 
     public BrewingKegScreen(BrewingKegMenu menu, Inventory inventory, Component title) {
         super(menu, inventory, title);

@@ -95,6 +95,10 @@ public class ModItems {
             "goblin_spawn_egg",
             properties -> new SpawnEggItem(properties.spawnEgg(ModEntities.GOBLIN.get())));
 
+    public static final DeferredItem<SpawnEggItem> GNOME_SPAWN_EGG = ITEMS.registerItem(
+            "gnome_spawn_egg",
+            properties -> new SpawnEggItem(properties.spawnEgg(ModEntities.GNOME.get())));
+
 
     public static void register(IEventBus eventBus) {
         ITEMS.register(eventBus);
