@@ -23,17 +23,18 @@ import org.jspecify.annotations.Nullable;
 
 
 /**
- * Renders the items in the alchemy stand's three input slots + output slot, plus the lava
- * surface inside the cauldron, at the positions defined by the INPUTRENDER#/OUTPUTRENDER/
- * FLUIDRENDER marker cubes in the Blockbench source model. The whole render rig rotates
- * with the block's FACING property so items stay on the correct corners after placement.
+ * Renders the items in the alchemy stand's three input slots + output slot, plus the
+ * elixir surface inside the cauldron, at the positions defined by the INPUTRENDER#/
+ * OUTPUTRENDER/FLUIDRENDER marker cubes in the Blockbench source model. The whole
+ * render rig rotates with the block's FACING property so items stay on the correct
+ * corners after placement.
  */
 public class AlchemyStandRenderer implements BlockEntityRenderer<AlchemyStandBlockEntity, AlchemyStandRenderState> {
-    // The lava still texture file (frame 0 only — we don't animate this overlay).
-    private static final Identifier LAVA_STILL_TEXTURE =
-            Identifier.withDefaultNamespace("textures/block/lava_still.png");
+    // The elixir still texture file (frame 0 only — we don't animate this overlay).
+    private static final Identifier ELIXIR_STILL_TEXTURE =
+            Identifier.fromNamespaceAndPath("darkfantasy", "textures/block/elixir_still.png");
     // Source PNG is 16x512 — one frame is 1/32 of the height.
-    private static final float LAVA_FRAME_V = 1.0f / 32.0f;
+    private static final float FLUID_FRAME_V = 1.0f / 32.0f;
 
     // Marker positions in 1/16ths (Blockbench coords) — centers of the marker cubes.
     // Default FACING is NORTH; rotation around the block center handles other facings.
@@ -68,7 +69,7 @@ public class AlchemyStandRenderer implements BlockEntityRenderer<AlchemyStandBlo
                                    ModelFeatureRenderer.@Nullable CrumblingOverlay breakProgress) {
         BlockEntityRenderer.super.extractRenderState(be, state, partialTicks, cameraPosition, breakProgress);
         state.facing = be.getBlockState().getValue(AlchemyStandBlock.FACING);
-        state.lavaAmount = be.getLavaAmount();
+        state.elixirAmount = be.getElixirAmount();
         state.tankCapacity = AlchemyStandBlockEntity.TANK_CAPACITY;
         int seed = (int) be.getBlockPos().asLong();
         resolveItem(state.input0, be.getItem(AlchemyStandBlockEntity.INPUT_SLOT_0), seed);
@@ -99,7 +100,7 @@ public class AlchemyStandRenderer implements BlockEntityRenderer<AlchemyStandBlo
         submitItem(state.input1, INPUT1_POS, poseStack, collector, state.lightCoords);
         submitItem(state.input2, INPUT2_POS, poseStack, collector, state.lightCoords);
         submitItem(state.output, OUTPUT_POS, poseStack, collector, state.lightCoords);
-        submitLavaSurface(state, poseStack, collector);
+        submitElixirSurface(state, poseStack, collector);
 
         poseStack.popPose();
     }
@@ -118,21 +119,21 @@ public class AlchemyStandRenderer implements BlockEntityRenderer<AlchemyStandBlo
         poseStack.popPose();
     }
 
-    /** Draws the lava surface inside the cauldron — a horizontal quad whose height scales with fill. */
-    private void submitLavaSurface(AlchemyStandRenderState state, PoseStack poseStack,
-                                   SubmitNodeCollector collector) {
-        if (state.lavaAmount <= 0) return;
+    /** Draws the elixir surface inside the cauldron — a horizontal quad whose height scales with fill. */
+    private void submitElixirSurface(AlchemyStandRenderState state, PoseStack poseStack,
+                                     SubmitNodeCollector collector) {
+        if (state.elixirAmount <= 0) return;
 
-        float fill = Math.min(1.0f, state.lavaAmount / (float) Math.max(1, state.tankCapacity));
+        float fill = Math.min(1.0f, state.elixirAmount / (float) Math.max(1, state.tankCapacity));
         float y = (FLUID_Y_MIN + (FLUID_Y_MAX - FLUID_Y_MIN) * fill) / 16.0f;
         float x0 = FLUID_X0 / 16.0f, x1 = FLUID_X1 / 16.0f;
         float z0 = FLUID_Z0 / 16.0f, z1 = FLUID_Z1 / 16.0f;
         // First frame of the still texture (top 1/32 of the PNG).
-        float v0 = 0.0f, v1 = LAVA_FRAME_V;
+        float v0 = 0.0f, v1 = FLUID_FRAME_V;
         float u0 = 0.0f, u1 = 1.0f;
         int fullBright = LightCoordsUtil.FULL_BRIGHT;
 
-        collector.submitCustomGeometry(poseStack, RenderTypes.entitySolid(LAVA_STILL_TEXTURE),
+        collector.submitCustomGeometry(poseStack, RenderTypes.entitySolid(ELIXIR_STILL_TEXTURE),
                 (pose, buffer) -> {
                     buffer.addVertex(pose, x0, y, z1).setColor(0xFFFFFFFF).setUv(u0, v1)
                             .setOverlay(OverlayTexture.NO_OVERLAY).setLight(fullBright)

@@ -1,7 +1,9 @@
 package net.steve.darkfantasy.block.entity;
 
 import net.steve.darkfantasy.init.ModBlockEntities;
+import net.steve.darkfantasy.init.ModFluids;
 import net.steve.darkfantasy.init.ModRecipes;
+import net.steve.darkfantasy.item.ModItems;
 import net.steve.darkfantasy.menu.AlchemyStandMenu;
 import net.steve.darkfantasy.recipe.AlchemyRecipe;
 import net.steve.darkfantasy.recipe.AlchemyRecipeInput;
@@ -26,7 +28,6 @@ import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.entity.BaseContainerBlockEntity;
 import net.minecraft.world.level.block.state.BlockState;
-import net.minecraft.world.level.material.Fluids;
 import net.minecraft.world.level.storage.ValueInput;
 import net.minecraft.world.level.storage.ValueOutput;
 import net.neoforged.neoforge.fluids.FluidStack;
@@ -45,13 +46,13 @@ public class AlchemyStandBlockEntity extends BaseContainerBlockEntity {
     public static final int BUCKET_SLOT = 4;
 
     public static final int TANK_CAPACITY = 4000;
-    public static final int LAVA_PER_BUCKET = 1000;
+    public static final int ELIXIR_PER_BUCKET = 1000;
     private static final int TANK_INDEX = 0; // single-tank handler
 
     // ContainerData indices for client-server sync of progress + fluid amount.
     public static final int DATA_PROGRESS = 0;
     public static final int DATA_MAX_PROGRESS = 1;
-    public static final int DATA_LAVA = 2;
+    public static final int DATA_ELIXIR = 2;
     public static final int DATA_COUNT = 3;
 
     private static final Component DEFAULT_NAME = Component.translatable("container.darkfantasy.alchemy_stand");
@@ -62,13 +63,15 @@ public class AlchemyStandBlockEntity extends BaseContainerBlockEntity {
     private int maxProgress = 200;
 
     /**
-     * Lava-only fluid tank (single index). Uses NeoForge's modern transfer API
+     * Elixir-only fluid tank (single index). Uses NeoForge's modern transfer API
      * ({@link FluidStacksResourceHandler}) instead of the deprecated {@code FluidTank}.
+     * Validity is gated to {@link ModFluids#ELIXIR_SOURCE}; any other fluid attempting
+     * to insert is rejected by the resource handler.
      */
     private final FluidStacksResourceHandler tank = new FluidStacksResourceHandler(1, TANK_CAPACITY) {
         @Override
         public boolean isValid(int index, FluidResource resource) {
-            return resource.getFluid() == Fluids.LAVA;
+            return resource.getFluid() == ModFluids.ELIXIR_SOURCE.get();
         }
 
         @Override
@@ -83,7 +86,7 @@ public class AlchemyStandBlockEntity extends BaseContainerBlockEntity {
             return switch (index) {
                 case DATA_PROGRESS -> progress;
                 case DATA_MAX_PROGRESS -> maxProgress;
-                case DATA_LAVA -> tank.getAmountAsInt(TANK_INDEX);
+                case DATA_ELIXIR -> tank.getAmountAsInt(TANK_INDEX);
                 default -> 0;
             };
         }
@@ -93,10 +96,10 @@ public class AlchemyStandBlockEntity extends BaseContainerBlockEntity {
             switch (index) {
                 case DATA_PROGRESS -> progress = value;
                 case DATA_MAX_PROGRESS -> maxProgress = value;
-                case DATA_LAVA -> {
-                    // Client-side write — reconstruct as lava with the synced amount.
+                case DATA_ELIXIR -> {
+                    // Client-side write — reconstruct as elixir with the synced amount.
                     if (value > 0) {
-                        tank.set(TANK_INDEX, FluidResource.of(Fluids.LAVA), Math.min(value, TANK_CAPACITY));
+                        tank.set(TANK_INDEX, FluidResource.of(ModFluids.ELIXIR_SOURCE.get()), Math.min(value, TANK_CAPACITY));
                     } else {
                         tank.set(TANK_INDEX, FluidResource.EMPTY, 0);
                     }
@@ -145,11 +148,11 @@ public class AlchemyStandBlockEntity extends BaseContainerBlockEntity {
         return this.maxProgress;
     }
 
-    public int getLavaAmount() {
+    public int getElixirAmount() {
         return this.tank.getAmountAsInt(TANK_INDEX);
     }
 
-    // Send the full save tag (items + lava + progress) when this BE is sent to the client.
+    // Send the full save tag (items + elixir + progress) when this BE is sent to the client.
     @Override
     public Packet<ClientGamePacketListener> getUpdatePacket() {
         return ClientboundBlockEntityDataPacket.create(this);
@@ -161,7 +164,7 @@ public class AlchemyStandBlockEntity extends BaseContainerBlockEntity {
     }
 
     /**
-     * Server-side broadcast so the in-world BER (items on top, lava level in the cauldron)
+     * Server-side broadcast so the in-world BER (items on top, elixir level in the cauldron)
      * stays in sync — slot moves and tank fills happen via menu/right-click and would
      * otherwise only reach the client on chunk reload.
      */
@@ -181,9 +184,9 @@ public class AlchemyStandBlockEntity extends BaseContainerBlockEntity {
         ContainerHelper.loadAllItems(input, this.items);
         this.progress = input.getIntOr("Progress", 0);
         this.maxProgress = input.getIntOr("MaxProgress", 200);
-        int lavaAmount = input.getIntOr("LavaAmount", 0);
-        if (lavaAmount > 0) {
-            tank.set(TANK_INDEX, FluidResource.of(Fluids.LAVA), Math.min(lavaAmount, TANK_CAPACITY));
+        int elixirAmount = input.getIntOr("ElixirAmount", 0);
+        if (elixirAmount > 0) {
+            tank.set(TANK_INDEX, FluidResource.of(ModFluids.ELIXIR_SOURCE.get()), Math.min(elixirAmount, TANK_CAPACITY));
         } else {
             tank.set(TANK_INDEX, FluidResource.EMPTY, 0);
         }
@@ -195,7 +198,7 @@ public class AlchemyStandBlockEntity extends BaseContainerBlockEntity {
         ContainerHelper.saveAllItems(output, this.items);
         output.putInt("Progress", this.progress);
         output.putInt("MaxProgress", this.maxProgress);
-        output.putInt("LavaAmount", tank.getAmountAsInt(TANK_INDEX));
+        output.putInt("ElixirAmount", tank.getAmountAsInt(TANK_INDEX));
     }
 
     @Override
@@ -206,19 +209,19 @@ public class AlchemyStandBlockEntity extends BaseContainerBlockEntity {
     @Override
     public boolean canPlaceItem(int slot, ItemStack stack) {
         if (slot == OUTPUT_SLOT) return false;
-        if (slot == BUCKET_SLOT) return stack.is(Items.LAVA_BUCKET);
+        if (slot == BUCKET_SLOT) return stack.is(ModItems.ELIXIR_BUCKET.get());
         return true;
     }
 
     /**
-     * Attempt to drain a lava bucket into the tank. Uses a transaction so we don't
+     * Attempt to drain an elixir bucket into the tank. Uses a transaction so we don't
      * commit the change unless we can fit the whole 1000 mB.
      * @return true if a bucket was consumed.
      */
     public boolean tryFillFromBucket() {
         try (Transaction txn = Transaction.openRoot()) {
-            int filled = tank.insert(TANK_INDEX, FluidResource.of(Fluids.LAVA), LAVA_PER_BUCKET, txn);
-            if (filled < LAVA_PER_BUCKET) {
+            int filled = tank.insert(TANK_INDEX, FluidResource.of(ModFluids.ELIXIR_SOURCE.get()), ELIXIR_PER_BUCKET, txn);
+            if (filled < ELIXIR_PER_BUCKET) {
                 return false; // transaction auto-rolls back on close without commit
             }
             txn.commit();
@@ -254,7 +257,7 @@ public class AlchemyStandBlockEntity extends BaseContainerBlockEntity {
             return;
         }
 
-        if (be.tank.getAmountAsInt(TANK_INDEX) < recipe.lava()) {
+        if (be.tank.getAmountAsInt(TANK_INDEX) < recipe.elixir()) {
             be.resetProgressIfNeeded(level, pos, state);
             return;
         }
@@ -263,7 +266,7 @@ public class AlchemyStandBlockEntity extends BaseContainerBlockEntity {
         be.progress++;
         if (be.progress >= be.maxProgress) {
             be.craft(result);
-            be.drainLava(recipe.lava());
+            be.drainElixir(recipe.elixir());
             be.progress = 0;
         }
         setChanged(level, pos, state);
@@ -271,7 +274,7 @@ public class AlchemyStandBlockEntity extends BaseContainerBlockEntity {
 
     private void tickBucketSlot() {
         ItemStack inBucketSlot = items.get(BUCKET_SLOT);
-        if (!inBucketSlot.is(Items.LAVA_BUCKET)) return;
+        if (!inBucketSlot.is(ModItems.ELIXIR_BUCKET.get())) return;
         if (!tryFillFromBucket()) return;
 
         if (inBucketSlot.getCount() == 1) {
@@ -300,9 +303,9 @@ public class AlchemyStandBlockEntity extends BaseContainerBlockEntity {
         }
     }
 
-    private void drainLava(int amount) {
+    private void drainElixir(int amount) {
         try (Transaction txn = Transaction.openRoot()) {
-            tank.extract(TANK_INDEX, FluidResource.of(Fluids.LAVA), amount, txn);
+            tank.extract(TANK_INDEX, FluidResource.of(ModFluids.ELIXIR_SOURCE.get()), amount, txn);
             txn.commit();
         }
     }

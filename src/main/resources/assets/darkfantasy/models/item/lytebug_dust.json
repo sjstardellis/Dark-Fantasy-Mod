@@ -1,6 +1,6 @@
 {
   "parent": "minecraft:item/generated",
   "textures": {
-    "layer0": "darkfantasy:item/nightshade"
+    "layer0": "darkfantasy:item/lytebug_dust"
   }
 }

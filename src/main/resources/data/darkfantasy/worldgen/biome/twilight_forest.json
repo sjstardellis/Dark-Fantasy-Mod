@@ -18,11 +18,11 @@
     "minecraft:visual/ambient_particles": [
       {
         "particle": {"type": "minecraft:warped_spore"},
-        "probability": 0.008
+        "probability": 0.004
       },
       {
         "particle": {"type": "minecraft:firefly"},
-        "probability": 0.012
+        "probability": 0.007
       }
     ]
   },
@@ -41,7 +41,8 @@
     [],
     [
       "minecraft:lake_lava_underground",
-      "minecraft:lake_lava_surface"
+      "minecraft:lake_lava_surface",
+      "darkfantasy:elixir_lake"
     ],
     [
       "minecraft:amethyst_geode",
@@ -132,16 +133,22 @@
         "weight": 8
       },
       {
+        "type": "minecraft:mooshroom",
+        "maxCount": 2,
+        "minCount": 1,
+        "weight": 5
+      },
+      {
         "type": "minecraft:allay",
         "maxCount": 2,
         "minCount": 1,
         "weight": 4
       },
       {
-        "type": "minecraft:mooshroom",
-        "maxCount": 2,
-        "minCount": 1,
-        "weight": 5
+        "type": "darkfantasy:lytebug",
+        "maxCount": 5,
+        "minCount": 3,
+        "weight": 4
       }
     ],
     "misc": [],

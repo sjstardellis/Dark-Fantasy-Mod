@@ -9,6 +9,6 @@
     "id": "minecraft:phantom_membrane",
     "count": 1
   },
-  "lava": 100,
+  "elixir": 100,
   "cook_time": 200
 }

@@ -10,6 +10,6 @@ public class AlchemyStandRenderState extends BlockEntityRenderState {
     public ItemStackRenderState input1 = new ItemStackRenderState();
     public ItemStackRenderState input2 = new ItemStackRenderState();
     public ItemStackRenderState output = new ItemStackRenderState();
-    public int lavaAmount;
+    public int elixirAmount;
     public int tankCapacity = 1;
 }

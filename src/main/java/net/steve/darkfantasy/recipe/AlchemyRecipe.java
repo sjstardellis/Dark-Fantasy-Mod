@@ -22,29 +22,28 @@ import java.util.List;
 
 /**
  * A custom recipe for the Alchemy Stand.
- * Takes exactly 3 ingredients (shapeless — any order) plus lava fuel
- * and produces a single output stack after a cook time.
- * <p>
- * The {@code lava} field is parsed but unused until Phase 3 (fluid tank).
+ * Takes exactly 3 ingredients (shapeless — any order) plus elixir fuel
+ * (in mB; one elixir bucket = 1000) and produces a single output stack after
+ * a cook time.
  */
 public record AlchemyRecipe(
         List<Ingredient> ingredients,
         ItemStackTemplate result,
-        int lava,
+        int elixir,
         int cookTime
 ) implements Recipe<AlchemyRecipeInput> {
 
     public static final MapCodec<AlchemyRecipe> MAP_CODEC = RecordCodecBuilder.mapCodec(inst -> inst.group(
             Ingredient.CODEC.listOf().fieldOf("ingredients").forGetter(AlchemyRecipe::ingredients),
             ItemStackTemplate.CODEC.fieldOf("result").forGetter(AlchemyRecipe::result),
-            Codec.INT.optionalFieldOf("lava", 100).forGetter(AlchemyRecipe::lava),
+            Codec.INT.optionalFieldOf("elixir", 100).forGetter(AlchemyRecipe::elixir),
             Codec.INT.optionalFieldOf("cook_time", 200).forGetter(AlchemyRecipe::cookTime)
     ).apply(inst, AlchemyRecipe::new));
 
     public static final StreamCodec<RegistryFriendlyByteBuf, AlchemyRecipe> STREAM_CODEC = StreamCodec.composite(
             Ingredient.CONTENTS_STREAM_CODEC.apply(ByteBufCodecs.list()), AlchemyRecipe::ingredients,
             ItemStackTemplate.STREAM_CODEC, AlchemyRecipe::result,
-            ByteBufCodecs.INT, AlchemyRecipe::lava,
+            ByteBufCodecs.INT, AlchemyRecipe::elixir,
             ByteBufCodecs.INT, AlchemyRecipe::cookTime,
             AlchemyRecipe::new
     );

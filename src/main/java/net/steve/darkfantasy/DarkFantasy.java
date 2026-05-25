@@ -7,13 +7,17 @@ import net.steve.darkfantasy.entity.custom.ElectroDragonEntity;
 import net.steve.darkfantasy.entity.custom.FairyEntity;
 import net.steve.darkfantasy.entity.custom.GnomeEntity;
 import net.steve.darkfantasy.entity.custom.GoblinEntity;
+import net.steve.darkfantasy.entity.custom.LytebugEntity;
 import net.steve.darkfantasy.entity.custom.WizardEntity;
 import net.steve.darkfantasy.init.ModBlockEntities;
 import net.steve.darkfantasy.init.ModEntities;
+import net.steve.darkfantasy.init.ModFluidTypes;
+import net.steve.darkfantasy.init.ModFluids;
 import net.steve.darkfantasy.init.ModMenuTypes;
 import net.steve.darkfantasy.init.ModPoiTypes;
 import net.steve.darkfantasy.init.ModRecipes;
 import net.steve.darkfantasy.item.ModItems;
+import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.entity.SpawnPlacementTypes;
 import net.minecraft.world.entity.monster.Monster;
 import net.minecraft.world.level.levelgen.Heightmap;
@@ -53,6 +57,12 @@ public class DarkFantasy {
         ModMenuTypes.register(modEventBus);
         ModRecipes.register(modEventBus);
         ModPoiTypes.register(modEventBus);
+        // FluidTypes must register BEFORE Fluids — the BaseFlowingFluid constructor
+        // resolves its FluidType supplier lazily, but the type holder must exist by
+        // the time the Fluid registry freezes. Same-bus same-phase ordering keeps
+        // that invariant; the relative call order here documents intent.
+        ModFluidTypes.register(modEventBus);
+        ModFluids.register(modEventBus);
 
         // Mod-bus listeners for entity attributes + spawn placement.
         modEventBus.addListener(DarkFantasy::onEntityAttributeCreation);
@@ -73,6 +83,7 @@ public class DarkFantasy {
         event.put(ModEntities.ELECTRO_DRAGON.get(), ElectroDragonEntity.createAttributes().build());
         event.put(ModEntities.GOBLIN.get(), GoblinEntity.createAttributes().build());
         event.put(ModEntities.GNOME.get(), GnomeEntity.createAttributes().build());
+        event.put(ModEntities.LYTEBUG.get(), LytebugEntity.createAttributes().build());
     }
 
     /**
@@ -106,6 +117,34 @@ public class DarkFantasy {
                 SpawnPlacementTypes.ON_GROUND,
                 Heightmap.Types.MOTION_BLOCKING_NO_LEAVES,
                 Monster::checkAnyLightMonsterSpawnRules,
+                RegisterSpawnPlacementsEvent.Operation.REPLACE);
+        // Electrodragons are big flying bosses — no ground requirement and no light
+        // gate (they don't extend Monster, so the standard light predicate doesn't fit).
+        // Rarity is already heavily controlled by weight=1 + spawn_costs charge=10 in
+        // the biome JSON; per-position predicate just needs to confirm there's air to
+        // spawn into.
+        event.register(ModEntities.ELECTRO_DRAGON.get(),
+                SpawnPlacementTypes.NO_RESTRICTIONS,
+                Heightmap.Types.MOTION_BLOCKING_NO_LEAVES,
+                (type, level, reason, pos, random) -> level.getBlockState(pos).isAir(),
+                RegisterSpawnPlacementsEvent.Operation.REPLACE);
+        // Lytebugs are passive flyers — no light gating, no ground requirement. The
+        // permissive predicate just confirms there's air to spawn into; biome weight
+        // + the passive mob cap throttle frequency. They glow themselves so spawning
+        // in pitch darkness is exactly the point.
+        event.register(ModEntities.LYTEBUG.get(),
+                SpawnPlacementTypes.NO_RESTRICTIONS,
+                Heightmap.Types.MOTION_BLOCKING_NO_LEAVES,
+                (type, level, reason, pos, random) -> level.getBlockState(pos).isAir(),
+                RegisterSpawnPlacementsEvent.Operation.REPLACE);
+        // Vanilla Allay has no built-in spawn placement (it's normally only released
+        // from mansion/outpost cages). We add it to the Twilight Forest's creature
+        // spawners so we have to declare a placement ourselves — air check only,
+        // since allays fly.
+        event.register(EntityType.ALLAY,
+                SpawnPlacementTypes.NO_RESTRICTIONS,
+                Heightmap.Types.MOTION_BLOCKING_NO_LEAVES,
+                (type, level, reason, pos, random) -> level.getBlockState(pos).isAir(),
                 RegisterSpawnPlacementsEvent.Operation.REPLACE);
     }
 

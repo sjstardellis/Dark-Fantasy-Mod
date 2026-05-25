@@ -2,6 +2,7 @@ package net.steve.darkfantasy.menu;
 
 import net.steve.darkfantasy.block.entity.AlchemyStandBlockEntity;
 import net.steve.darkfantasy.init.ModMenuTypes;
+import net.steve.darkfantasy.item.ModItems;
 import net.minecraft.core.BlockPos;
 import net.minecraft.network.RegistryFriendlyByteBuf;
 import net.minecraft.world.Container;
@@ -20,7 +21,7 @@ public class AlchemyStandMenu extends AbstractContainerMenu {
     // BE slots:
     //   0..2  = inputs
     //   3     = output
-    //   4     = bucket slot (lava only)
+    //   4     = bucket slot (elixir only)
     public static final int BE_SLOT_COUNT = 5;
     public static final int OUTPUT_SLOT = 3;
     public static final int BUCKET_SLOT = 4;
@@ -59,11 +60,12 @@ public class AlchemyStandMenu extends AbstractContainerMenu {
             }
         });
 
-        // Bucket slot — right side, mid-height (lava buckets only).
+        // Bucket slot — right side, mid-height (elixir buckets only). Empty buckets
+        // are allowed in too so the auto-drain path can return one cleanly.
         this.addSlot(new Slot(container, BUCKET_SLOT, 140, 53) {
             @Override
             public boolean mayPlace(ItemStack stack) {
-                return stack.is(Items.LAVA_BUCKET) || stack.is(Items.BUCKET);
+                return stack.is(ModItems.ELIXIR_BUCKET.get()) || stack.is(Items.BUCKET);
             }
         });
 
@@ -85,8 +87,8 @@ public class AlchemyStandMenu extends AbstractContainerMenu {
         return data.get(AlchemyStandBlockEntity.DATA_MAX_PROGRESS);
     }
 
-    public int getLavaAmount() {
-        return data.get(AlchemyStandBlockEntity.DATA_LAVA);
+    public int getElixirAmount() {
+        return data.get(AlchemyStandBlockEntity.DATA_ELIXIR);
     }
 
     public int getTankCapacity() {
@@ -111,8 +113,8 @@ public class AlchemyStandMenu extends AbstractContainerMenu {
                 if (!this.moveItemStackTo(stack, PLAYER_INV_START, PLAYER_INV_END, true)) {
                     return ItemStack.EMPTY;
                 }
-            } else if (stack.is(Items.LAVA_BUCKET)) {
-                // Lava bucket -> bucket slot.
+            } else if (stack.is(ModItems.ELIXIR_BUCKET.get())) {
+                // Elixir bucket -> bucket slot.
                 if (!this.moveItemStackTo(stack, BUCKET_SLOT, BUCKET_SLOT + 1, false)) {
                     return ItemStack.EMPTY;
                 }

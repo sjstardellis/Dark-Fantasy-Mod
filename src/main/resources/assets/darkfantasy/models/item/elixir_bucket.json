@@ -1,6 +1,6 @@
 {
   "parent": "minecraft:item/generated",
   "textures": {
-    "layer0": "darkfantasy:item/hellfire_kindling"
+    "layer0": "darkfantasy:item/elixir_bucket"
   }
 }

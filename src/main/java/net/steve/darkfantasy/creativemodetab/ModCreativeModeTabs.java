@@ -32,9 +32,6 @@ public class ModCreativeModeTabs {
                         output.accept(ModItems.DAWNMETAL);
                         output.accept(ModItems.RAW_DAWNMETAL);
 
-                        output.accept(ModItems.SOUL_COMPASS);
-                        output.accept(ModItems.NIGHTSHADE);
-                        output.accept(ModItems.HELLFIRE_KINDLING);
                         output.accept(ModBlocks.SHADOWSTEEL_ORE);
                         output.accept(ModBlocks.SHADOWSTEEL_DEEPSLATE_ORE);
 
@@ -48,6 +45,9 @@ public class ModCreativeModeTabs {
                         output.accept(ModBlocks.ENCHANTED_BOOKSHELF);
 
                         output.accept(ModItems.FAIRY_DUST);
+                        output.accept(ModItems.LYTEBUG_DUST);
+                        output.accept(ModBlocks.LYTESTONE);
+                        output.accept(ModItems.ELIXIR_BUCKET);
                         output.accept(ModItems.HOPS);
                         output.accept(ModItems.BEER);
                         output.accept(ModItems.STEIN_GLASS);
@@ -59,6 +59,7 @@ public class ModCreativeModeTabs {
                         output.accept(ModItems.ELECTRO_DRAGON_SPAWN_EGG);
                         output.accept(ModItems.GOBLIN_SPAWN_EGG);
                         output.accept(ModItems.GNOME_SPAWN_EGG);
+                        output.accept(ModItems.LYTEBUG_SPAWN_EGG);
                     }).build());
 
 

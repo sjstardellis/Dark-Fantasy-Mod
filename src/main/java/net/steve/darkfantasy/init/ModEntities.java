@@ -7,6 +7,7 @@ import net.steve.darkfantasy.entity.custom.GnomeEntity;
 import net.steve.darkfantasy.entity.custom.GoblinEntity;
 import net.steve.darkfantasy.entity.custom.GoblinRockProjectile;
 import net.steve.darkfantasy.entity.custom.LightningBoltProjectile;
+import net.steve.darkfantasy.entity.custom.LytebugEntity;
 import net.steve.darkfantasy.entity.custom.WizardEntity;
 import net.minecraft.core.registries.Registries;
 import net.minecraft.resources.Identifier;
@@ -35,6 +36,8 @@ public class ModEntities {
             Registries.ENTITY_TYPE, Identifier.fromNamespaceAndPath(DarkFantasy.MOD_ID, "goblin_rock"));
     private static final ResourceKey<EntityType<?>> GNOME_KEY = ResourceKey.create(
             Registries.ENTITY_TYPE, Identifier.fromNamespaceAndPath(DarkFantasy.MOD_ID, "gnome"));
+    private static final ResourceKey<EntityType<?>> LYTEBUG_KEY = ResourceKey.create(
+            Registries.ENTITY_TYPE, Identifier.fromNamespaceAndPath(DarkFantasy.MOD_ID, "lytebug"));
 
     public static final DeferredHolder<EntityType<?>, EntityType<FairyEntity>> FAIRY =
             ENTITY_TYPES.register("fairy",
@@ -100,6 +103,20 @@ public class ModEntities {
                             .sized(0.5F, 0.65F)
                             .clientTrackingRange(8)
                             .build(GNOME_KEY));
+
+    /**
+     * Lytebug — passive ambient firefly that drifts around the Twilight Forest with
+     * a cosmetic emissive glow. Uses the vanilla bee model retextured via
+     * {@link net.steve.darkfantasy.client.renderer.LytebugRenderer}; SCALE attribute
+     * (0.6) shrinks it well below bee size. {@link net.minecraft.world.entity.MobCategory#CREATURE}
+     * so it shares the passive spawn cap, not the monster cap.
+     */
+    public static final DeferredHolder<EntityType<?>, EntityType<LytebugEntity>> LYTEBUG =
+            ENTITY_TYPES.register("lytebug",
+                    () -> EntityType.Builder.<LytebugEntity>of(LytebugEntity::new, MobCategory.CREATURE)
+                            .sized(0.4F, 0.3F)
+                            .clientTrackingRange(8)
+                            .build(LYTEBUG_KEY));
 
     /** Thrown stone projectile fired by the goblin's ranged attack. */
     public static final DeferredHolder<EntityType<?>, EntityType<GoblinRockProjectile>> GOBLIN_ROCK =

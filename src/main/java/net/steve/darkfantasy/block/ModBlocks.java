@@ -4,10 +4,13 @@ import net.steve.darkfantasy.DarkFantasy;
 import net.steve.darkfantasy.block.custom.AlchemyStandBlock;
 import net.steve.darkfantasy.block.custom.BrewingKegBlock;
 import net.steve.darkfantasy.block.custom.CursedBlock;
+import net.steve.darkfantasy.block.custom.ElixirLiquidBlock;
 import net.steve.darkfantasy.block.custom.EnchantedBookshelfBlock;
 import net.steve.darkfantasy.block.custom.HopsBlock;
+import net.steve.darkfantasy.block.custom.LytestoneBlock;
 import net.steve.darkfantasy.block.custom.SkylandsPortalBlock;
 import net.steve.darkfantasy.block.custom.TwilightPortalBlock;
+import net.steve.darkfantasy.init.ModFluids;
 import net.steve.darkfantasy.item.ModItems;
 import net.minecraft.network.chat.Component;
 import net.minecraft.util.valueproviders.UniformInt;
@@ -64,6 +67,13 @@ public class ModBlocks {
             properties -> new EnchantedBookshelfBlock(properties.strength(1.8f)
                     .sound(SoundType.WOOD).lightLevel(state -> 4).ignitedByLava()));
 
+    // Lytestone — crystallized lytebug essence. Glowstone-grade light (15) and acts as
+    // a lytebug magnet (see LytebugEntity.MoveToLytestoneGoal). Drops 2-4 dust like
+    // glowstone unless mined with silk touch — loot table handles that.
+    public static final DeferredBlock<Block> LYTESTONE = registerBlock("lytestone",
+            properties -> new LytestoneBlock(properties.strength(0.3f)
+                    .sound(SoundType.GLASS).lightLevel(state -> 15)));
+
     // Skylands portal — no BlockItem (not obtainable in survival).
     public static final DeferredBlock<SkylandsPortalBlock> SKYLANDS_PORTAL = BLOCKS.registerBlock("skylands_portal",
             SkylandsPortalBlock::new,
@@ -95,6 +105,23 @@ public class ModBlocks {
                     .instabreak()
                     .sound(SoundType.CROP)
                     .pushReaction(net.minecraft.world.level.material.PushReaction.DESTROY));
+
+    // Elixir liquid block — placed in world by the bucket or by the elixir_lake
+    // worldgen feature. No BlockItem (the bucket IS the item form, registered in
+    // ModItems). Standard vanilla-liquid properties: replaceable, no collision,
+    // no loot, very high blast resistance, push-destroyed by pistons. The light
+    // value (4) mirrors the FluidType's getLightLevel — the block-light side has
+    // to be set here separately for chunk lighting to pick it up.
+    public static final DeferredBlock<LiquidBlock> ELIXIR = BLOCKS.registerBlock("elixir",
+            properties -> new ElixirLiquidBlock(ModFluids.ELIXIR_SOURCE.get(), properties),
+            properties -> properties
+                    .replaceable()
+                    .noCollision()
+                    .strength(100.0F)
+                    .pushReaction(net.minecraft.world.level.material.PushReaction.DESTROY)
+                    .noLootTable()
+                    .liquid()
+                    .lightLevel(state -> 4));
 
     // Twilight Forest portal — also no BlockItem.
     public static final DeferredBlock<TwilightPortalBlock> TWILIGHT_PORTAL = BLOCKS.registerBlock("twilight_portal",

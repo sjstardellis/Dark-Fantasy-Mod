@@ -13,12 +13,6 @@
   "item.darkfantasy.dawnmetal": "Dawnmetal Ingot",
   "item.darkfantasy.raw_dawnmetal": "Raw Dawnmetal",
 
-  "item.darkfantasy.soul_compass": "Soul Compass",
-  "item.darkfantasy.soul_compass.no_valuables": "No Souls Found!",
-
-  "item.darkfantasy.nightshade": "Nightshade",
-  "item.darkfantasy.hellfire_kindling": "Hellfire Kindling",
-
   "item.darkfantasy.fairy_dust": "Fairy Dust",
 
   "item.darkfantasy.hops": "Hops",
@@ -50,6 +44,15 @@
   "item.darkfantasy.gnome_spawn_egg": "Gnome Spawn Egg",
   "entity.darkfantasy.gnome": "Gnome",
 
+  "item.darkfantasy.lytebug_dust": "Lytebug Dust",
+  "item.darkfantasy.lytebug_spawn_egg": "Lytebug Spawn Egg",
+  "entity.darkfantasy.lytebug": "Lytebug",
+  "block.darkfantasy.lytestone": "Lytestone",
+
+  "fluid_type.darkfantasy.elixir": "Elixir",
+  "block.darkfantasy.elixir": "Elixir",
+  "item.darkfantasy.elixir_bucket": "Bucket of Elixir",
+
   "block.darkfantasy.dawnmetal_ore": "Dawnmetal Ore",
   "block.darkfantasy.dawnmetal_deepslate_ore": "Dawnmetal Deepslate Ore",
 
@@ -65,15 +68,12 @@
   "block.darkfantasy.skylands_portal": "Skylands Portal",
   "block.darkfantasy.enchanted_bookshelf": "Enchanted Bookshelf",
 
-  "tooltip.darkfantasy.alchemy_stand.tank": "Lava Tank",
+  "tooltip.darkfantasy.alchemy_stand.tank": "Elixir Tank",
   "tooltip.darkfantasy.alchemy_stand.tank.amount": "§7%s / %s mB§r",
 
   "creativetab.darkfantasy.darkfantasy_tab": "Dark Fantasy",
 
-  "tooltip.darkfantasy.nightshade.tooltip": "Bitter and accursed...",
   "tooltip.darkfantasy.cursed_block.tooltip": "It's deeply §8CURSED§r",
-  "tooltip.darkfantasy.soul_compass.shift_down": "Discover souls by clicking on Blocks",
-  "tooltip.darkfantasy.soul_compass": "Press §eShift§r for more Information",
 
 
   "darkfantasy.configuration.title": "Dark Fantasy Configs",
