@@ -40,7 +40,6 @@ public class ModCreativeModeTabs {
                         output.accept(ModBlocks.MOONSILVER_ORE);
                         output.accept(ModBlocks.MOONSILVER_DEEPSLATE_ORE);
 
-                        output.accept(ModBlocks.CURSED_BLOCK);
                         output.accept(ModBlocks.ALCHEMY_STAND);
                         output.accept(ModBlocks.ENCHANTED_BOOKSHELF);
 
@@ -60,6 +59,55 @@ public class ModCreativeModeTabs {
                         output.accept(ModItems.GOBLIN_SPAWN_EGG);
                         output.accept(ModItems.GNOME_SPAWN_EGG);
                         output.accept(ModItems.LYTEBUG_SPAWN_EGG);
+
+                        // Ghostwillow wood set
+                        output.accept(ModBlocks.GHOSTWILLOW_LOG);
+                        output.accept(ModBlocks.STRIPPED_GHOSTWILLOW_LOG);
+                        output.accept(ModBlocks.GHOSTWILLOW_WOOD);
+                        output.accept(ModBlocks.STRIPPED_GHOSTWILLOW_WOOD);
+                        output.accept(ModBlocks.GHOSTWILLOW_PLANKS);
+                        output.accept(ModBlocks.GHOSTWILLOW_STAIRS);
+                        output.accept(ModBlocks.GHOSTWILLOW_SLAB);
+                        output.accept(ModBlocks.GHOSTWILLOW_FENCE);
+                        output.accept(ModBlocks.GHOSTWILLOW_FENCE_GATE);
+                        output.accept(ModBlocks.GHOSTWILLOW_DOOR);
+                        output.accept(ModBlocks.GHOSTWILLOW_TRAPDOOR);
+                        output.accept(ModBlocks.GHOSTWILLOW_BUTTON);
+                        output.accept(ModBlocks.GHOSTWILLOW_PRESSURE_PLATE);
+                        output.accept(ModBlocks.GHOSTWILLOW_LEAVES);
+                        output.accept(ModBlocks.GHOSTWILLOW_SAPLING);
+
+                        // Gravewood wood set
+                        output.accept(ModBlocks.GRAVEWOOD_LOG);
+                        output.accept(ModBlocks.STRIPPED_GRAVEWOOD_LOG);
+                        output.accept(ModBlocks.GRAVEWOOD_WOOD);
+                        output.accept(ModBlocks.STRIPPED_GRAVEWOOD_WOOD);
+                        output.accept(ModBlocks.GRAVEWOOD_PLANKS);
+                        output.accept(ModBlocks.GRAVEWOOD_STAIRS);
+                        output.accept(ModBlocks.GRAVEWOOD_SLAB);
+                        output.accept(ModBlocks.GRAVEWOOD_FENCE);
+                        output.accept(ModBlocks.GRAVEWOOD_FENCE_GATE);
+                        output.accept(ModBlocks.GRAVEWOOD_DOOR);
+                        output.accept(ModBlocks.GRAVEWOOD_TRAPDOOR);
+                        output.accept(ModBlocks.GRAVEWOOD_BUTTON);
+                        output.accept(ModBlocks.GRAVEWOOD_PRESSURE_PLATE);
+                        output.accept(ModBlocks.GRAVEWOOD_LEAVES);
+                        output.accept(ModBlocks.GRAVEWOOD_SAPLING);
+
+                        // Cinderbark wood set (fire-immune, nether-style stem)
+                        output.accept(ModBlocks.CINDERBARK_STEM);
+                        output.accept(ModBlocks.STRIPPED_CINDERBARK_STEM);
+                        output.accept(ModBlocks.CINDERBARK_HYPHAE);
+                        output.accept(ModBlocks.STRIPPED_CINDERBARK_HYPHAE);
+                        output.accept(ModBlocks.CINDERBARK_PLANKS);
+                        output.accept(ModBlocks.CINDERBARK_STAIRS);
+                        output.accept(ModBlocks.CINDERBARK_SLAB);
+                        output.accept(ModBlocks.CINDERBARK_FENCE);
+                        output.accept(ModBlocks.CINDERBARK_FENCE_GATE);
+                        output.accept(ModBlocks.CINDERBARK_DOOR);
+                        output.accept(ModBlocks.CINDERBARK_TRAPDOOR);
+                        output.accept(ModBlocks.CINDERBARK_BUTTON);
+                        output.accept(ModBlocks.CINDERBARK_PRESSURE_PLATE);
                     }).build());
 
 

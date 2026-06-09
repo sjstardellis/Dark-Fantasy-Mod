@@ -1,0 +1,8 @@
+{
+  "parent": "minecraft:block/outer_stairs",
+  "textures": {
+    "bottom": "darkfantasy:block/cinderbark_planks",
+    "side": "darkfantasy:block/cinderbark_planks",
+    "top": "darkfantasy:block/cinderbark_planks"
+  }
+}

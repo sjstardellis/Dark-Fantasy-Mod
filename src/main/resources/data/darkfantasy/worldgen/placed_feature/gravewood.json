@@ -1,0 +1,15 @@
+{
+  "feature": "darkfantasy:gravewood",
+  "placement": [
+    {
+      "type": "minecraft:block_predicate_filter",
+      "predicate": {
+        "type": "minecraft:would_survive",
+        "state": {
+          "Name": "darkfantasy:gravewood_sapling",
+          "Properties": {"stage": "0"}
+        }
+      }
+    }
+  ]
+}

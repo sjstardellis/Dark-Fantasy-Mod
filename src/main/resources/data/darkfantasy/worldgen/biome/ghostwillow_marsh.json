@@ -1,0 +1,139 @@
+{
+  "attributes": {
+    "minecraft:audio/ambient_sounds": {
+      "additions": {
+        "sound": "minecraft:ambient.warped_forest.additions",
+        "tick_chance": 0.0111
+      },
+      "loop": "minecraft:ambient.warped_forest.loop",
+      "mood": {
+        "block_search_extent": 8,
+        "offset": 2.0,
+        "sound": "minecraft:ambient.warped_forest.mood",
+        "tick_delay": 6000
+      }
+    },
+    "minecraft:audio/background_music": {
+      "default": {
+        "max_delay": 24000,
+        "min_delay": 12000,
+        "sound": "minecraft:music.nether.warped_forest"
+      }
+    },
+    "minecraft:visual/ambient_particles": [
+      {
+        "particle": {"type": "minecraft:warped_spore"},
+        "probability": 0.03
+      },
+      {
+        "particle": {"type": "minecraft:firefly"},
+        "probability": 0.015
+      },
+      {
+        "particle": {"type": "minecraft:end_rod"},
+        "probability": 0.0005
+      }
+    ],
+    "minecraft:visual/fog_color": "#a8c8d0",
+    "minecraft:visual/sky_color": "#b8d0d8",
+    "minecraft:visual/water_fog_color": "#7aa8b8",
+    "minecraft:visual/water_fog_end_distance": {
+      "argument": 0.7,
+      "modifier": "multiply"
+    }
+  },
+  "carvers": [
+    "minecraft:cave",
+    "minecraft:cave_extra_underground",
+    "minecraft:canyon"
+  ],
+  "downfall": 1.0,
+  "effects": {
+    "water_color": "#a0c8d0",
+    "foliage_color": "#c0d8d0",
+    "grass_color": "#a8c0a8",
+    "dry_foliage_color": "#88a098"
+  },
+  "features": [
+    [],
+    [
+      "minecraft:lake_lava_underground",
+      "minecraft:lake_lava_surface"
+    ],
+    [
+      "minecraft:amethyst_geode",
+      "darkfantasy:ghostwillow_mud_patch",
+      "darkfantasy:ghostwillow_moss_patch"
+    ],
+    [
+      "minecraft:monster_room",
+      "minecraft:monster_room_deep"
+    ],
+    [],
+    [],
+    [
+      "minecraft:ore_dirt",
+      "minecraft:ore_gravel",
+      "minecraft:ore_granite_upper",
+      "minecraft:ore_granite_lower",
+      "minecraft:ore_diorite_upper",
+      "minecraft:ore_diorite_lower",
+      "minecraft:ore_andesite_upper",
+      "minecraft:ore_andesite_lower",
+      "minecraft:ore_tuff",
+      "minecraft:ore_coal_upper",
+      "minecraft:ore_coal_lower",
+      "minecraft:ore_iron_upper",
+      "minecraft:ore_iron_middle",
+      "minecraft:ore_iron_small",
+      "minecraft:ore_gold",
+      "minecraft:ore_redstone",
+      "minecraft:ore_redstone_lower",
+      "minecraft:ore_diamond",
+      "minecraft:ore_lapis",
+      "minecraft:ore_copper"
+    ],
+    [],
+    [
+      "minecraft:spring_water",
+      "minecraft:spring_lava"
+    ],
+    [
+      "minecraft:glow_lichen",
+      "darkfantasy:ghostwillow_biome_tree",
+      "darkfantasy:elixir_lake",
+      "minecraft:flower_default",
+      "minecraft:patch_grass_plain",
+      "minecraft:patch_waterlily",
+      "minecraft:patch_sugar_cane",
+      "minecraft:patch_firefly_bush_near_water"
+    ],
+    []
+  ],
+  "has_precipitation": true,
+  "spawn_costs": {},
+  "spawners": {
+    "ambient": [
+      {"type": "minecraft:bat", "maxCount": 4, "minCount": 1, "weight": 5}
+    ],
+    "axolotls": [],
+    "creature": [
+      {"type": "minecraft:allay", "maxCount": 2, "minCount": 1, "weight": 12},
+      {"type": "darkfantasy:lytebug", "maxCount": 4, "minCount": 2, "weight": 15}
+    ],
+    "misc": [],
+    "monster": [
+      {"type": "darkfantasy:fairy", "maxCount": 3, "minCount": 1, "weight": 8},
+      {"type": "minecraft:slime", "maxCount": 2, "minCount": 1, "weight": 40},
+      {"type": "minecraft:witch", "maxCount": 1, "minCount": 1, "weight": 20},
+      {"type": "minecraft:zombie", "maxCount": 2, "minCount": 1, "weight": 25},
+      {"type": "minecraft:spider", "maxCount": 2, "minCount": 1, "weight": 20}
+    ],
+    "underground_water_creature": [],
+    "water_ambient": [],
+    "water_creature": [
+      {"type": "minecraft:squid", "maxCount": 2, "minCount": 1, "weight": 1}
+    ]
+  },
+  "temperature": 0.5
+}

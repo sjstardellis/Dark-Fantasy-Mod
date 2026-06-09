@@ -1,0 +1,10 @@
+{
+  "variants": {
+    "powered=false": {
+      "model": "darkfantasy:block/cinderbark_pressure_plate"
+    },
+    "powered=true": {
+      "model": "darkfantasy:block/cinderbark_pressure_plate_down"
+    }
+  }
+}

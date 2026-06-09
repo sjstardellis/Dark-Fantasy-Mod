@@ -239,9 +239,6 @@ public final class TwilightTeleporter {
             BlockPos under = axis == Direction.Axis.X
                     ? origin.offset(2, 0, dz)
                     : origin.offset(dz, 0, 2);
-            if (!level.getBlockState(under).isSolid()) {
-                level.setBlock(under, Blocks.DIRT.defaultBlockState(), 3);
-            }
         }
 
         // Lay the 16 perimeter enchanted bookshelves on the frame plane.

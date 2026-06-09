@@ -1,0 +1,7 @@
+{
+  "parent": "minecraft:block/door_bottom_right",
+  "textures": {
+    "bottom": "darkfantasy:block/ghostwillow_door_bottom",
+    "top": "darkfantasy:block/ghostwillow_door_top"
+  }
+}

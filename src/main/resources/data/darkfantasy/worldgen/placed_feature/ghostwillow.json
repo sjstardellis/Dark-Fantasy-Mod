@@ -1,0 +1,15 @@
+{
+  "feature": "darkfantasy:ghostwillow",
+  "placement": [
+    {
+      "type": "minecraft:block_predicate_filter",
+      "predicate": {
+        "type": "minecraft:would_survive",
+        "state": {
+          "Name": "darkfantasy:ghostwillow_sapling",
+          "Properties": {"stage": "0"}
+        }
+      }
+    }
+  ]
+}

@@ -1,0 +1,13 @@
+{
+  "variants": {
+    "type=bottom": {
+      "model": "darkfantasy:block/gravewood_slab"
+    },
+    "type=double": {
+      "model": "darkfantasy:block/gravewood_planks"
+    },
+    "type=top": {
+      "model": "darkfantasy:block/gravewood_slab_top"
+    }
+  }
+}

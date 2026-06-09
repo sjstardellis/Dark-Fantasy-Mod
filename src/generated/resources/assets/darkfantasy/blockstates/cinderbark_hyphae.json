@@ -1,0 +1,16 @@
+{
+  "variants": {
+    "axis=x": {
+      "model": "darkfantasy:block/cinderbark_hyphae",
+      "x": 90,
+      "y": 90
+    },
+    "axis=y": {
+      "model": "darkfantasy:block/cinderbark_hyphae"
+    },
+    "axis=z": {
+      "model": "darkfantasy:block/cinderbark_hyphae",
+      "x": 90
+    }
+  }
+}

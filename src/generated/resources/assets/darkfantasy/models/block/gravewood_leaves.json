@@ -1,0 +1,6 @@
+{
+  "parent": "minecraft:block/leaves",
+  "textures": {
+    "all": "darkfantasy:block/gravewood_leaves"
+  }
+}

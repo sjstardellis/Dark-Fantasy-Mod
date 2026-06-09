@@ -1,0 +1,16 @@
+{
+  "variants": {
+    "axis=x": {
+      "model": "darkfantasy:block/stripped_ghostwillow_wood",
+      "x": 90,
+      "y": 90
+    },
+    "axis=y": {
+      "model": "darkfantasy:block/stripped_ghostwillow_wood"
+    },
+    "axis=z": {
+      "model": "darkfantasy:block/stripped_ghostwillow_wood",
+      "x": 90
+    }
+  }
+}

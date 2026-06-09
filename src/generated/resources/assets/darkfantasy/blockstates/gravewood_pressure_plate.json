@@ -1,0 +1,10 @@
+{
+  "variants": {
+    "powered=false": {
+      "model": "darkfantasy:block/gravewood_pressure_plate"
+    },
+    "powered=true": {
+      "model": "darkfantasy:block/gravewood_pressure_plate_down"
+    }
+  }
+}

@@ -1,25 +1,31 @@
+# Dark Fantasy
 
-Installation information
-=======
+A dark-fantasy adventure mod for **Minecraft 26.1.2** ([NeoForge](https://neoforged.net/)). Explore a gloom-soaked new dimension, mine strange metals, brew and trade, and fight (or befriend) a cast of custom creatures.
 
-This template repository can be directly cloned to get you started with a new
-mod. Simply create a new repository cloned from this one, by following the
-instructions provided by [GitHub](https://docs.github.com/en/repositories/creating-and-managing-repositories/creating-a-repository-from-a-template).
+## Features
 
-Once you have your clone, simply open the repository in the IDE of your choice. The usual recommendation for an IDE is either IntelliJ IDEA or Eclipse.
+- **The Twilight Forest** — a permanently dusk dimension with its own atmosphere, biome injection, and mob spawns.
+- **New mobs** — fairies, wizards, goblins (with a berserk rage and a barter system), gnomes, glowing lytebugs, and the boss-tier **Electrodragon**.
+- **Ores & metals** — shadowsteel, moonsilver, dawnmetal, and eclipsium, each with ore, deepslate, and raw/ingot forms.
+- **Alchemy & brewing** — an Alchemy Stand that works elixir, plus a Brewing Keg, hops crop, and beer.
+- **Magic items** — lightning and fireball staves.
+- **Building blocks** — full ghostwillow, gravewood, and cinderbark wood sets (logs, planks, stairs, slabs, fences, doors, trapdoors, buttons, pressure plates), glowing lytestone, bone piles, and an enchanted bookshelf.
 
-If at any point you are missing libraries in your IDE, or you've run into problems you can
-run `gradlew --refresh-dependencies` to refresh the local cache. `gradlew clean` to reset everything 
-{this does not affect your code} and then start the process again.
+## Building
 
-Mapping Names:
-============
-By default, the MDK is configured to use the official mapping names from Mojang for methods and fields 
-in the Minecraft codebase. These names are covered by a specific license. All modders should be aware of this
-license. For the latest license text, refer to the mapping file itself, or the reference copy here:
-https://github.com/NeoForged/NeoForm/blob/main/Mojang.md
+Requires JDK 21+.
 
-Additional Resources: 
-==========
-Community Documentation: https://docs.neoforged.net/  
-NeoForged Discord: https://discord.neoforged.net/
+```bash
+./gradlew build          # produces the mod jar in build/libs
+./gradlew runClient      # launch a dev client
+./gradlew runData        # regenerate datagen assets/data into src/generated
+```
+
+## License
+
+Released under the [MIT License](LICENSE).
+
+## Links
+
+- Issues: https://github.com/sjstardellis/Dark-Fantasy-Mod/issues
+- NeoForge docs: https://docs.neoforged.net/

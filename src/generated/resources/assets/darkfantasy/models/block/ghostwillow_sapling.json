@@ -1,0 +1,6 @@
+{
+  "parent": "minecraft:block/cross",
+  "textures": {
+    "cross": "darkfantasy:block/ghostwillow_sapling"
+  }
+}

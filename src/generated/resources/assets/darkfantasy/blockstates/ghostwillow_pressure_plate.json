@@ -1,0 +1,10 @@
+{
+  "variants": {
+    "powered=false": {
+      "model": "darkfantasy:block/ghostwillow_pressure_plate"
+    },
+    "powered=true": {
+      "model": "darkfantasy:block/ghostwillow_pressure_plate_down"
+    }
+  }
+}

@@ -1,0 +1,8 @@
+{
+  "parent": "minecraft:block/outer_stairs",
+  "textures": {
+    "bottom": "darkfantasy:block/ghostwillow_planks",
+    "side": "darkfantasy:block/ghostwillow_planks",
+    "top": "darkfantasy:block/ghostwillow_planks"
+  }
+}

@@ -1,0 +1,13 @@
+{
+  "variants": {
+    "type=bottom": {
+      "model": "darkfantasy:block/ghostwillow_slab"
+    },
+    "type=double": {
+      "model": "darkfantasy:block/ghostwillow_planks"
+    },
+    "type=top": {
+      "model": "darkfantasy:block/ghostwillow_slab_top"
+    }
+  }
+}

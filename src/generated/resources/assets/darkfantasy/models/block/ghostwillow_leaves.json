@@ -1,0 +1,6 @@
+{
+  "parent": "minecraft:block/leaves",
+  "textures": {
+    "all": "darkfantasy:block/ghostwillow_leaves"
+  }
+}

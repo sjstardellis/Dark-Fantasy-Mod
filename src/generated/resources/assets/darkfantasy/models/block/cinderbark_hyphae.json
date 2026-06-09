@@ -1,0 +1,7 @@
+{
+  "parent": "minecraft:block/cube_column",
+  "textures": {
+    "end": "darkfantasy:block/cinderbark_stem",
+    "side": "darkfantasy:block/cinderbark_stem"
+  }
+}

@@ -1,0 +1,7 @@
+{
+  "parent": "minecraft:block/cube_column",
+  "textures": {
+    "end": "darkfantasy:block/gravewood_log",
+    "side": "darkfantasy:block/gravewood_log"
+  }
+}

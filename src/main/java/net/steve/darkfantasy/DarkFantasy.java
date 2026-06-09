@@ -17,20 +17,20 @@ import net.steve.darkfantasy.init.ModMenuTypes;
 import net.steve.darkfantasy.init.ModPoiTypes;
 import net.steve.darkfantasy.init.ModRecipes;
 import net.steve.darkfantasy.item.ModItems;
+import net.steve.darkfantasy.worldgen.biome.OverworldBiomeInjector;
 import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.entity.SpawnPlacementTypes;
 import net.minecraft.world.entity.monster.Monster;
+import net.minecraft.world.level.block.Blocks;
+import net.minecraft.world.level.block.FireBlock;
 import net.minecraft.world.level.levelgen.Heightmap;
 import net.neoforged.bus.api.IEventBus;
-import net.neoforged.bus.api.SubscribeEvent;
 import net.neoforged.fml.ModContainer;
 import net.neoforged.fml.common.Mod;
-import net.neoforged.fml.config.ModConfig;
 import net.neoforged.fml.event.lifecycle.FMLCommonSetupEvent;
 import net.neoforged.neoforge.common.NeoForge;
 import net.neoforged.neoforge.event.entity.EntityAttributeCreationEvent;
 import net.neoforged.neoforge.event.entity.RegisterSpawnPlacementsEvent;
-import net.neoforged.neoforge.event.server.ServerStartingEvent;
 import org.slf4j.Logger;
 
 // The value here should match an entry in the META-INF/neoforge.mods.toml file
@@ -68,13 +68,51 @@ public class DarkFantasy {
         modEventBus.addListener(DarkFantasy::onEntityAttributeCreation);
         modEventBus.addListener(DarkFantasy::onRegisterSpawnPlacements);
 
-        NeoForge.EVENT_BUS.register(this);
-        // Register our mod's ModConfigSpec so that FML can create and load the config file for us
-        modContainer.registerConfig(ModConfig.Type.COMMON, Config.SPEC);
+        NeoForge.EVENT_BUS.register(OverworldBiomeInjector.class);
     }
 
     private void commonSetup(FMLCommonSetupEvent event) {
+        event.enqueueWork(DarkFantasy::registerFlammability);
+    }
 
+    /**
+     * Mirrors vanilla {@code FireBlock.bootStrap()} for our overworld-style wood sets
+     * (gravewood, ghostwillow). Vanilla flammability values:
+     * <ul>
+     *   <li>logs/woods/stripped variants — encouragement 5, flammability 5</li>
+     *   <li>planks/slab/stairs/fence/fence_gate — 5 / 20</li>
+     *   <li>leaves — 30 / 60</li>
+     * </ul>
+     * Cinderbark is intentionally excluded: it's a nether stem set (mirrors crimson/
+     * warped, neither of which is flammable). Doors, trapdoors, buttons, and pressure
+     * plates are excluded because vanilla wood doors/trapdoors/etc. are not flammable
+     * either — keeping parity avoids surprising players.
+     */
+    private static void registerFlammability() {
+        FireBlock fire = (FireBlock) Blocks.FIRE;
+        // logs / woods / stripped variants
+        fire.setFlammable(ModBlocks.GHOSTWILLOW_LOG.get(), 5, 5);
+        fire.setFlammable(ModBlocks.STRIPPED_GHOSTWILLOW_LOG.get(), 5, 5);
+        fire.setFlammable(ModBlocks.GHOSTWILLOW_WOOD.get(), 5, 5);
+        fire.setFlammable(ModBlocks.STRIPPED_GHOSTWILLOW_WOOD.get(), 5, 5);
+        fire.setFlammable(ModBlocks.GRAVEWOOD_LOG.get(), 5, 5);
+        fire.setFlammable(ModBlocks.STRIPPED_GRAVEWOOD_LOG.get(), 5, 5);
+        fire.setFlammable(ModBlocks.GRAVEWOOD_WOOD.get(), 5, 5);
+        fire.setFlammable(ModBlocks.STRIPPED_GRAVEWOOD_WOOD.get(), 5, 5);
+        // planks / slabs / stairs / fence / fence_gate
+        fire.setFlammable(ModBlocks.GHOSTWILLOW_PLANKS.get(), 5, 20);
+        fire.setFlammable(ModBlocks.GHOSTWILLOW_SLAB.get(), 5, 20);
+        fire.setFlammable(ModBlocks.GHOSTWILLOW_STAIRS.get(), 5, 20);
+        fire.setFlammable(ModBlocks.GHOSTWILLOW_FENCE.get(), 5, 20);
+        fire.setFlammable(ModBlocks.GHOSTWILLOW_FENCE_GATE.get(), 5, 20);
+        fire.setFlammable(ModBlocks.GRAVEWOOD_PLANKS.get(), 5, 20);
+        fire.setFlammable(ModBlocks.GRAVEWOOD_SLAB.get(), 5, 20);
+        fire.setFlammable(ModBlocks.GRAVEWOOD_STAIRS.get(), 5, 20);
+        fire.setFlammable(ModBlocks.GRAVEWOOD_FENCE.get(), 5, 20);
+        fire.setFlammable(ModBlocks.GRAVEWOOD_FENCE_GATE.get(), 5, 20);
+        // leaves — much higher fire spread, matches vanilla leaves
+        fire.setFlammable(ModBlocks.GHOSTWILLOW_LEAVES.get(), 30, 60);
+        fire.setFlammable(ModBlocks.GRAVEWOOD_LEAVES.get(), 30, 60);
     }
 
     private static void onEntityAttributeCreation(EntityAttributeCreationEvent event) {
@@ -146,10 +184,5 @@ public class DarkFantasy {
                 Heightmap.Types.MOTION_BLOCKING_NO_LEAVES,
                 (type, level, reason, pos, random) -> level.getBlockState(pos).isAir(),
                 RegisterSpawnPlacementsEvent.Operation.REPLACE);
-    }
-
-    @SubscribeEvent
-    public void onServerStarting(ServerStartingEvent event) {
-
     }
 }
