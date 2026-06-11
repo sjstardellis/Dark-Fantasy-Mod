@@ -11,6 +11,7 @@ import net.minecraft.client.data.models.model.TexturedModel;
 import net.minecraft.core.Holder;
 import net.minecraft.data.BlockFamily;
 import net.minecraft.data.PackOutput;
+import net.minecraft.world.item.Item;
 import net.minecraft.world.level.block.Block;
 
 import java.util.stream.Stream;
@@ -27,12 +28,47 @@ public class ModModelProvider extends ModelProvider {
         itemModels.generateFlatItem(ModItems.RAW_SHADOWSTEEL.get(), ModelTemplates.FLAT_ITEM);
         itemModels.generateFlatItem(ModItems.ECLIPSIUM.get(), ModelTemplates.FLAT_ITEM);
         itemModels.generateFlatItem(ModItems.FAIRY_DUST.get(), ModelTemplates.FLAT_ITEM);
+        itemModels.generateFlatItem(ModItems.GRIMSHARD.get(), ModelTemplates.FLAT_ITEM);
+        itemModels.generateFlatItem(ModItems.EMBERSTONE.get(), ModelTemplates.FLAT_ITEM);
+        itemModels.generateFlatItem(ModItems.SOUL_PEARL.get(), ModelTemplates.FLAT_ITEM);
+        itemModels.generateFlatItem(ModItems.ARCANE_ASH.get(), ModelTemplates.FLAT_ITEM);
+        itemModels.generateFlatItem(ModItems.STORM_SCALE.get(), ModelTemplates.FLAT_ITEM);
+        itemModels.generateFlatItem(ModItems.MOONLIGHT_ELIXIR.get(), ModelTemplates.FLAT_ITEM);
+        itemModels.generateFlatItem(ModItems.STONESKIN_ELIXIR.get(), ModelTemplates.FLAT_ITEM);
+        itemModels.generateFlatItem(ModItems.EMBERBLOOD_ELIXIR.get(), ModelTemplates.FLAT_ITEM);
+        itemModels.generateFlatItem(ModItems.WISPSTEP_ELIXIR.get(), ModelTemplates.FLAT_ITEM);
         itemModels.generateFlatItem(ModItems.LIGHTNING_STAFF.get(), ModelTemplates.FLAT_HANDHELD_ITEM);
         itemModels.generateFlatItem(ModItems.FIREBALL_STAFF.get(), ModelTemplates.FLAT_HANDHELD_ITEM);
+        itemModels.generateFlatItem(ModItems.FROST_STAFF.get(), ModelTemplates.FLAT_HANDHELD_ITEM);
+        itemModels.generateFlatItem(ModItems.BLINK_STAFF.get(), ModelTemplates.FLAT_HANDHELD_ITEM);
+        itemModels.generateFlatItem(ModItems.CINDER_STAFF.get(), ModelTemplates.FLAT_HANDHELD_ITEM);
 
 
         itemModels.generateFlatItem(ModItems.MOONSILVER.get(), ModelTemplates.FLAT_ITEM);
         itemModels.generateFlatItem(ModItems.RAW_MOONSILVER.get(), ModelTemplates.FLAT_ITEM);
+
+        // Metal gear — tools use the handheld template, armor uses flat inventory icons.
+        gearModels(itemModels,
+                ModItems.MOONSILVER_SWORD.get(), ModItems.MOONSILVER_PICKAXE.get(), ModItems.MOONSILVER_AXE.get(),
+                ModItems.MOONSILVER_SHOVEL.get(), ModItems.MOONSILVER_HOE.get(), ModItems.MOONSILVER_HELMET.get(),
+                ModItems.MOONSILVER_CHESTPLATE.get(), ModItems.MOONSILVER_LEGGINGS.get(), ModItems.MOONSILVER_BOOTS.get());
+        gearModels(itemModels,
+                ModItems.SHADOWSTEEL_SWORD.get(), ModItems.SHADOWSTEEL_PICKAXE.get(), ModItems.SHADOWSTEEL_AXE.get(),
+                ModItems.SHADOWSTEEL_SHOVEL.get(), ModItems.SHADOWSTEEL_HOE.get(), ModItems.SHADOWSTEEL_HELMET.get(),
+                ModItems.SHADOWSTEEL_CHESTPLATE.get(), ModItems.SHADOWSTEEL_LEGGINGS.get(), ModItems.SHADOWSTEEL_BOOTS.get());
+        gearModels(itemModels,
+                ModItems.DAWNMETAL_SWORD.get(), ModItems.DAWNMETAL_PICKAXE.get(), ModItems.DAWNMETAL_AXE.get(),
+                ModItems.DAWNMETAL_SHOVEL.get(), ModItems.DAWNMETAL_HOE.get(), ModItems.DAWNMETAL_HELMET.get(),
+                ModItems.DAWNMETAL_CHESTPLATE.get(), ModItems.DAWNMETAL_LEGGINGS.get(), ModItems.DAWNMETAL_BOOTS.get());
+        gearModels(itemModels,
+                ModItems.ECLIPSIUM_SWORD.get(), ModItems.ECLIPSIUM_PICKAXE.get(), ModItems.ECLIPSIUM_AXE.get(),
+                ModItems.ECLIPSIUM_SHOVEL.get(), ModItems.ECLIPSIUM_HOE.get(), ModItems.ECLIPSIUM_HELMET.get(),
+                ModItems.ECLIPSIUM_CHESTPLATE.get(), ModItems.ECLIPSIUM_LEGGINGS.get(), ModItems.ECLIPSIUM_BOOTS.get());
+
+        // Signature weapons (all handheld).
+        itemModels.generateFlatItem(ModItems.MOONSILVER_SCYTHE.get(), ModelTemplates.FLAT_HANDHELD_ITEM);
+        itemModels.generateFlatItem(ModItems.SHADOWSTEEL_DAGGERS.get(), ModelTemplates.FLAT_HANDHELD_ITEM);
+        itemModels.generateFlatItem(ModItems.DAWNMETAL_SUNLANCE.get(), ModelTemplates.FLAT_HANDHELD_ITEM);
 
 
         itemModels.generateFlatItem(ModItems.DAWNMETAL.get(), ModelTemplates.FLAT_ITEM);
@@ -51,6 +87,10 @@ public class ModModelProvider extends ModelProvider {
 
         blockModels.createTrivialCube(ModBlocks.MOONSILVER_ORE.get());
         blockModels.createTrivialCube(ModBlocks.MOONSILVER_DEEPSLATE_ORE.get());
+
+        blockModels.createTrivialCube(ModBlocks.GRIMSHARD_ORE.get());
+        blockModels.createTrivialCube(ModBlocks.EMBERSTONE_ORE.get());
+        blockModels.createTrivialCube(ModBlocks.SOUL_PEARL_ORE.get());
 
         // LYTESTONE has hand-written blockstate + model under src/main/resources;
         // skipping datagen for it (see #getKnownBlocks below) avoids a duplicate.
@@ -94,6 +134,21 @@ public class ModModelProvider extends ModelProvider {
                 ModBlocks.CINDERBARK_FENCE_GATE.get(), ModBlocks.CINDERBARK_DOOR.get(),
                 ModBlocks.CINDERBARK_TRAPDOOR.get(), ModBlocks.CINDERBARK_BUTTON.get(),
                 ModBlocks.CINDERBARK_PRESSURE_PLATE.get(), /* horizontalLog = */ false);
+    }
+
+    /** Item models for a full metal gear set: tools handheld, armor flat. */
+    private static void gearModels(ItemModelGenerators m, Item sword, Item pickaxe, Item axe,
+                                   Item shovel, Item hoe, Item helmet, Item chestplate,
+                                   Item leggings, Item boots) {
+        m.generateFlatItem(sword, ModelTemplates.FLAT_HANDHELD_ITEM);
+        m.generateFlatItem(pickaxe, ModelTemplates.FLAT_HANDHELD_ITEM);
+        m.generateFlatItem(axe, ModelTemplates.FLAT_HANDHELD_ITEM);
+        m.generateFlatItem(shovel, ModelTemplates.FLAT_HANDHELD_ITEM);
+        m.generateFlatItem(hoe, ModelTemplates.FLAT_HANDHELD_ITEM);
+        m.generateFlatItem(helmet, ModelTemplates.FLAT_ITEM);
+        m.generateFlatItem(chestplate, ModelTemplates.FLAT_ITEM);
+        m.generateFlatItem(leggings, ModelTemplates.FLAT_ITEM);
+        m.generateFlatItem(boots, ModelTemplates.FLAT_ITEM);
     }
 
     /**
@@ -146,6 +201,7 @@ public class ModModelProvider extends ModelProvider {
                                && holder.value() != ModBlocks.BREWING_KEG.get()
                                && holder.value() != ModBlocks.HOPS_CROP.get()
                                && holder.value() != ModBlocks.ELIXIR.get()
+                               && holder.value() != ModBlocks.GNOME_BURROW.get()
                                && holder.value() != ModBlocks.LYTESTONE.get());
     }
 
@@ -167,6 +223,7 @@ public class ModModelProvider extends ModelProvider {
                                && holder.value() != net.steve.darkfantasy.item.ModItems.STEIN_GLASS.get()
                                && holder.value() != net.steve.darkfantasy.item.ModItems.HOPS.get()
                                && holder.value() != ModBlocks.BREWING_KEG.get().asItem()
+                               && holder.value() != ModBlocks.GNOME_BURROW.get().asItem()
                                && holder.value() != ModBlocks.LYTESTONE.get().asItem());
     }
 }

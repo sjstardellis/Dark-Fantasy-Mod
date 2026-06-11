@@ -22,6 +22,9 @@ import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.entity.LightningBolt;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.Mob;
+import net.minecraft.world.entity.SpawnGroupData;
+import net.minecraft.world.DifficultyInstance;
+import net.minecraft.world.level.ServerLevelAccessor;
 import net.minecraft.world.entity.ai.attributes.AttributeSupplier;
 import net.minecraft.world.entity.ai.attributes.Attributes;
 import net.minecraft.world.entity.ai.control.BodyRotationControl;
@@ -246,6 +249,24 @@ public class ElectroDragonEntity extends Mob implements Enemy {
                 .add(this.getLookAngle().scale(this.getBbWidth() * 0.5));
     }
 
+    /**
+     * Natural spawn positions are picked at or below the terrain heightmap, which put
+     * dragons at ground level among the trees. Lift naturally-spawned dragons well above
+     * the canopy (surface + 25..40) so they're sky encounters — spawn eggs, commands, and
+     * structure spawns are left where they were placed.
+     */
+    @Override
+    public @Nullable SpawnGroupData finalizeSpawn(ServerLevelAccessor level, DifficultyInstance difficulty,
+                                                  EntitySpawnReason spawnReason, @Nullable SpawnGroupData groupData) {
+        if (spawnReason == EntitySpawnReason.NATURAL || spawnReason == EntitySpawnReason.CHUNK_GENERATION) {
+            int surface = level.getHeight(Heightmap.Types.MOTION_BLOCKING_NO_LEAVES,
+                    this.getBlockX(), this.getBlockZ());
+            double y = surface + 25 + level.getRandom().nextInt(16);
+            this.setPos(this.getX(), y, this.getZ());
+        }
+        return super.finalizeSpawn(level, difficulty, spawnReason, groupData);
+    }
+
     // ---- Death sequence ----------------------------------------------------
 
     @Override
@@ -260,6 +281,9 @@ public class ElectroDragonEntity extends Mob implements Enemy {
                 LightningBolt strike = EntityType.LIGHTNING_BOLT.create(serverLevel, EntitySpawnReason.TRIGGERED);
                 if (strike != null) {
                     strike.snapTo(Vec3.atBottomCenterOf(BlockPos.containing(x, this.getY(), z)));
+                    // Cosmetic only — real bolts damage item entities and place fire,
+                    // which incinerated the dragon's own death drops.
+                    strike.setVisualOnly(true);
                     serverLevel.addFreshEntity(strike);
                 }
             }

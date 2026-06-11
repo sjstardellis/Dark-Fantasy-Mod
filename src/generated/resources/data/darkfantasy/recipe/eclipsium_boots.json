@@ -1,0 +1,14 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "category": "equipment",
+  "key": {
+    "M": "darkfantasy:eclipsium"
+  },
+  "pattern": [
+    "M M",
+    "M M"
+  ],
+  "result": {
+    "id": "darkfantasy:eclipsium_boots"
+  }
+}

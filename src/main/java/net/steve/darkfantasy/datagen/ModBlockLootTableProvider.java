@@ -41,10 +41,22 @@ public class ModBlockLootTableProvider extends BlockLootSubProvider {
         add(ModBlocks.DAWNMETAL_DEEPSLATE_ORE.get(),
                 createOreDrop(ModBlocks.DAWNMETAL_DEEPSLATE_ORE.get(), ModItems.RAW_DAWNMETAL.get()));
 
+        // Gem ores drop their gem directly (diamond-style, fortune-aware).
+        add(ModBlocks.GRIMSHARD_ORE.get(),
+                createOreDrop(ModBlocks.GRIMSHARD_ORE.get(), ModItems.GRIMSHARD.get()));
+        add(ModBlocks.EMBERSTONE_ORE.get(),
+                createOreDrop(ModBlocks.EMBERSTONE_ORE.get(), ModItems.EMBERSTONE.get()));
+        add(ModBlocks.SOUL_PEARL_ORE.get(),
+                createOreDrop(ModBlocks.SOUL_PEARL_ORE.get(), ModItems.SOUL_PEARL.get()));
+
         dropSelf(ModBlocks.ALCHEMY_STAND.get());
         dropSelf(ModBlocks.ENCHANTED_BOOKSHELF.get());
+        // GNOME_BURROW uses a hand-written loot table (copies the gnome_count component
+        // onto the dropped item) — excluded from getKnownBlocks below.
 
-        // Portals - never drops anything
+        // Portals - never drops anything. (The elixir liquid block uses .noLootTable()
+        // in its block properties, so it needs no entry here and is skipped by the
+        // getKnownBlocks validation automatically.)
         add(ModBlocks.SKYLANDS_PORTAL.get(), noDrop());
         add(ModBlocks.TWILIGHT_PORTAL.get(), noDrop());
 
@@ -89,6 +101,24 @@ public class ModBlockLootTableProvider extends BlockLootSubProvider {
                 ModBlocks.CINDERBARK_FENCE_GATE.get(), ModBlocks.CINDERBARK_DOOR.get(),
                 ModBlocks.CINDERBARK_TRAPDOOR.get(), ModBlocks.CINDERBARK_BUTTON.get(),
                 ModBlocks.CINDERBARK_PRESSURE_PLATE.get());
+    }
+
+    /**
+     * Scope validation to THIS mod's blocks only — without this the base provider
+     * validates against every vanilla block and fails ("Missing loottable for
+     * minecraft:stone"). Excludes blocks whose loot tables are hand-written under
+     * src/main/resources (brewing_keg, hops_crop, lytestone), mirroring the
+     * exclusion pattern used in ModModelProvider#getKnownBlocks.
+     */
+    @Override
+    protected Iterable<Block> getKnownBlocks() {
+        return ModBlocks.BLOCKS.getEntries().stream()
+                .map(holder -> (Block) holder.get())
+                .filter(b -> b != ModBlocks.BREWING_KEG.get()
+                          && b != ModBlocks.HOPS_CROP.get()
+                          && b != ModBlocks.GNOME_BURROW.get()
+                          && b != ModBlocks.LYTESTONE.get())
+                .toList();
     }
 
     private void addWoodSetDrops(Block log, Block strippedLog, Block wood, Block strippedWood,

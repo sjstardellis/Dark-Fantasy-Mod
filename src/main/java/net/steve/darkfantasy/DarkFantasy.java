@@ -10,12 +10,14 @@ import net.steve.darkfantasy.entity.custom.GoblinEntity;
 import net.steve.darkfantasy.entity.custom.LytebugEntity;
 import net.steve.darkfantasy.entity.custom.WizardEntity;
 import net.steve.darkfantasy.init.ModBlockEntities;
+import net.steve.darkfantasy.init.ModDataComponents;
 import net.steve.darkfantasy.init.ModEntities;
 import net.steve.darkfantasy.init.ModFluidTypes;
 import net.steve.darkfantasy.init.ModFluids;
 import net.steve.darkfantasy.init.ModMenuTypes;
 import net.steve.darkfantasy.init.ModPoiTypes;
 import net.steve.darkfantasy.init.ModRecipes;
+import net.steve.darkfantasy.init.ModStructureTypes;
 import net.steve.darkfantasy.item.ModItems;
 import net.steve.darkfantasy.worldgen.biome.OverworldBiomeInjector;
 import net.minecraft.world.entity.EntityType;
@@ -53,10 +55,12 @@ public class DarkFantasy {
         ModEntities.register(modEventBus);
         ModItems.register(modEventBus);
         ModBlocks.register(modEventBus);
+        ModDataComponents.register(modEventBus);
         ModBlockEntities.register(modEventBus);
         ModMenuTypes.register(modEventBus);
         ModRecipes.register(modEventBus);
         ModPoiTypes.register(modEventBus);
+        ModStructureTypes.register(modEventBus);
         // FluidTypes must register BEFORE Fluids — the BaseFlowingFluid constructor
         // resolves its FluidType supplier lazily, but the type holder must exist by
         // the time the Fluid registry freezes. Same-bus same-phase ordering keeps
@@ -158,13 +162,14 @@ public class DarkFantasy {
                 RegisterSpawnPlacementsEvent.Operation.REPLACE);
         // Electrodragons are big flying bosses — no ground requirement and no light
         // gate (they don't extend Monster, so the standard light predicate doesn't fit).
-        // Rarity is already heavily controlled by weight=1 + spawn_costs charge=10 in
-        // the biome JSON; per-position predicate just needs to confirm there's air to
-        // spawn into.
+        // Rarity: weight=1 + spawn_costs charge=10 in the biome JSON, plus a 1-in-3
+        // random gate here so attempts succeed a third as often. The entity's
+        // finalizeSpawn lifts natural spawns to surface+25..40 (sky encounters).
         event.register(ModEntities.ELECTRO_DRAGON.get(),
                 SpawnPlacementTypes.NO_RESTRICTIONS,
                 Heightmap.Types.MOTION_BLOCKING_NO_LEAVES,
-                (type, level, reason, pos, random) -> level.getBlockState(pos).isAir(),
+                (type, level, reason, pos, random) ->
+                        level.getBlockState(pos).isAir() && random.nextInt(3) == 0,
                 RegisterSpawnPlacementsEvent.Operation.REPLACE);
         // Lytebugs are passive flyers — no light gating, no ground requirement. The
         // permissive predicate just confirms there's air to spawn into; biome weight

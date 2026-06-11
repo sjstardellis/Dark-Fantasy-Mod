@@ -1,0 +1,15 @@
+{
+  "name": "darkfantasy:gnome_hollow/start_pool",
+  "fallback": "minecraft:empty",
+  "elements": [
+    {
+      "weight": 1,
+      "element": {
+        "element_type": "minecraft:single_pool_element",
+        "location": "darkfantasy:gnome_hollow",
+        "processors": "minecraft:empty",
+        "projection": "rigid"
+      }
+    }
+  ]
+}

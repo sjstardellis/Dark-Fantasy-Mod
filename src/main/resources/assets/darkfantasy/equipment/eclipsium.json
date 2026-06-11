@@ -1,0 +1,14 @@
+{
+  "layers": {
+    "humanoid": [
+      {
+        "texture": "darkfantasy:eclipsium"
+      }
+    ],
+    "humanoid_leggings": [
+      {
+        "texture": "darkfantasy:eclipsium"
+      }
+    ]
+  }
+}

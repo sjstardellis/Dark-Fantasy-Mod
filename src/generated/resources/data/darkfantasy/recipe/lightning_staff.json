@@ -1,0 +1,16 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "category": "equipment",
+  "key": {
+    "B": "minecraft:blaze_rod",
+    "R": "minecraft:lightning_rod"
+  },
+  "pattern": [
+    " R ",
+    " B ",
+    " B "
+  ],
+  "result": {
+    "id": "darkfantasy:lightning_staff"
+  }
+}

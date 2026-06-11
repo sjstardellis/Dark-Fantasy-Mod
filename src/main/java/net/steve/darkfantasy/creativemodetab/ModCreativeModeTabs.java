@@ -25,12 +25,54 @@ public class ModCreativeModeTabs {
                     .displayItems((itemDisplayParameters, output) -> {
                         output.accept(ModItems.SHADOWSTEEL);
                         output.accept(ModItems.RAW_SHADOWSTEEL);
+                        output.accept(ModItems.SHADOWSTEEL_SWORD);
+                        output.accept(ModItems.SHADOWSTEEL_PICKAXE);
+                        output.accept(ModItems.SHADOWSTEEL_AXE);
+                        output.accept(ModItems.SHADOWSTEEL_SHOVEL);
+                        output.accept(ModItems.SHADOWSTEEL_HOE);
+                        output.accept(ModItems.SHADOWSTEEL_HELMET);
+                        output.accept(ModItems.SHADOWSTEEL_CHESTPLATE);
+                        output.accept(ModItems.SHADOWSTEEL_LEGGINGS);
+                        output.accept(ModItems.SHADOWSTEEL_BOOTS);
+                        output.accept(ModItems.SHADOWSTEEL_DAGGERS);
+
                         output.accept(ModItems.ECLIPSIUM);
+                        output.accept(ModItems.ECLIPSIUM_SWORD);
+                        output.accept(ModItems.ECLIPSIUM_PICKAXE);
+                        output.accept(ModItems.ECLIPSIUM_AXE);
+                        output.accept(ModItems.ECLIPSIUM_SHOVEL);
+                        output.accept(ModItems.ECLIPSIUM_HOE);
+                        output.accept(ModItems.ECLIPSIUM_HELMET);
+                        output.accept(ModItems.ECLIPSIUM_CHESTPLATE);
+                        output.accept(ModItems.ECLIPSIUM_LEGGINGS);
+                        output.accept(ModItems.ECLIPSIUM_BOOTS);
+
                         output.accept(ModItems.MOONSILVER);
                         output.accept(ModItems.RAW_MOONSILVER);
 
+                        output.accept(ModItems.MOONSILVER_SWORD);
+                        output.accept(ModItems.MOONSILVER_PICKAXE);
+                        output.accept(ModItems.MOONSILVER_AXE);
+                        output.accept(ModItems.MOONSILVER_SHOVEL);
+                        output.accept(ModItems.MOONSILVER_HOE);
+                        output.accept(ModItems.MOONSILVER_HELMET);
+                        output.accept(ModItems.MOONSILVER_CHESTPLATE);
+                        output.accept(ModItems.MOONSILVER_LEGGINGS);
+                        output.accept(ModItems.MOONSILVER_BOOTS);
+                        output.accept(ModItems.MOONSILVER_SCYTHE);
+
                         output.accept(ModItems.DAWNMETAL);
                         output.accept(ModItems.RAW_DAWNMETAL);
+                        output.accept(ModItems.DAWNMETAL_SWORD);
+                        output.accept(ModItems.DAWNMETAL_PICKAXE);
+                        output.accept(ModItems.DAWNMETAL_AXE);
+                        output.accept(ModItems.DAWNMETAL_SHOVEL);
+                        output.accept(ModItems.DAWNMETAL_HOE);
+                        output.accept(ModItems.DAWNMETAL_HELMET);
+                        output.accept(ModItems.DAWNMETAL_CHESTPLATE);
+                        output.accept(ModItems.DAWNMETAL_LEGGINGS);
+                        output.accept(ModItems.DAWNMETAL_BOOTS);
+                        output.accept(ModItems.DAWNMETAL_SUNLANCE);
 
                         output.accept(ModBlocks.SHADOWSTEEL_ORE);
                         output.accept(ModBlocks.SHADOWSTEEL_DEEPSLATE_ORE);
@@ -40,12 +82,26 @@ public class ModCreativeModeTabs {
                         output.accept(ModBlocks.MOONSILVER_ORE);
                         output.accept(ModBlocks.MOONSILVER_DEEPSLATE_ORE);
 
+                        output.accept(ModItems.GRIMSHARD);
+                        output.accept(ModItems.EMBERSTONE);
+                        output.accept(ModItems.SOUL_PEARL);
+                        output.accept(ModItems.ARCANE_ASH);
+                        output.accept(ModItems.STORM_SCALE);
+                        output.accept(ModItems.MOONLIGHT_ELIXIR);
+                        output.accept(ModItems.STONESKIN_ELIXIR);
+                        output.accept(ModItems.EMBERBLOOD_ELIXIR);
+                        output.accept(ModItems.WISPSTEP_ELIXIR);
+                        output.accept(ModBlocks.GRIMSHARD_ORE);
+                        output.accept(ModBlocks.EMBERSTONE_ORE);
+                        output.accept(ModBlocks.SOUL_PEARL_ORE);
+
                         output.accept(ModBlocks.ALCHEMY_STAND);
                         output.accept(ModBlocks.ENCHANTED_BOOKSHELF);
 
                         output.accept(ModItems.FAIRY_DUST);
                         output.accept(ModItems.LYTEBUG_DUST);
                         output.accept(ModBlocks.LYTESTONE);
+                        output.accept(ModBlocks.GNOME_BURROW);
                         output.accept(ModItems.ELIXIR_BUCKET);
                         output.accept(ModItems.HOPS);
                         output.accept(ModItems.BEER);
@@ -53,6 +109,9 @@ public class ModCreativeModeTabs {
                         output.accept(ModBlocks.BREWING_KEG);
                         output.accept(ModItems.LIGHTNING_STAFF);
                         output.accept(ModItems.FIREBALL_STAFF);
+                        output.accept(ModItems.FROST_STAFF);
+                        output.accept(ModItems.BLINK_STAFF);
+                        output.accept(ModItems.CINDER_STAFF);
                         output.accept(ModItems.FAIRY_SPAWN_EGG);
                         output.accept(ModItems.WIZARD_SPAWN_EGG);
                         output.accept(ModItems.ELECTRO_DRAGON_SPAWN_EGG);

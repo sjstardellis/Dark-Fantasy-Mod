@@ -1,0 +1,14 @@
+{
+  "type": "darkfantasy:alchemy",
+  "ingredients": [
+    "darkfantasy:storm_scale",
+    "darkfantasy:arcane_ash",
+    "minecraft:glass_bottle"
+  ],
+  "result": {
+    "id": "darkfantasy:stoneskin_elixir",
+    "count": 1
+  },
+  "elixir": 200,
+  "cook_time": 200
+}

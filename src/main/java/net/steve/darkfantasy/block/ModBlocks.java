@@ -5,6 +5,7 @@ import net.steve.darkfantasy.block.custom.AlchemyStandBlock;
 import net.steve.darkfantasy.block.custom.BrewingKegBlock;
 import net.steve.darkfantasy.block.custom.ElixirLiquidBlock;
 import net.steve.darkfantasy.block.custom.EnchantedBookshelfBlock;
+import net.steve.darkfantasy.block.custom.GnomeBurrowBlock;
 import net.steve.darkfantasy.block.custom.HopsBlock;
 import net.steve.darkfantasy.block.custom.LytestoneBlock;
 import net.steve.darkfantasy.block.custom.SkylandsPortalBlock;
@@ -66,6 +67,20 @@ public class ModBlocks {
             properties -> new DropExperienceBlock(UniformInt.of(3, 7), properties.strength(5f)
                     .requiresCorrectToolForDrops().sound(SoundType.DEEPSLATE)));
 
+    // ---- Biome gem ores (generate only under their rare biome; drop the gem directly) ----
+    // Grimshard: deepslate depths beneath the gravewood grove.
+    public static final DeferredBlock<Block> GRIMSHARD_ORE = registerBlock("grimshard_ore",
+            properties -> new DropExperienceBlock(UniformInt.of(3, 7), properties.strength(4.5f)
+                    .requiresCorrectToolForDrops().sound(SoundType.DEEPSLATE)));
+    // Emberstone: stone layers beneath the cinderbark forest.
+    public static final DeferredBlock<Block> EMBERSTONE_ORE = registerBlock("emberstone_ore",
+            properties -> new DropExperienceBlock(UniformInt.of(3, 7), properties.strength(3f)
+                    .requiresCorrectToolForDrops().sound(SoundType.STONE)));
+    // Wisp pearl: shallow stone beneath the ghostwillow marsh.
+    public static final DeferredBlock<Block> SOUL_PEARL_ORE = registerBlock("soul_pearl_ore",
+            properties -> new DropExperienceBlock(UniformInt.of(3, 7), properties.strength(3f)
+                    .requiresCorrectToolForDrops().sound(SoundType.STONE)));
+
     public static final DeferredBlock<Block> ALCHEMY_STAND = registerBlock("alchemy_stand",
             properties -> new AlchemyStandBlock(properties.strength(2f)
                     .requiresCorrectToolForDrops().sound(SoundType.STONE).noOcclusion()));
@@ -80,6 +95,11 @@ public class ModBlocks {
     public static final DeferredBlock<Block> LYTESTONE = registerBlock("lytestone",
             properties -> new LytestoneBlock(properties.strength(0.3f)
                     .sound(SoundType.GLASS).lightLevel(state -> 15)));
+
+    // Gnome burrow — a beehive-style home block gnomes wander in and out of.
+    public static final DeferredBlock<Block> GNOME_BURROW = registerBlock("gnome_burrow",
+            properties -> new GnomeBurrowBlock(properties.mapColor(MapColor.DIRT)
+                    .strength(0.6f).sound(SoundType.WOOD)));
 
     // Skylands portal — no BlockItem (not obtainable in survival).
     public static final DeferredBlock<SkylandsPortalBlock> SKYLANDS_PORTAL = BLOCKS.registerBlock("skylands_portal",

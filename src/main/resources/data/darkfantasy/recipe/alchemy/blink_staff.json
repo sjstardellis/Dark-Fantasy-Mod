@@ -1,0 +1,14 @@
+{
+  "type": "darkfantasy:alchemy",
+  "ingredients": [
+    "darkfantasy:soul_pearl",
+    "minecraft:blaze_rod",
+    "minecraft:ender_pearl"
+  ],
+  "result": {
+    "id": "darkfantasy:blink_staff",
+    "count": 1
+  },
+  "elixir": 250,
+  "cook_time": 300
+}

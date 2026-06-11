@@ -1,5 +1,8 @@
 package net.steve.darkfantasy.entity.custom;
 
+import net.steve.darkfantasy.block.ModBlocks;
+import net.steve.darkfantasy.block.entity.GnomeBurrowBlockEntity;
+import net.minecraft.core.BlockPos;
 import net.minecraft.core.Holder;
 import net.minecraft.core.component.DataComponents;
 import net.minecraft.server.level.ServerLevel;
@@ -32,6 +35,7 @@ import net.minecraft.world.item.alchemy.PotionContents;
 import net.minecraft.world.item.alchemy.Potions;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.phys.Vec3;
+import org.jspecify.annotations.Nullable;
 
 import java.util.EnumSet;
 
@@ -124,6 +128,9 @@ public class GnomeEntity extends Monster implements RangedAttackMob {
         // attackRange=10 blocks. Slower throw cadence than vanilla witch (60) because
         // gnomes pelt in groups and 60 made packs feel oppressive.
         this.goalSelector.addGoal(1, new RangedAttackGoal(this, 1.0, 80, 10.0F));
+        // When idle (no target), occasionally seek out a nearby Gnome Burrow and tuck
+        // into it — the burrow later pops it back out. Yields to combat (needs no target).
+        this.goalSelector.addGoal(4, new EnterBurrowGoal());
         this.goalSelector.addGoal(5, new WaterAvoidingRandomStrollGoal(this, 0.8));
         this.goalSelector.addGoal(6, new LookAtPlayerGoal(this, Player.class, 8.0F));
         this.goalSelector.addGoal(7, new RandomLookAroundGoal(this));
@@ -299,6 +306,96 @@ public class GnomeEntity extends Monster implements RangedAttackMob {
             GnomeEntity.this.getNavigation().stop();
             GnomeEntity.this.setDeltaMovement(
                     0.0, GnomeEntity.this.getDeltaMovement().y, 0.0); // keep gravity
+        }
+    }
+
+    // ---- Burrow homing (beehive-style in/out behavior) ---------------------
+
+    /**
+     * When idle, an idle gnome will occasionally look for a nearby non-full
+     * {@link net.steve.darkfantasy.block.custom.GnomeBurrowBlock}, walk to it, and tuck
+     * inside (incrementing the burrow's occupant count and removing itself). The burrow
+     * later emerges a gnome on its own timer, producing bee-like in/out traffic.
+     */
+    private class EnterBurrowGoal extends Goal {
+        private static final int SEARCH_RADIUS = 6;
+        /** ~1-in-N per-tick roll to start heading home, so gnomes don't all rush in at once. */
+        private static final int START_CHANCE = 200;
+        private @Nullable BlockPos burrowPos;
+        private int giveUpTime;
+
+        EnterBurrowGoal() {
+            this.setFlags(EnumSet.of(Goal.Flag.MOVE));
+        }
+
+        @Override
+        public boolean canUse() {
+            GnomeEntity g = GnomeEntity.this;
+            if (g.getTarget() != null || g.level().isClientSide()) return false;
+            if (g.getRandom().nextInt(START_CHANCE) != 0) return false;
+            this.burrowPos = findNearbyBurrow();
+            return this.burrowPos != null;
+        }
+
+        @Override
+        public boolean canContinueToUse() {
+            return this.burrowPos != null && this.giveUpTime > 0
+                    && GnomeEntity.this.getTarget() == null && isOpenBurrow(this.burrowPos);
+        }
+
+        @Override
+        public void start() {
+            this.giveUpTime = 200;
+            moveToBurrow();
+        }
+
+        @Override
+        public void stop() {
+            this.burrowPos = null;
+        }
+
+        @Override
+        public void tick() {
+            this.giveUpTime--;
+            if (this.burrowPos == null) return;
+            GnomeEntity g = GnomeEntity.this;
+            if (g.blockPosition().closerThan(this.burrowPos, 1.8)) {
+                if (g.level().getBlockEntity(this.burrowPos) instanceof GnomeBurrowBlockEntity be && be.tryEnter()) {
+                    g.discard();
+                }
+                this.burrowPos = null;
+            } else if (g.getNavigation().isDone()) {
+                moveToBurrow();
+            }
+        }
+
+        private void moveToBurrow() {
+            if (this.burrowPos != null) {
+                GnomeEntity.this.getNavigation().moveTo(
+                        this.burrowPos.getX() + 0.5, this.burrowPos.getY(), this.burrowPos.getZ() + 0.5, 0.9);
+            }
+        }
+
+        private boolean isOpenBurrow(BlockPos pos) {
+            return GnomeEntity.this.level().getBlockEntity(pos) instanceof GnomeBurrowBlockEntity be && !be.isFull();
+        }
+
+        private @Nullable BlockPos findNearbyBurrow() {
+            GnomeEntity g = GnomeEntity.this;
+            BlockPos origin = g.blockPosition();
+            BlockPos.MutableBlockPos m = new BlockPos.MutableBlockPos();
+            for (int dy = -2; dy <= 2; dy++) {
+                for (int dx = -SEARCH_RADIUS; dx <= SEARCH_RADIUS; dx++) {
+                    for (int dz = -SEARCH_RADIUS; dz <= SEARCH_RADIUS; dz++) {
+                        m.set(origin.getX() + dx, origin.getY() + dy, origin.getZ() + dz);
+                        if (g.level().getBlockState(m).is(ModBlocks.GNOME_BURROW.get())
+                                && g.level().getBlockEntity(m) instanceof GnomeBurrowBlockEntity be && !be.isFull()) {
+                            return m.immutable();
+                        }
+                    }
+                }
+            }
+            return null;
         }
     }
 }

@@ -1,0 +1,14 @@
+{
+  "layers": {
+    "humanoid": [
+      {
+        "texture": "darkfantasy:moonsilver"
+      }
+    ],
+    "humanoid_leggings": [
+      {
+        "texture": "darkfantasy:moonsilver"
+      }
+    ]
+  }
+}

@@ -1,0 +1,14 @@
+{
+  "type": "darkfantasy:alchemy",
+  "ingredients": [
+    "darkfantasy:grimshard",
+    "darkfantasy:fairy_dust",
+    "minecraft:glass_bottle"
+  ],
+  "result": {
+    "id": "darkfantasy:moonlight_elixir",
+    "count": 1
+  },
+  "elixir": 150,
+  "cook_time": 200
+}

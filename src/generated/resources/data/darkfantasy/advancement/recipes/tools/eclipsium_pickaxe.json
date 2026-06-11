@@ -1,0 +1,32 @@
+{
+  "parent": "minecraft:recipes/root",
+  "criteria": {
+    "has_eclipsium": {
+      "conditions": {
+        "items": [
+          {
+            "items": "darkfantasy:eclipsium"
+          }
+        ]
+      },
+      "trigger": "minecraft:inventory_changed"
+    },
+    "has_the_recipe": {
+      "conditions": {
+        "recipe": "darkfantasy:eclipsium_pickaxe"
+      },
+      "trigger": "minecraft:recipe_unlocked"
+    }
+  },
+  "requirements": [
+    [
+      "has_the_recipe",
+      "has_eclipsium"
+    ]
+  ],
+  "rewards": {
+    "recipes": [
+      "darkfantasy:eclipsium_pickaxe"
+    ]
+  }
+}

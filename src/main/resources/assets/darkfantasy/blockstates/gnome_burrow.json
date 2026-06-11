@@ -1,0 +1,8 @@
+{
+  "variants": {
+    "facing=north": { "model": "darkfantasy:block/gnome_burrow" },
+    "facing=east":  { "model": "darkfantasy:block/gnome_burrow", "y": 90 },
+    "facing=south": { "model": "darkfantasy:block/gnome_burrow", "y": 180 },
+    "facing=west":  { "model": "darkfantasy:block/gnome_burrow", "y": 270 }
+  }
+}

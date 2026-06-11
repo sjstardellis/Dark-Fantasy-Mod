@@ -1,0 +1,14 @@
+{
+  "type": "darkfantasy:alchemy",
+  "ingredients": [
+    "darkfantasy:soul_pearl",
+    "darkfantasy:lytebug_dust",
+    "minecraft:glass_bottle"
+  ],
+  "result": {
+    "id": "darkfantasy:wispstep_elixir",
+    "count": 1
+  },
+  "elixir": 150,
+  "cook_time": 200
+}

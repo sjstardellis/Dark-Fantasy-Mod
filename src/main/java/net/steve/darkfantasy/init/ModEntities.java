@@ -3,6 +3,7 @@ package net.steve.darkfantasy.init;
 import net.steve.darkfantasy.DarkFantasy;
 import net.steve.darkfantasy.entity.custom.ElectroDragonEntity;
 import net.steve.darkfantasy.entity.custom.FairyEntity;
+import net.steve.darkfantasy.entity.custom.FrostBoltProjectile;
 import net.steve.darkfantasy.entity.custom.GnomeEntity;
 import net.steve.darkfantasy.entity.custom.GoblinEntity;
 import net.steve.darkfantasy.entity.custom.GoblinRockProjectile;
@@ -34,6 +35,8 @@ public class ModEntities {
             Registries.ENTITY_TYPE, Identifier.fromNamespaceAndPath(DarkFantasy.MOD_ID, "goblin"));
     private static final ResourceKey<EntityType<?>> GOBLIN_ROCK_KEY = ResourceKey.create(
             Registries.ENTITY_TYPE, Identifier.fromNamespaceAndPath(DarkFantasy.MOD_ID, "goblin_rock"));
+    private static final ResourceKey<EntityType<?>> FROST_BOLT_KEY = ResourceKey.create(
+            Registries.ENTITY_TYPE, Identifier.fromNamespaceAndPath(DarkFantasy.MOD_ID, "frost_bolt"));
     private static final ResourceKey<EntityType<?>> GNOME_KEY = ResourceKey.create(
             Registries.ENTITY_TYPE, Identifier.fromNamespaceAndPath(DarkFantasy.MOD_ID, "gnome"));
     private static final ResourceKey<EntityType<?>> LYTEBUG_KEY = ResourceKey.create(
@@ -126,6 +129,15 @@ public class ModEntities {
                             .clientTrackingRange(4)
                             .updateInterval(10)
                             .build(GOBLIN_ROCK_KEY));
+
+    /** Frost bolt fired by the Frost Staff — slows + freezes on hit. */
+    public static final DeferredHolder<EntityType<?>, EntityType<FrostBoltProjectile>> FROST_BOLT =
+            ENTITY_TYPES.register("frost_bolt",
+                    () -> EntityType.Builder.<FrostBoltProjectile>of(FrostBoltProjectile::new, MobCategory.MISC)
+                            .sized(0.25F, 0.25F)
+                            .clientTrackingRange(4)
+                            .updateInterval(10)
+                            .build(FROST_BOLT_KEY));
 
     public static void register(IEventBus eventBus) {
         ENTITY_TYPES.register(eventBus);

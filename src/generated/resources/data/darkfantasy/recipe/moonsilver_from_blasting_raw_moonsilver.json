@@ -1,0 +1,11 @@
+{
+  "type": "minecraft:blasting",
+  "category": "misc",
+  "cookingtime": 100,
+  "experience": 0.7,
+  "group": "moonsilver",
+  "ingredient": "darkfantasy:raw_moonsilver",
+  "result": {
+    "id": "darkfantasy:moonsilver"
+  }
+}

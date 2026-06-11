@@ -1,0 +1,14 @@
+{
+  "type": "darkfantasy:alchemy",
+  "ingredients": [
+    "darkfantasy:emberstone",
+    "minecraft:blaze_rod",
+    "minecraft:blaze_powder"
+  ],
+  "result": {
+    "id": "darkfantasy:cinder_staff",
+    "count": 1
+  },
+  "elixir": 250,
+  "cook_time": 300
+}

@@ -1,0 +1,16 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "category": "misc",
+  "key": {
+    "M": "minecraft:brown_mushroom",
+    "P": "darkfantasy:ghostwillow_planks"
+  },
+  "pattern": [
+    "PPP",
+    "PMP",
+    "PPP"
+  ],
+  "result": {
+    "id": "darkfantasy:gnome_burrow"
+  }
+}

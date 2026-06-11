@@ -1,0 +1,6 @@
+{
+  "parent": "minecraft:item/handheld",
+  "textures": {
+    "layer0": "darkfantasy:item/dawnmetal_pickaxe"
+  }
+}

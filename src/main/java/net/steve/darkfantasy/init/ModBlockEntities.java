@@ -4,6 +4,7 @@ import net.steve.darkfantasy.DarkFantasy;
 import net.steve.darkfantasy.block.ModBlocks;
 import net.steve.darkfantasy.block.entity.AlchemyStandBlockEntity;
 import net.steve.darkfantasy.block.entity.BrewingKegBlockEntity;
+import net.steve.darkfantasy.block.entity.GnomeBurrowBlockEntity;
 import net.steve.darkfantasy.block.entity.SkylandsPortalBlockEntity;
 import net.minecraft.core.registries.Registries;
 import net.minecraft.world.level.block.entity.BlockEntityType;
@@ -30,6 +31,11 @@ public class ModBlockEntities {
             BLOCK_ENTITIES.register("brewing_keg_be",
                     () -> new BlockEntityType<>(BrewingKegBlockEntity::new,
                             ModBlocks.BREWING_KEG.get()));
+
+    public static final Supplier<BlockEntityType<GnomeBurrowBlockEntity>> GNOME_BURROW_BE =
+            BLOCK_ENTITIES.register("gnome_burrow_be",
+                    () -> new BlockEntityType<>(GnomeBurrowBlockEntity::new,
+                            ModBlocks.GNOME_BURROW.get()));
 
     public static void register(IEventBus eventBus) {
         BLOCK_ENTITIES.register(eventBus);

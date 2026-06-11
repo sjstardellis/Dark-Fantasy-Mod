@@ -1,0 +1,16 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "category": "equipment",
+  "key": {
+    "M": "darkfantasy:moonsilver",
+    "S": "minecraft:stick"
+  },
+  "pattern": [
+    "MM",
+    " S",
+    " S"
+  ],
+  "result": {
+    "id": "darkfantasy:moonsilver_hoe"
+  }
+}

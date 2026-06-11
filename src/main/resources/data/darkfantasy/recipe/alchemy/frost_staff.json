@@ -1,0 +1,14 @@
+{
+  "type": "darkfantasy:alchemy",
+  "ingredients": [
+    "darkfantasy:grimshard",
+    "minecraft:blaze_rod",
+    "darkfantasy:fairy_dust"
+  ],
+  "result": {
+    "id": "darkfantasy:frost_staff",
+    "count": 1
+  },
+  "elixir": 250,
+  "cook_time": 300
+}

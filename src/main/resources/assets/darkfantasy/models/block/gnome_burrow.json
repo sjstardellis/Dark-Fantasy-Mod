@@ -1,0 +1,9 @@
+{
+  "parent": "minecraft:block/orientable_with_bottom",
+  "textures": {
+    "top": "darkfantasy:block/gnome_burrow_top",
+    "bottom": "darkfantasy:block/gnome_burrow_top",
+    "front": "darkfantasy:block/gnome_burrow_front",
+    "side": "darkfantasy:block/gnome_burrow_side"
+  }
+}

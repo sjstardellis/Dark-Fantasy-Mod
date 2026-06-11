@@ -1,0 +1,32 @@
+{
+  "parent": "minecraft:recipes/root",
+  "criteria": {
+    "has_moonsilver_ore": {
+      "conditions": {
+        "items": [
+          {
+            "items": "darkfantasy:moonsilver_ore"
+          }
+        ]
+      },
+      "trigger": "minecraft:inventory_changed"
+    },
+    "has_the_recipe": {
+      "conditions": {
+        "recipe": "darkfantasy:moonsilver_from_blasting_moonsilver_ore"
+      },
+      "trigger": "minecraft:recipe_unlocked"
+    }
+  },
+  "requirements": [
+    [
+      "has_the_recipe",
+      "has_moonsilver_ore"
+    ]
+  ],
+  "rewards": {
+    "recipes": [
+      "darkfantasy:moonsilver_from_blasting_moonsilver_ore"
+    ]
+  }
+}
