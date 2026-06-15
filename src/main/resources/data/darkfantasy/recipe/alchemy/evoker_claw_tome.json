@@ -1,0 +1,14 @@
+{
+  "type": "darkfantasy:alchemy",
+  "ingredients": [
+    "minecraft:book",
+    "darkfantasy:arcane_ash",
+    "minecraft:emerald"
+  ],
+  "result": {
+    "id": "darkfantasy:evoker_claw_tome",
+    "count": 1
+  },
+  "elixir": 350,
+  "cook_time": 300
+}

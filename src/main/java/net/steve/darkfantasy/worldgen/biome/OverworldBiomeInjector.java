@@ -28,6 +28,7 @@ import java.lang.reflect.Field;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
+import java.util.Optional;
 import java.util.Set;
 import java.util.function.Supplier;
 import java.util.stream.Collectors;
@@ -39,6 +40,16 @@ import java.util.stream.Collectors;
  * modifiers only mutate existing biomes), so we mutate the source's parameter list
  * via reflection and invalidate the memoized possibleBiomes cache so /locate biome,
  * structure placement, and spawn target collection see the new entries.
+ *
+ * <p><b>Save-size note (critical):</b> a {@link MultiNoiseBiomeSource} backed by the
+ * overworld preset stores {@code Either.right(Holder<…ParameterList>)} and serializes
+ * to just {@code {"preset":"minecraft:overworld"}}. If we instead overwrite its field
+ * with {@code Either.left(expandedList)}, the codec writes the whole ~120-entry climate
+ * list inline; persisted into {@code world_gen_settings.dat} that balloons past the
+ * 2 MiB {@code NbtAccounter} read quota and the world can never be reopened. So in the
+ * preset case we mutate the preset's parameter list <em>in place</em> and leave the
+ * source's {@code Either.right} untouched — runtime sees the new biomes, but the save
+ * still writes only the preset key.
  */
 public final class OverworldBiomeInjector {
 
@@ -117,16 +128,53 @@ public final class OverworldBiomeInjector {
     }
 
     private static void inject(MultiNoiseBiomeSource source, Registry<Biome> biomes) throws ReflectiveOperationException {
-        // Resolve existing parameter list (works whether the source was built from a
-        // preset Holder or a direct list).
         Field paramField = MultiNoiseBiomeSource.class.getDeclaredField("parameters");
         paramField.setAccessible(true);
         @SuppressWarnings("unchecked")
         Either<Climate.ParameterList<Holder<Biome>>, Holder<MultiNoiseBiomeSourceParameterList>> existing =
                 (Either<Climate.ParameterList<Holder<Biome>>, Holder<MultiNoiseBiomeSourceParameterList>>) paramField.get(source);
-        Climate.ParameterList<Holder<Biome>> current =
-                existing.map(direct -> direct, preset -> preset.value().parameters());
 
+        // The parameter list we'll publish to possibleBiomes once (de)injection is done.
+        Climate.ParameterList<Holder<Biome>> effective;
+
+        Optional<Holder<MultiNoiseBiomeSourceParameterList>> presetHolder = existing.right();
+        if (presetHolder.isPresent()) {
+            // NORMAL CASE — mutate the preset's list in place, keep source's Either.right
+            // so the save stays a one-line preset reference (see class javadoc).
+            MultiNoiseBiomeSourceParameterList presetList = presetHolder.get().value();
+            Field plField = MultiNoiseBiomeSourceParameterList.class.getDeclaredField("parameters");
+            plField.setAccessible(true);
+            @SuppressWarnings("unchecked")
+            Climate.ParameterList<Holder<Biome>> current =
+                    (Climate.ParameterList<Holder<Biome>>) plField.get(presetList);
+            // The preset object is a shared registry value; a previous overworld load in
+            // this same JVM may have already mutated it. Stay idempotent.
+            if (containsInjected(current)) {
+                effective = current;
+            } else {
+                effective = withDarkFantasyBiomes(current, biomes);
+                plField.set(presetList, effective);
+            }
+            // Deliberately NOT writing paramField here — that's what keeps the save small.
+        } else {
+            // EDGE CASE — source built from a direct (inline) list. It already serializes
+            // inline in vanilla, so appending our entries introduces no *new* bloat.
+            Climate.ParameterList<Holder<Biome>> current = existing.left().orElseThrow();
+            effective = containsInjected(current) ? current : withDarkFantasyBiomes(current, biomes);
+            paramField.set(source, Either.left(effective));
+        }
+
+        refreshPossibleBiomes(source, effective);
+    }
+
+    /** True once our biomes are present, so re-running injection on the shared preset is a no-op. */
+    private static boolean containsInjected(Climate.ParameterList<Holder<Biome>> list) {
+        return list.values().stream().anyMatch(pair -> pair.getSecond().is(GRAVEWOOD_GROVE));
+    }
+
+    /** Returns a new parameter list = {@code current} plus the three Dark Fantasy biomes. */
+    private static Climate.ParameterList<Holder<Biome>> withDarkFantasyBiomes(
+            Climate.ParameterList<Holder<Biome>> current, Registry<Biome> biomes) {
         List<Pair<Climate.ParameterPoint, Holder<Biome>>> merged = new ArrayList<>(current.values());
 
         // Each biome is locked to its temp/humidity climate identity. Cinderbark keeps
@@ -170,17 +218,21 @@ public final class OverworldBiomeInjector {
                 0.0F),
                 biomes.getOrThrow(GHOSTWILLOW_MARSH)));
 
-        Climate.ParameterList<Holder<Biome>> rebuilt = new Climate.ParameterList<>(merged);
-        paramField.set(source, Either.left(rebuilt));
+        return new Climate.ParameterList<>(merged);
+    }
 
-        // BiomeSource.possibleBiomes is a Suppliers.memoize() — if anything queried
-        // it before us the cache is now stale. Replace it with a fresh memoized
-        // supplier built from the rebuilt list so /locate biome, structure starts,
-        // and spawn targets all see the new biomes.
+    /**
+     * BiomeSource.possibleBiomes is a Suppliers.memoize() — if anything queried it before
+     * us (structure-state build does) the cache is stale. Replace it with a fresh memoized
+     * supplier from {@code list} so /locate biome, structure starts, and spawn targets all
+     * see the new biomes.
+     */
+    private static void refreshPossibleBiomes(MultiNoiseBiomeSource source,
+            Climate.ParameterList<Holder<Biome>> list) throws ReflectiveOperationException {
         Field possField = BiomeSource.class.getDeclaredField("possibleBiomes");
         possField.setAccessible(true);
         Supplier<Set<Holder<Biome>>> fresh = Suppliers.memoize(
-                () -> rebuilt.values().stream().map(Pair::getSecond).distinct()
+                () -> list.values().stream().map(Pair::getSecond).distinct()
                         .collect(ImmutableSet.toImmutableSet()));
         possField.set(source, fresh);
     }

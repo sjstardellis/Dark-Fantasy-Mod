@@ -1,0 +1,14 @@
+{
+  "type": "darkfantasy:alchemy",
+  "ingredients": [
+    "minecraft:book",
+    "darkfantasy:mercuryglass",
+    "minecraft:amethyst_shard"
+  ],
+  "result": {
+    "id": "darkfantasy:prospector_tome",
+    "count": 1
+  },
+  "elixir": 250,
+  "cook_time": 300
+}

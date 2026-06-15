@@ -1,0 +1,14 @@
+{
+  "type": "darkfantasy:alchemy",
+  "ingredients": [
+    "minecraft:book",
+    "darkfantasy:larimar_pearl",
+    "minecraft:ender_pearl"
+  ],
+  "result": {
+    "id": "darkfantasy:maelstrom_tome",
+    "count": 1
+  },
+  "elixir": 300,
+  "cook_time": 300
+}

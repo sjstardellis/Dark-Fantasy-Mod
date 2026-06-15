@@ -1,0 +1,14 @@
+{
+  "type": "darkfantasy:alchemy",
+  "ingredients": [
+    "minecraft:book",
+    "darkfantasy:mercuryglass",
+    "minecraft:ender_pearl"
+  ],
+  "result": {
+    "id": "darkfantasy:wayfarer_tome",
+    "count": 1
+  },
+  "elixir": 350,
+  "cook_time": 300
+}

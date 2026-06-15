@@ -42,12 +42,12 @@ public class ModBlockLootTableProvider extends BlockLootSubProvider {
                 createOreDrop(ModBlocks.DAWNMETAL_DEEPSLATE_ORE.get(), ModItems.RAW_DAWNMETAL.get()));
 
         // Gem ores drop their gem directly (diamond-style, fortune-aware).
-        add(ModBlocks.GRIMSHARD_ORE.get(),
-                createOreDrop(ModBlocks.GRIMSHARD_ORE.get(), ModItems.GRIMSHARD.get()));
+        add(ModBlocks.MERCURYGLASS_ORE.get(),
+                createOreDrop(ModBlocks.MERCURYGLASS_ORE.get(), ModItems.MERCURYGLASS.get()));
         add(ModBlocks.EMBERSTONE_ORE.get(),
                 createOreDrop(ModBlocks.EMBERSTONE_ORE.get(), ModItems.EMBERSTONE.get()));
-        add(ModBlocks.SOUL_PEARL_ORE.get(),
-                createOreDrop(ModBlocks.SOUL_PEARL_ORE.get(), ModItems.SOUL_PEARL.get()));
+        add(ModBlocks.LARIMAR_PEARL_ORE.get(),
+                createOreDrop(ModBlocks.LARIMAR_PEARL_ORE.get(), ModItems.LARIMAR_PEARL.get()));
 
         dropSelf(ModBlocks.ALCHEMY_STAND.get());
         dropSelf(ModBlocks.ENCHANTED_BOOKSHELF.get());

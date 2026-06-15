@@ -41,3 +41,9 @@ repo/
 
 .claude
 memory
+
+### Python (tooling) ###
+__pycache__/
+*.py[cod]
+*.bloated.bak
+tools/

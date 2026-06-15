@@ -109,7 +109,7 @@ public class DarkFantasyClient {
         // ItemSupplier.getItem() — GoblinRockProjectile returns a cobblestone.
         event.registerEntityRenderer(ModEntities.GOBLIN_ROCK.get(),
                 net.minecraft.client.renderer.entity.ThrownItemRenderer::new);
-        // Frost bolt renders as its grimshard core via the same thrown-item path.
+        // Frost bolt renders as its mercuryglass core via the same thrown-item path.
         event.registerEntityRenderer(ModEntities.FROST_BOLT.get(),
                 net.minecraft.client.renderer.entity.ThrownItemRenderer::new);
     }

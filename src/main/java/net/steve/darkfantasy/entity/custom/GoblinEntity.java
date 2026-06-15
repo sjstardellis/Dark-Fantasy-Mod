@@ -58,6 +58,13 @@ import java.util.List;
  * and attack damage, and {@link #spawnBerserkParticles} adds red angry-villager
  * wisps so the player can read the state visually. The transition fires once via
  * {@link #berserkApplied} — no per-tick attribute churn.
+ *
+ * <h2>Trading economy</h2>
+ * Neutral goblins barter two currencies: fairy dust → an everyday pool of modest vanilla
+ * resources (no mod metals), and <b>beer</b> → a prized pool with only a small chance at a
+ * mod metal. Beer is the goblins' weakness — uniquely it pacifies a hostile goblin and
+ * leaves it {@linkplain #makeTipsy tipsy}, a 60 s window where it won't fight. See
+ * {@link #mobInteract}.
  */
 public class GoblinEntity extends Monster {
     private static final float SCALE = 0.7F;
@@ -89,6 +96,17 @@ public class GoblinEntity extends Monster {
 
     /** True once the goblin has entered berserk mode this lifetime. Never resets. */
     private boolean berserkApplied = false;
+
+    // Tipsy (beer) tuning ------------------------------------------------------
+    /** How long a goblin stays tipsy after a beer. 1200 ticks = 60 s. */
+    private static final int TIPSY_TICKS = 1200;
+    /**
+     * Ticks of tipsiness remaining. While &gt; 0 the goblin won't fight — its target is
+     * cleared every tick (see {@link #tick}) — which is what lets a beer pacify a hostile
+     * goblin. Set by {@link #makeTipsy}; decays in {@link #tick}. Transient: a save/reload
+     * sobers the goblin up, which is fine for a 60 s buzz.
+     */
+    private int tipsyTicks = 0;
 
     // Animation event IDs — broadcast via Level.broadcastEntityEvent so client viewers
     // start their AnimationStates in sync with server-side actions. Values are in the
@@ -213,6 +231,44 @@ public class GoblinEntity extends Monster {
         if (this.berserkApplied && this.level().isClientSide()) {
             this.spawnBerserkParticles();
         }
+
+        if (this.tipsyTicks > 0) {
+            this.tipsyTicks--;
+            if (this.level().isClientSide()) {
+                this.spawnTipsyParticles();
+            } else if (this.getTarget() != null) {
+                // Too drunk to brawl: drop any target it picks up (e.g. retaliation)
+                // for the duration of the buzz. The beer wears off and it can fight again.
+                this.setTarget(null);
+            }
+        }
+    }
+
+    /**
+     * Calm the goblin and put it in a tipsy buzz. Clears any current target and the
+     * last-attacker memory so a pacified goblin actually disengages, then plays a burp
+     * and a puff of happy particles. Server-authoritative; called from {@link #mobInteract}.
+     */
+    private void makeTipsy() {
+        this.tipsyTicks = TIPSY_TICKS;
+        this.setTarget(null);
+        this.setLastHurtByMob(null);
+        this.playSound(SoundEvents.PLAYER_BURP, 0.7F, 0.8F + this.random.nextFloat() * 0.2F);
+        if (this.level() instanceof ServerLevel server) {
+            server.sendParticles(ParticleTypes.HAPPY_VILLAGER,
+                    this.getX(), this.getY() + this.getBbHeight() * 0.9, this.getZ(),
+                    8, 0.25, 0.2, 0.25, 0.0);
+            server.broadcastEntityEvent(this, EVENT_TRADE_ACCEPT);
+        }
+    }
+
+    /** Lazy happy-villager wisps while buzzed (client-side cosmetic), echoing the berserk cue. */
+    private void spawnTipsyParticles() {
+        if (this.random.nextInt(10) != 0) return;
+        double x = this.getX() + (this.random.nextDouble() - 0.5) * this.getBbWidth();
+        double y = this.getY() + this.getBbHeight() * 0.85 + this.random.nextDouble() * 0.2;
+        double z = this.getZ() + (this.random.nextDouble() - 0.5) * this.getBbWidth();
+        this.level().addParticle(ParticleTypes.HAPPY_VILLAGER, x, y, z, 0.0, 0.02, 0.0);
     }
 
     /**
@@ -358,70 +414,87 @@ public class GoblinEntity extends Monster {
     private record TradeOption(Item item, int weight, int minCount, int maxCount) {}
 
     /**
-     * "Cheap" loot pool — fired by gold-ingot trades. Mundane utility drops that a
-     * forager-tier mob plausibly hoards. Weights skew toward sticks/bones/string so
-     * jackpot trades feel meaningful when they hit.
-     */
-    private static final List<TradeOption> GOLD_TRADES = List.of(
-            new TradeOption(Items.STICK, 12, 2, 4),
-            new TradeOption(Items.BONE, 10, 1, 2),
-            new TradeOption(Items.STRING, 8, 1, 3),
-            new TradeOption(Items.GOLD_NUGGET, 8, 1, 3),
-            new TradeOption(Items.ARROW, 7, 2, 4),
-            new TradeOption(Items.GUNPOWDER, 5, 1, 2),
-            new TradeOption(Items.LEATHER, 5, 1, 2),
-            new TradeOption(Items.GLASS_BOTTLE, 4, 1, 2),
-            new TradeOption(Items.REDSTONE, 4, 1, 3));
-
-    /**
-     * "Premium" loot pool — fired by fairy-dust trades. Includes a couple mod-specific
-     * ingots so trading is also a route to mod content. Diamond and golden apple are
-     * the trophy outcomes; iron/gold ingots are the floor.
+     * Fairy-dust pool — the everyday currency. Modest vanilla resources in small amounts;
+     * deliberately NO mod metals and no jackpots, so dust trading is a steady trickle of
+     * basics rather than a shortcut to gear. Nuggets dominate; a whole iron ingot or an
+     * emerald is the rare upside.
      */
     private static final List<TradeOption> FAIRY_DUST_TRADES = List.of(
-            new TradeOption(Items.IRON_INGOT, 10, 2, 4),
-            new TradeOption(Items.GOLD_INGOT, 8, 1, 3),
-            new TradeOption(Items.EMERALD, 6, 1, 2),
-            new TradeOption(Items.LAPIS_LAZULI, 5, 2, 4),
-            new TradeOption(Items.EXPERIENCE_BOTTLE, 5, 1, 2),
-            new TradeOption(Items.ENDER_PEARL, 4, 1, 1),
-            new TradeOption(ModItems.MOONSILVER.get(), 3, 1, 1),
-            new TradeOption(ModItems.ECLIPSIUM.get(), 1, 1, 1),
-            new TradeOption(Items.DIAMOND, 2, 1, 1),
-            new TradeOption(Items.GOLDEN_APPLE, 1, 1, 1));
+            new TradeOption(Items.IRON_NUGGET, 12, 2, 5),
+            new TradeOption(Items.GOLD_NUGGET, 11, 2, 5),
+            new TradeOption(Items.LAPIS_LAZULI, 9, 1, 3),
+            new TradeOption(Items.REDSTONE, 8, 1, 3),
+            new TradeOption(Items.STRING, 7, 1, 3),
+            new TradeOption(Items.ARROW, 7, 2, 5),
+            new TradeOption(Items.GLASS_BOTTLE, 6, 1, 2),
+            new TradeOption(Items.IRON_INGOT, 5, 1, 1),
+            new TradeOption(Items.EXPERIENCE_BOTTLE, 4, 1, 1),
+            new TradeOption(Items.EMERALD, 3, 1, 1));
 
     /**
-     * Right-click interaction. While the goblin is neutral (no current target AND no
-     * recent damage attacker), accepts a gold ingot OR a fairy dust as a one-shot trade
-     * and hands back an item from the matching pool.
+     * Beer pool — the prized currency, and the goblins' weakness. A clear step up from dust
+     * (real ingots, the occasional diamond or golden apple), but kept in check: the three
+     * mod metals sit at weight 1 each in a ~62-weight pool, so a given beer trade only yields
+     * one with very low odds (~5% combined). No enchanted-apple jackpot.
+     */
+    private static final List<TradeOption> BEER_TRADES = List.of(
+            new TradeOption(Items.IRON_INGOT, 12, 1, 3),
+            new TradeOption(Items.GOLD_INGOT, 10, 1, 3),
+            new TradeOption(Items.EMERALD, 8, 1, 2),
+            new TradeOption(Items.EXPERIENCE_BOTTLE, 7, 1, 2),
+            new TradeOption(Items.ENDER_PEARL, 6, 1, 2),
+            new TradeOption(ModItems.LYTEBUG_DUST.get(), 6, 1, 2),
+            new TradeOption(ModItems.ARCANE_ASH.get(), 5, 1, 2),
+            new TradeOption(Items.DIAMOND, 3, 1, 1),
+            new TradeOption(Items.GOLDEN_APPLE, 2, 1, 1),
+            // Mod metals — intentionally rare (weight 1 apiece).
+            new TradeOption(ModItems.MOONSILVER.get(), 1, 1, 1),
+            new TradeOption(ModItems.DAWNMETAL.get(), 1, 1, 1),
+            new TradeOption(ModItems.ECLIPSIUM.get(), 1, 1, 1));
+
+    /**
+     * Right-click interaction — the goblin trading economy. Two currencies:
+     * <ul>
+     *   <li><b>Fairy dust</b> → {@link #FAIRY_DUST_TRADES}: the everyday pool — modest
+     *       vanilla resources, no mod metals.</li>
+     *   <li><b>Beer</b> → {@link #BEER_TRADES}: the prized pool, and the goblins' weakness.
+     *       Better goods, with only a small chance at a mod metal.</li>
+     * </ul>
+     *
+     * <p><b>Beer is special.</b> It's the only currency that pacifies a <em>hostile</em>
+     * goblin: tossing one a beer mid-fight clears its aggro and leaves it {@linkplain
+     * #makeTipsy tipsy} for {@value #TIPSY_TICKS} ticks (no trade — you spent it to escape).
+     * Given to a <em>neutral</em> goblin it buys from the prized pool and still gets it tipsy.
+     *
+     * <p>Fairy-dust trades are refused while the goblin is hostile — only beer calms one.
      *
      * <p>Made {@code public} to match the vanilla pattern ({@link net.minecraft.world.entity.animal.pig.Pig#mobInteract})
      * — protected works too but some interaction code paths (e.g. NeoForge events) are
-     * defensively coded around the public form.
-     *
-     * <p>Returns {@link InteractionResult#SUCCESS_SERVER} from the server so we don't
-     * rely on client-side prediction of the inventory change — the reward only appears
-     * once the server has actually added it.
+     * defensively coded around the public form. Returns {@link InteractionResult#SUCCESS_SERVER}
+     * so the inventory change is server-authoritative rather than client-predicted.
      */
     @Override
     public InteractionResult mobInteract(Player player, InteractionHand hand) {
-        // Check ingredient first — if the player isn't even offering gold/dust, fall
+        // Check ingredient first — if the player isn't even offering a currency, fall
         // through to vanilla immediately so we don't accidentally swallow unrelated
         // interactions (lead, name tag, spawn egg) above.
         ItemStack offered = player.getItemInHand(hand);
+        boolean offeredBeer = offered.is(ModItems.BEER.get());
+        boolean hostile = this.getTarget() != null;
+
         List<TradeOption> pool;
-        if (offered.is(Items.GOLD_INGOT)) {
-            pool = GOLD_TRADES;
+        if (offeredBeer) {
+            pool = BEER_TRADES;
         } else if (offered.is(ModItems.FAIRY_DUST.get())) {
             pool = FAIRY_DUST_TRADES;
         } else {
             return super.mobInteract(player, hand);
         }
 
-        // Refuse if currently hostile — can't bribe a charging goblin.
-        if (this.getTarget() != null) {
-            // SUCCESS_SERVER so we still consume the click (player won't see a place-block
-            // or attack from the missed interaction), but no inventory change happens.
+        // Fairy dust can't bribe a charging goblin — only beer can.
+        if (hostile && !offeredBeer) {
+            // SUCCESS_SERVER so we still consume the click (no stray place-block/attack),
+            // but no inventory change happens.
             if (!this.level().isClientSide()) {
                 this.playSound(SoundEvents.VILLAGER_NO, 0.8F, 0.9F);
             }
@@ -429,15 +502,24 @@ public class GoblinEntity extends Monster {
         }
 
         if (this.level().isClientSide()) {
-            // Client-side: report success so the player's hand swings immediately and
-            // no other interaction handler tries to run. Actual reward arrives via the
-            // next server sync.
+            // Report success so the player's hand swings immediately and no other
+            // interaction handler runs. Actual result arrives via the next server sync.
             return InteractionResult.SUCCESS;
         }
 
-        // ----- Server-side: perform the trade -----
-        ItemStack reward = rollTrade(pool);
+        // ----- Server-side -----
         if (!player.getAbilities().instabuild) offered.shrink(1);
+
+        // Beer always buys a round of calm: clear aggro and start the buzz.
+        if (offeredBeer) {
+            this.makeTipsy();
+            if (hostile) {
+                // Spent to de-aggro a fight — the goblin staggers off, no loot this time.
+                return InteractionResult.SUCCESS_SERVER;
+            }
+        }
+
+        ItemStack reward = rollTrade(pool);
         if (!player.getInventory().add(reward)) {
             player.drop(reward, false);
         }

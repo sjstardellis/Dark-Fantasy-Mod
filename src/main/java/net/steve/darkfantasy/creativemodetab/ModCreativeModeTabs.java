@@ -82,18 +82,18 @@ public class ModCreativeModeTabs {
                         output.accept(ModBlocks.MOONSILVER_ORE);
                         output.accept(ModBlocks.MOONSILVER_DEEPSLATE_ORE);
 
-                        output.accept(ModItems.GRIMSHARD);
+                        output.accept(ModItems.MERCURYGLASS);
                         output.accept(ModItems.EMBERSTONE);
-                        output.accept(ModItems.SOUL_PEARL);
+                        output.accept(ModItems.LARIMAR_PEARL);
                         output.accept(ModItems.ARCANE_ASH);
                         output.accept(ModItems.STORM_SCALE);
                         output.accept(ModItems.MOONLIGHT_ELIXIR);
                         output.accept(ModItems.STONESKIN_ELIXIR);
                         output.accept(ModItems.EMBERBLOOD_ELIXIR);
                         output.accept(ModItems.WISPSTEP_ELIXIR);
-                        output.accept(ModBlocks.GRIMSHARD_ORE);
+                        output.accept(ModBlocks.MERCURYGLASS_ORE);
                         output.accept(ModBlocks.EMBERSTONE_ORE);
-                        output.accept(ModBlocks.SOUL_PEARL_ORE);
+                        output.accept(ModBlocks.LARIMAR_PEARL_ORE);
 
                         output.accept(ModBlocks.ALCHEMY_STAND);
                         output.accept(ModBlocks.ENCHANTED_BOOKSHELF);
@@ -112,6 +112,13 @@ public class ModCreativeModeTabs {
                         output.accept(ModItems.FROST_STAFF);
                         output.accept(ModItems.BLINK_STAFF);
                         output.accept(ModItems.CINDER_STAFF);
+                        output.accept(ModItems.WARDING_TOME);
+                        output.accept(ModItems.MAELSTROM_TOME);
+                        output.accept(ModItems.WAYFARER_TOME);
+                        output.accept(ModItems.WITHER_SKULL_TOME);
+                        output.accept(ModItems.PROSPECTOR_TOME);
+                        output.accept(ModItems.STASIS_TOME);
+                        output.accept(ModItems.EVOKER_CLAW_TOME);
                         output.accept(ModItems.FAIRY_SPAWN_EGG);
                         output.accept(ModItems.WIZARD_SPAWN_EGG);
                         output.accept(ModItems.ELECTRO_DRAGON_SPAWN_EGG);

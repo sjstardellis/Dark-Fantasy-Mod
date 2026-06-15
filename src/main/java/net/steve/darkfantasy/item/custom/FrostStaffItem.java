@@ -19,7 +19,7 @@ import net.minecraft.world.phys.Vec3;
 import java.util.function.Consumer;
 
 /**
- * Grimshard-core staff: fires a {@link FrostBoltProjectile} that slows its target and
+ * Mercuryglass-core staff: fires a {@link FrostBoltProjectile} that slows its target and
  * builds freezing ticks. Mirrors the existing staff pattern (right-click, cooldown,
  * durability).
  */

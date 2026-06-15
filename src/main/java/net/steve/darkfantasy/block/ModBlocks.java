@@ -68,8 +68,8 @@ public class ModBlocks {
                     .requiresCorrectToolForDrops().sound(SoundType.DEEPSLATE)));
 
     // ---- Biome gem ores (generate only under their rare biome; drop the gem directly) ----
-    // Grimshard: deepslate depths beneath the gravewood grove.
-    public static final DeferredBlock<Block> GRIMSHARD_ORE = registerBlock("grimshard_ore",
+    // Mercuryglass: deepslate depths beneath the gravewood grove.
+    public static final DeferredBlock<Block> MERCURYGLASS_ORE = registerBlock("mercuryglass_ore",
             properties -> new DropExperienceBlock(UniformInt.of(3, 7), properties.strength(4.5f)
                     .requiresCorrectToolForDrops().sound(SoundType.DEEPSLATE)));
     // Emberstone: stone layers beneath the cinderbark forest.
@@ -77,7 +77,7 @@ public class ModBlocks {
             properties -> new DropExperienceBlock(UniformInt.of(3, 7), properties.strength(3f)
                     .requiresCorrectToolForDrops().sound(SoundType.STONE)));
     // Wisp pearl: shallow stone beneath the ghostwillow marsh.
-    public static final DeferredBlock<Block> SOUL_PEARL_ORE = registerBlock("soul_pearl_ore",
+    public static final DeferredBlock<Block> LARIMAR_PEARL_ORE = registerBlock("larimar_pearl_ore",
             properties -> new DropExperienceBlock(UniformInt.of(3, 7), properties.strength(3f)
                     .requiresCorrectToolForDrops().sound(SoundType.STONE)));
 

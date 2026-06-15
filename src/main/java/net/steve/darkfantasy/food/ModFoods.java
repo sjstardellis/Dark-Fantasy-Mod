@@ -30,7 +30,7 @@ public class ModFoods {
     public static final FoodProperties ELIXIR = new FoodProperties.Builder()
             .nutrition(0).saturationModifier(0f).alwaysEdible().build();
 
-    /** Grimshard + fairy dust — see in the dark, fade from sight. */
+    /** Mercuryglass + fairy dust — see in the dark, fade from sight. */
     public static final Consumable MOONLIGHT_ELIXIR = Consumables.defaultDrink()
             .consumeSeconds(1.6f)
             .onConsume(new ApplyStatusEffectsConsumeEffect(

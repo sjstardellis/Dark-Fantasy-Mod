@@ -22,7 +22,7 @@ import net.minecraft.world.phys.HitResult;
  * Frost bolt fired by the {@link net.steve.darkfantasy.item.custom.FrostStaffItem}.
  * Snowball physics; on entity impact it deals light damage, applies heavy slowness,
  * and builds freezing ticks (the powder-snow frost overlay + freeze damage). Renders
- * via {@link net.minecraft.client.renderer.entity.ThrownItemRenderer} as a grimshard.
+ * via {@link net.minecraft.client.renderer.entity.ThrownItemRenderer} as a mercuryglass.
  */
 public class FrostBoltProjectile extends ThrowableProjectile implements ItemSupplier {
     private static final float IMPACT_DAMAGE = 3.0F;
@@ -40,7 +40,7 @@ public class FrostBoltProjectile extends ThrowableProjectile implements ItemSupp
 
     @Override
     public ItemStack getItem() {
-        return new ItemStack(ModItems.GRIMSHARD.get());
+        return new ItemStack(ModItems.MERCURYGLASS.get());
     }
 
     @Override

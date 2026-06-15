@@ -1,0 +1,14 @@
+{
+  "type": "darkfantasy:alchemy",
+  "ingredients": [
+    "minecraft:book",
+    "darkfantasy:shadowsteel",
+    "minecraft:soul_sand"
+  ],
+  "result": {
+    "id": "darkfantasy:wither_skull_tome",
+    "count": 1
+  },
+  "elixir": 400,
+  "cook_time": 300
+}

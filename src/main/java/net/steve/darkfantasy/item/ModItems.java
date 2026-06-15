@@ -10,9 +10,16 @@ import net.steve.darkfantasy.item.custom.CinderStaffItem;
 import net.steve.darkfantasy.item.custom.DaggerItem;
 import net.steve.darkfantasy.item.custom.FireballStaffItem;
 import net.steve.darkfantasy.item.custom.FrostStaffItem;
+import net.steve.darkfantasy.item.custom.EvokerClawTomeItem;
 import net.steve.darkfantasy.item.custom.LightningStaffItem;
+import net.steve.darkfantasy.item.custom.MaelstromTomeItem;
+import net.steve.darkfantasy.item.custom.ProspectorTomeItem;
 import net.steve.darkfantasy.item.custom.ScytheItem;
+import net.steve.darkfantasy.item.custom.StasisTomeItem;
 import net.steve.darkfantasy.item.custom.SunlanceItem;
+import net.steve.darkfantasy.item.custom.WardingTomeItem;
+import net.steve.darkfantasy.item.custom.WayfarerTomeItem;
+import net.steve.darkfantasy.item.custom.WitherSkullTomeItem;
 import net.minecraft.world.item.AxeItem;
 import net.minecraft.world.item.BlockItem;
 import net.minecraft.world.item.BucketItem;
@@ -137,9 +144,9 @@ public class ModItems {
             p -> new SunlanceItem(SunlanceItem.applyProperties(p)));
 
     // ---- Biome gems (each mined only in its rare biome; staff cores + alchemy reagents) ----
-    public static final DeferredItem<Item> GRIMSHARD = ITEMS.registerSimpleItem("grimshard");
+    public static final DeferredItem<Item> MERCURYGLASS = ITEMS.registerSimpleItem("mercuryglass");
     public static final DeferredItem<Item> EMBERSTONE = ITEMS.registerSimpleItem("emberstone");
-    public static final DeferredItem<Item> SOUL_PEARL = ITEMS.registerSimpleItem("soul_pearl");
+    public static final DeferredItem<Item> LARIMAR_PEARL = ITEMS.registerSimpleItem("larimar_pearl");
 
     // ---- Alchemy reagents (mob drops) ----
     public static final DeferredItem<Item> ARCANE_ASH = ITEMS.registerSimpleItem("arcane_ash");
@@ -201,6 +208,22 @@ public class ModItems {
             properties -> new BlinkStaffItem(properties.durability(50).stacksTo(1)));
     public static final DeferredItem<Item> CINDER_STAFF = ITEMS.registerItem("cinder_staff",
             properties -> new CinderStaffItem(properties.durability(40).stacksTo(1)));
+
+    // ---- Spell books (cast at the alchemy stand; ritual/utility magic vs the staffs' projectiles) ----
+    public static final DeferredItem<Item> WARDING_TOME = ITEMS.registerItem("warding_tome",
+            properties -> new WardingTomeItem(properties.durability(40).stacksTo(1)));
+    public static final DeferredItem<Item> MAELSTROM_TOME = ITEMS.registerItem("maelstrom_tome",
+            properties -> new MaelstromTomeItem(properties.durability(40).stacksTo(1)));
+    public static final DeferredItem<Item> WAYFARER_TOME = ITEMS.registerItem("wayfarer_tome",
+            properties -> new WayfarerTomeItem(properties.durability(24).stacksTo(1)));
+    public static final DeferredItem<Item> WITHER_SKULL_TOME = ITEMS.registerItem("wither_skull_tome",
+            properties -> new WitherSkullTomeItem(properties.durability(24).stacksTo(1)));
+    public static final DeferredItem<Item> PROSPECTOR_TOME = ITEMS.registerItem("prospector_tome",
+            properties -> new ProspectorTomeItem(properties.durability(32).stacksTo(1)));
+    public static final DeferredItem<Item> STASIS_TOME = ITEMS.registerItem("stasis_tome",
+            properties -> new StasisTomeItem(properties.durability(30).stacksTo(1)));
+    public static final DeferredItem<Item> EVOKER_CLAW_TOME = ITEMS.registerItem("evoker_claw_tome",
+            properties -> new EvokerClawTomeItem(properties.durability(30).stacksTo(1)));
 
     // Spawn egg is tinted automatically via Item.Properties.spawnEgg(EntityType).
     public static final DeferredItem<SpawnEggItem> FAIRY_SPAWN_EGG = ITEMS.registerItem(

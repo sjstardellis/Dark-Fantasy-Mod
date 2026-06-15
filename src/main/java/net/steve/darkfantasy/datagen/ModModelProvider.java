@@ -28,9 +28,9 @@ public class ModModelProvider extends ModelProvider {
         itemModels.generateFlatItem(ModItems.RAW_SHADOWSTEEL.get(), ModelTemplates.FLAT_ITEM);
         itemModels.generateFlatItem(ModItems.ECLIPSIUM.get(), ModelTemplates.FLAT_ITEM);
         itemModels.generateFlatItem(ModItems.FAIRY_DUST.get(), ModelTemplates.FLAT_ITEM);
-        itemModels.generateFlatItem(ModItems.GRIMSHARD.get(), ModelTemplates.FLAT_ITEM);
+        itemModels.generateFlatItem(ModItems.MERCURYGLASS.get(), ModelTemplates.FLAT_ITEM);
         itemModels.generateFlatItem(ModItems.EMBERSTONE.get(), ModelTemplates.FLAT_ITEM);
-        itemModels.generateFlatItem(ModItems.SOUL_PEARL.get(), ModelTemplates.FLAT_ITEM);
+        itemModels.generateFlatItem(ModItems.LARIMAR_PEARL.get(), ModelTemplates.FLAT_ITEM);
         itemModels.generateFlatItem(ModItems.ARCANE_ASH.get(), ModelTemplates.FLAT_ITEM);
         itemModels.generateFlatItem(ModItems.STORM_SCALE.get(), ModelTemplates.FLAT_ITEM);
         itemModels.generateFlatItem(ModItems.MOONLIGHT_ELIXIR.get(), ModelTemplates.FLAT_ITEM);
@@ -88,9 +88,9 @@ public class ModModelProvider extends ModelProvider {
         blockModels.createTrivialCube(ModBlocks.MOONSILVER_ORE.get());
         blockModels.createTrivialCube(ModBlocks.MOONSILVER_DEEPSLATE_ORE.get());
 
-        blockModels.createTrivialCube(ModBlocks.GRIMSHARD_ORE.get());
+        blockModels.createTrivialCube(ModBlocks.MERCURYGLASS_ORE.get());
         blockModels.createTrivialCube(ModBlocks.EMBERSTONE_ORE.get());
-        blockModels.createTrivialCube(ModBlocks.SOUL_PEARL_ORE.get());
+        blockModels.createTrivialCube(ModBlocks.LARIMAR_PEARL_ORE.get());
 
         // LYTESTONE has hand-written blockstate + model under src/main/resources;
         // skipping datagen for it (see #getKnownBlocks below) avoids a duplicate.
@@ -222,6 +222,13 @@ public class ModModelProvider extends ModelProvider {
                                && holder.value() != net.steve.darkfantasy.item.ModItems.BEER.get()
                                && holder.value() != net.steve.darkfantasy.item.ModItems.STEIN_GLASS.get()
                                && holder.value() != net.steve.darkfantasy.item.ModItems.HOPS.get()
+                               && holder.value() != net.steve.darkfantasy.item.ModItems.WARDING_TOME.get()
+                               && holder.value() != net.steve.darkfantasy.item.ModItems.MAELSTROM_TOME.get()
+                               && holder.value() != net.steve.darkfantasy.item.ModItems.WAYFARER_TOME.get()
+                               && holder.value() != net.steve.darkfantasy.item.ModItems.WITHER_SKULL_TOME.get()
+                               && holder.value() != net.steve.darkfantasy.item.ModItems.PROSPECTOR_TOME.get()
+                               && holder.value() != net.steve.darkfantasy.item.ModItems.STASIS_TOME.get()
+                               && holder.value() != net.steve.darkfantasy.item.ModItems.EVOKER_CLAW_TOME.get()
                                && holder.value() != ModBlocks.BREWING_KEG.get().asItem()
                                && holder.value() != ModBlocks.GNOME_BURROW.get().asItem()
                                && holder.value() != ModBlocks.LYTESTONE.get().asItem());

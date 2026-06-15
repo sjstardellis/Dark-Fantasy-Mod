@@ -1,0 +1,14 @@
+{
+  "type": "darkfantasy:alchemy",
+  "ingredients": [
+    "minecraft:book",
+    "darkfantasy:dawnmetal",
+    "darkfantasy:arcane_ash"
+  ],
+  "result": {
+    "id": "darkfantasy:warding_tome",
+    "count": 1
+  },
+  "elixir": 300,
+  "cook_time": 300
+}
