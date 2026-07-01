@@ -1,0 +1,12 @@
+{
+  "type": "darkfantasy:brewing",
+  "ingredients": [
+    "darkfantasy:hops",
+    "minecraft:glow_berries"
+  ],
+  "result": {
+    "id": "darkfantasy:glowbrew",
+    "count": 1
+  },
+  "brew_time": 5000
+}

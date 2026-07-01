@@ -151,14 +151,15 @@ public class BrewingKegBlock extends BaseEntityBlock {
 
         if (stack.is(ModItems.STEIN_GLASS.get())) {
             if (!level.isClientSide()) {
-                if (!be.drainOneStein()) {
-                    // Tank doesn't have a full quart. Soft cue rather than a chat message.
+                ItemStack drink = be.drainOneStein();
+                if (drink.isEmpty()) {
+                    // Tank doesn't have a full quart (or no brew). Soft cue, no chat message.
                     level.playSound(null, pos, SoundEvents.BOTTLE_EMPTY, SoundSource.BLOCKS, 0.4F, 0.7F);
                     return InteractionResult.CONSUME;
                 }
                 if (!player.getAbilities().instabuild) stack.shrink(1);
-                ItemStack beer = new ItemStack(ModItems.BEER.get());
-                if (!player.getInventory().add(beer)) player.drop(beer, false);
+                // Hand back whichever brew the keg holds (beer, dark ale, mead, …).
+                if (!player.getInventory().add(drink)) player.drop(drink, false);
                 level.playSound(null, pos, SoundEvents.BOTTLE_FILL, SoundSource.BLOCKS, 0.9F, 1.0F);
             }
             return InteractionResult.SUCCESS;

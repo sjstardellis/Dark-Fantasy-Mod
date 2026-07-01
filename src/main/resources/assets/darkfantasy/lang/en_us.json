@@ -60,7 +60,7 @@
 
   "tooltip.darkfantasy.set.moonsilver": "Full Set: Night Vision; Strength after dark.",
   "tooltip.darkfantasy.set.shadowsteel": "Full Set: Invisibility & Speed while sneaking.",
-  "tooltip.darkfantasy.set.dawnmetal": "Full Set: Fire Resistance; Regeneration in daylight.",
+  "tooltip.darkfantasy.set.dawnmetal": "Full Set: Fire Resistance; Absorption in daylight.",
   "tooltip.darkfantasy.set.eclipsium": "Full Set: Night Vision, Fire Resistance & Strength.",
 
   "item.darkfantasy.dawnmetal": "Dawnmetal Ingot",
@@ -70,6 +70,12 @@
 
   "item.darkfantasy.hops": "Hops",
   "item.darkfantasy.beer": "Stein of Beer",
+  "item.darkfantasy.dark_ale": "Stein of Dark Ale",
+  "item.darkfantasy.honey_mead": "Stein of Honey Mead",
+  "item.darkfantasy.glowbrew": "Stein of Glowbrew",
+  "item.darkfantasy.mushroom_stout": "Stein of Mushroom Stout",
+  "item.darkfantasy.wither_stout": "Stein of Wither Stout",
+  "item.darkfantasy.battle_brew": "Stein of Battle Brew",
   "item.darkfantasy.stein_glass": "Stein Glass",
   "block.darkfantasy.hops_crop": "Hops",
   "block.darkfantasy.brewing_keg": "Brewing Keg",
@@ -114,6 +120,15 @@
   "entity.darkfantasy.lightning_projectile": "Lightning Bolt",
 
   "item.darkfantasy.wizard_spawn_egg": "Wizard Spawn Egg",
+  "entity.darkfantasy.eclipse_king": "Eclipse King",
+  "block.darkfantasy.obsidian_brick": "Obsidian Brick",
+  "block.darkfantasy.obsidian_glass": "Obsidian Glass",
+  "item.darkfantasy.eclipse_crown": "Eclipse Crown",
+  "item.darkfantasy.eclipse_greatsword": "Nightfall",
+  "tooltip.darkfantasy.eclipse_greatsword": "Each strike steals the light. Use for an umbral sweep.",
+  "item.darkfantasy.eclipse_king_spawn_egg": "Eclipse King Spawn Egg",
+  "tooltip.darkfantasy.eclipse_crown": "Worn: Night Vision, Strength & Regeneration.",
+  "entity.darkfantasy.villager.brewer": "Brewer",
   "entity.darkfantasy.wizard": "Wizard",
 
   "item.darkfantasy.electro_dragon_spawn_egg": "Electrodragon Spawn Egg",

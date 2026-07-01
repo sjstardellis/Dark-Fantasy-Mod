@@ -2,7 +2,6 @@ package net.steve.darkfantasy.menu;
 
 import net.steve.darkfantasy.block.entity.BrewingKegBlockEntity;
 import net.steve.darkfantasy.init.ModMenuTypes;
-import net.steve.darkfantasy.item.ModItems;
 import net.minecraft.core.BlockPos;
 import net.minecraft.network.RegistryFriendlyByteBuf;
 import net.minecraft.world.Container;
@@ -21,14 +20,14 @@ import net.minecraft.world.level.block.entity.BlockEntity;
  * Container menu for the brewing keg. Three input slots in a horizontal row:
  *
  * <ul>
- *   <li><b>Hops</b> (slot 0) — accepts {@link ModItems#HOPS} only.</li>
- *   <li><b>Wheat</b> (slot 1) — accepts {@link Items#WHEAT} only.</li>
+ *   <li><b>Ingredient</b> (slots 0 &amp; 1) — accept any non-bucket item; the brewing
+ *       recipe decides which pairs actually ferment (hops + wheat → beer, etc.).</li>
  *   <li><b>Water bucket</b> (slot 2) — accepts {@link Items#WATER_BUCKET} or
  *       {@link Items#BUCKET} (the empty bucket left after a brew completes,
  *       so the player can still pull it out via shift-click).</li>
  * </ul>
  *
- * <p>There's no output slot — beer accumulates in the BE's internal tank and is
+ * <p>There's no output slot — the brew accumulates in the BE's internal tank and is
  * extracted by right-clicking the keg with a Stein Glass.
  */
 public class BrewingKegMenu extends AbstractContainerMenu {
@@ -61,19 +60,24 @@ public class BrewingKegMenu extends AbstractContainerMenu {
         // Three input slots — horizontal row at the top of the GUI.
         // Layout is intentionally identical to the alchemy stand's input row so
         // it looks "the same kind of machine" at a glance.
-        this.addSlot(new Slot(container, SLOT_HOPS, 52, 17) {
+        // The two solid slots accept any non-bucket item; the brewing recipe decides
+        // what actually ferments, so every brew's ingredients (hops, nether wart, glow
+        // berries, mushrooms, wither rose, …) can be loaded here.
+        // Slot positions match the vanilla brewing stand's three-bottle arc exactly
+        // (56,51)/(79,51)/(102,51). There is no output slot — the brew goes to the tank.
+        this.addSlot(new Slot(container, SLOT_HOPS, 56, 51) {
             @Override
             public boolean mayPlace(ItemStack stack) {
-                return stack.is(ModItems.HOPS.get());
+                return isSolidIngredient(stack);
             }
         });
-        this.addSlot(new Slot(container, SLOT_WHEAT, 80, 17) {
+        this.addSlot(new Slot(container, SLOT_WHEAT, 79, 51) {
             @Override
             public boolean mayPlace(ItemStack stack) {
-                return stack.is(Items.WHEAT);
+                return isSolidIngredient(stack);
             }
         });
-        this.addSlot(new Slot(container, SLOT_BUCKET, 108, 17) {
+        this.addSlot(new Slot(container, SLOT_BUCKET, 102, 51) {
             @Override
             public boolean mayPlace(ItemStack stack) {
                 // Both full and empty buckets are valid — the BE swaps them in place.
@@ -89,6 +93,16 @@ public class BrewingKegMenu extends AbstractContainerMenu {
         BlockEntity be = inv.player.level().getBlockEntity(pos);
         if (be instanceof BrewingKegBlockEntity bkbe) return bkbe;
         return new SimpleContainer(BE_SLOT_COUNT);
+    }
+
+    /** Both solid slots accept any non-empty, non-bucket item; the recipe gates brewing. */
+    private static boolean isSolidIngredient(ItemStack stack) {
+        return !stack.isEmpty() && !stack.is(Items.WATER_BUCKET) && !stack.is(Items.BUCKET);
+    }
+
+    /** The drink the keg's tank currently holds (client-synced), or empty. Drives the tank tint. */
+    public ItemStack currentBrew() {
+        return this.container instanceof BrewingKegBlockEntity be ? be.getCurrentBrew() : ItemStack.EMPTY;
     }
 
     public int getProgress() {
@@ -133,15 +147,13 @@ public class BrewingKegMenu extends AbstractContainerMenu {
                     return ItemStack.EMPTY;
                 }
             } else {
-                // From player inv: send each ingredient to its dedicated slot.
-                // Buckets (both full and empty) target the bucket slot.
-                int targetSlot;
-                if (stack.is(ModItems.HOPS.get())) targetSlot = SLOT_HOPS;
-                else if (stack.is(Items.WHEAT)) targetSlot = SLOT_WHEAT;
-                else if (stack.is(Items.WATER_BUCKET) || stack.is(Items.BUCKET)) targetSlot = SLOT_BUCKET;
-                else return ItemStack.EMPTY;
-
-                if (!this.moveItemStackTo(stack, targetSlot, targetSlot + 1, false)) {
+                // From player inv: buckets go to the bucket slot; any other item is a
+                // candidate brewing ingredient and fills the two solid slots (0..1).
+                if (stack.is(Items.WATER_BUCKET) || stack.is(Items.BUCKET)) {
+                    if (!this.moveItemStackTo(stack, SLOT_BUCKET, SLOT_BUCKET + 1, false)) {
+                        return ItemStack.EMPTY;
+                    }
+                } else if (!this.moveItemStackTo(stack, SLOT_HOPS, SLOT_BUCKET, false)) {
                     return ItemStack.EMPTY;
                 }
             }

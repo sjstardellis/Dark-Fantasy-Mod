@@ -1,0 +1,12 @@
+{
+  "type": "darkfantasy:brewing",
+  "ingredients": [
+    "minecraft:brown_mushroom",
+    "minecraft:red_mushroom"
+  ],
+  "result": {
+    "id": "darkfantasy:mushroom_stout",
+    "count": 1
+  },
+  "brew_time": 5000
+}

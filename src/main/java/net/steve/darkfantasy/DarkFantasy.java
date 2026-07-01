@@ -16,6 +16,7 @@ import net.steve.darkfantasy.init.ModFluidTypes;
 import net.steve.darkfantasy.init.ModFluids;
 import net.steve.darkfantasy.init.ModMenuTypes;
 import net.steve.darkfantasy.init.ModPoiTypes;
+import net.steve.darkfantasy.init.ModVillagerProfessions;
 import net.steve.darkfantasy.init.ModRecipes;
 import net.steve.darkfantasy.init.ModStructureTypes;
 import net.steve.darkfantasy.item.ModItems;
@@ -60,6 +61,7 @@ public class DarkFantasy {
         ModMenuTypes.register(modEventBus);
         ModRecipes.register(modEventBus);
         ModPoiTypes.register(modEventBus);
+        ModVillagerProfessions.register(modEventBus);
         ModStructureTypes.register(modEventBus);
         // FluidTypes must register BEFORE Fluids — the BaseFlowingFluid constructor
         // resolves its FluidType supplier lazily, but the type holder must exist by
@@ -126,6 +128,7 @@ public class DarkFantasy {
         event.put(ModEntities.GOBLIN.get(), GoblinEntity.createAttributes().build());
         event.put(ModEntities.GNOME.get(), GnomeEntity.createAttributes().build());
         event.put(ModEntities.LYTEBUG.get(), LytebugEntity.createAttributes().build());
+        event.put(ModEntities.ECLIPSE_KING.get(), net.steve.darkfantasy.entity.custom.EclipseKingEntity.createAttributes().build());
     }
 
     /**

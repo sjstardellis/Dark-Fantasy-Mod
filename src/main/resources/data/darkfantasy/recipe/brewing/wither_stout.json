@@ -1,0 +1,12 @@
+{
+  "type": "darkfantasy:brewing",
+  "ingredients": [
+    "darkfantasy:hops",
+    "minecraft:wither_rose"
+  ],
+  "result": {
+    "id": "darkfantasy:wither_stout",
+    "count": 1
+  },
+  "brew_time": 7000
+}

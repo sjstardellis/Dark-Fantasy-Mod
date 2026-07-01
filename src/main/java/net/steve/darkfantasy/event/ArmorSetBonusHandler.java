@@ -26,7 +26,7 @@ import net.neoforged.neoforge.event.tick.PlayerTickEvent;
  * <ul>
  *   <li><b>Moonsilver (lunar)</b> — Night Vision always; Strength after dark.</li>
  *   <li><b>Shadowsteel (stealth)</b> — Invisibility + Speed while sneaking.</li>
- *   <li><b>Dawnmetal (solar)</b> — Fire Resistance always; Regeneration in daylight.</li>
+ *   <li><b>Dawnmetal (solar)</b> — Fire Resistance always; Absorption in daylight.</li>
  *   <li><b>Eclipsium (eclipse)</b> — the fused package: Night Vision, Fire Resistance,
  *       and Strength, with no day/night gating.</li>
  * </ul>
@@ -70,13 +70,22 @@ public final class ArmorSetBonusHandler {
         } else if (wears(p, ModItems.DAWNMETAL_HELMET.get(), ModItems.DAWNMETAL_CHESTPLATE.get(),
                 ModItems.DAWNMETAL_LEGGINGS.get(), ModItems.DAWNMETAL_BOOTS.get())) {
             apply(p, MobEffects.FIRE_RESISTANCE, SHORT_TICKS, 0);
-            if (day) apply(p, MobEffects.REGENERATION, SHORT_TICKS, 0);
+            if (day) apply(p, MobEffects.ABSORPTION, SHORT_TICKS, 0);
 
         } else if (wears(p, ModItems.ECLIPSIUM_HELMET.get(), ModItems.ECLIPSIUM_CHESTPLATE.get(),
                 ModItems.ECLIPSIUM_LEGGINGS.get(), ModItems.ECLIPSIUM_BOOTS.get())) {
             apply(p, MobEffects.NIGHT_VISION, NIGHT_VISION_TICKS, 0);
             apply(p, MobEffects.FIRE_RESISTANCE, SHORT_TICKS, 0);
             apply(p, MobEffects.STRENGTH, SHORT_TICKS, 0);
+        }
+
+        // Standalone relic — the Eclipse King's crown is a guaranteed boss drop and works in any
+        // head slot, independent of (and stacking with) the four-piece sets above. It carries the
+        // late monarch's gifts: sight in the dark, his might, and his unnatural vitality.
+        if (p.getItemBySlot(EquipmentSlot.HEAD).is(ModItems.ECLIPSE_CROWN.get())) {
+            apply(p, MobEffects.NIGHT_VISION, NIGHT_VISION_TICKS, 0);
+            apply(p, MobEffects.STRENGTH, SHORT_TICKS, 0);
+            apply(p, MobEffects.REGENERATION, SHORT_TICKS, 0);
         }
     }
 
@@ -109,6 +118,8 @@ public final class ArmorSetBonusHandler {
         } else if (isPiece(item, ModItems.ECLIPSIUM_HELMET.get(), ModItems.ECLIPSIUM_CHESTPLATE.get(),
                 ModItems.ECLIPSIUM_LEGGINGS.get(), ModItems.ECLIPSIUM_BOOTS.get())) {
             event.getToolTip().add(line("tooltip.darkfantasy.set.eclipsium", ChatFormatting.LIGHT_PURPLE));
+        } else if (item == ModItems.ECLIPSE_CROWN.get()) {
+            event.getToolTip().add(line("tooltip.darkfantasy.eclipse_crown", ChatFormatting.LIGHT_PURPLE));
         }
     }
 

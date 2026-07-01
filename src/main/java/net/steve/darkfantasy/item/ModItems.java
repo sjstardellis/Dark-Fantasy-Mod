@@ -10,6 +10,7 @@ import net.steve.darkfantasy.item.custom.CinderStaffItem;
 import net.steve.darkfantasy.item.custom.DaggerItem;
 import net.steve.darkfantasy.item.custom.FireballStaffItem;
 import net.steve.darkfantasy.item.custom.FrostStaffItem;
+import net.steve.darkfantasy.item.custom.EclipseGreatswordItem;
 import net.steve.darkfantasy.item.custom.EvokerClawTomeItem;
 import net.steve.darkfantasy.item.custom.LightningStaffItem;
 import net.steve.darkfantasy.item.custom.MaelstromTomeItem;
@@ -86,6 +87,17 @@ public class ModItems {
             p -> new Item(p.humanoidArmor(ModMaterials.ECLIPSIUM_ARMOR, ArmorType.LEGGINGS).fireResistant().rarity(Rarity.EPIC)));
     public static final DeferredItem<Item> ECLIPSIUM_BOOTS = ITEMS.registerItem("eclipsium_boots",
             p -> new Item(p.humanoidArmor(ModMaterials.ECLIPSIUM_ARMOR, ArmorType.BOOTS).fireResistant().rarity(Rarity.EPIC)));
+
+    // Eclipse Crown — the Eclipse King's headgear and guaranteed boss drop. A helmet-slot
+    // relic: Epic, fireproof, strong head defense, and (via ArmorSetBonusHandler) grants
+    // Night Vision while worn.
+    public static final DeferredItem<Item> ECLIPSE_CROWN = ITEMS.registerItem("eclipse_crown",
+            p -> new Item(p.humanoidArmor(ModMaterials.ECLIPSE_CROWN_ARMOR, ArmorType.HELMET)
+                    .fireResistant().rarity(Rarity.EPIC)));
+
+    // Nightfall — the Eclipse King's greatsword (he wields it; it's his guaranteed drop).
+    public static final DeferredItem<Item> ECLIPSE_GREATSWORD = ITEMS.registerItem("eclipse_greatsword",
+            p -> new EclipseGreatswordItem(EclipseGreatswordItem.applyProperties(p)));
 
     public static final DeferredItem<Item> MOONSILVER = ITEMS.registerSimpleItem("moonsilver");
     public static final DeferredItem<Item> RAW_MOONSILVER = ITEMS.registerSimpleItem("raw_moonsilver");
@@ -189,6 +201,21 @@ public class ModItems {
                     .stacksTo(16)
                     .food(ModFoods.BEER, ModFoods.BEER_CONSUMABLE)));
 
+    // Brewing-keg drinks. Each is poured from the keg into a stein like beer; the keg
+    // remembers which brew it holds and hands back the matching drink (see BrewingKegBlock).
+    public static final DeferredItem<Item> DARK_ALE = ITEMS.registerItem("dark_ale",
+            properties -> new Item(properties.stacksTo(16).food(ModFoods.DRINK, ModFoods.DARK_ALE_CONSUMABLE)));
+    public static final DeferredItem<Item> HONEY_MEAD = ITEMS.registerItem("honey_mead",
+            properties -> new Item(properties.stacksTo(16).food(ModFoods.DRINK, ModFoods.HONEY_MEAD_CONSUMABLE)));
+    public static final DeferredItem<Item> GLOWBREW = ITEMS.registerItem("glowbrew",
+            properties -> new Item(properties.stacksTo(16).food(ModFoods.DRINK, ModFoods.GLOWBREW_CONSUMABLE)));
+    public static final DeferredItem<Item> MUSHROOM_STOUT = ITEMS.registerItem("mushroom_stout",
+            properties -> new Item(properties.stacksTo(16).food(ModFoods.DRINK, ModFoods.MUSHROOM_STOUT_CONSUMABLE)));
+    public static final DeferredItem<Item> WITHER_STOUT = ITEMS.registerItem("wither_stout",
+            properties -> new Item(properties.stacksTo(16).food(ModFoods.DRINK, ModFoods.WITHER_STOUT_CONSUMABLE)));
+    public static final DeferredItem<Item> BATTLE_BREW = ITEMS.registerItem("battle_brew",
+            properties -> new Item(properties.stacksTo(16).food(ModFoods.DRINK, ModFoods.BATTLE_BREW_CONSUMABLE)));
+
     // Empty container — players right-click the brewing keg with this to draw off a
     // quart of beer (one stein, one quart drained, one Beer item handed back).
     // Interaction logic lives in BrewingKegBlock#useItemOn.
@@ -249,6 +276,10 @@ public class ModItems {
     public static final DeferredItem<SpawnEggItem> LYTEBUG_SPAWN_EGG = ITEMS.registerItem(
             "lytebug_spawn_egg",
             properties -> new SpawnEggItem(properties.spawnEgg(ModEntities.LYTEBUG.get())));
+
+    public static final DeferredItem<SpawnEggItem> ECLIPSE_KING_SPAWN_EGG = ITEMS.registerItem(
+            "eclipse_king_spawn_egg",
+            properties -> new SpawnEggItem(properties.spawnEgg(ModEntities.ECLIPSE_KING.get())));
 
 
     public static void register(IEventBus eventBus) {

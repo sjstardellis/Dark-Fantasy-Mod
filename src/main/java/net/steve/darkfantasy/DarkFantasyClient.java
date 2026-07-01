@@ -1,6 +1,7 @@
 package net.steve.darkfantasy;
 
 import net.steve.darkfantasy.client.renderer.AlchemyStandRenderer;
+import net.steve.darkfantasy.client.renderer.EclipseKingRenderer;
 import net.steve.darkfantasy.client.renderer.ElectroDragonRenderer;
 import net.steve.darkfantasy.client.renderer.FairyRenderer;
 import net.steve.darkfantasy.client.model.GnomeModel;
@@ -11,6 +12,8 @@ import net.steve.darkfantasy.client.renderer.SkylandsPortalRenderer;
 import net.steve.darkfantasy.client.renderer.WizardRenderer;
 import net.steve.darkfantasy.client.screen.AlchemyStandScreen;
 import net.steve.darkfantasy.client.screen.BrewingKegScreen;
+import net.steve.darkfantasy.client.AnimatedArmorExtensions;
+import net.steve.darkfantasy.item.ModItems;
 import net.steve.darkfantasy.init.ModBlockEntities;
 import net.steve.darkfantasy.init.ModEntities;
 import net.steve.darkfantasy.init.ModFluids;
@@ -28,6 +31,7 @@ import net.neoforged.fml.event.lifecycle.FMLClientSetupEvent;
 import net.neoforged.neoforge.client.event.EntityRenderersEvent;
 import net.neoforged.neoforge.client.event.RegisterFluidModelsEvent;
 import net.neoforged.neoforge.client.event.RegisterMenuScreensEvent;
+import net.neoforged.neoforge.client.extensions.common.RegisterClientExtensionsEvent;
 import net.neoforged.neoforge.client.gui.ConfigurationScreen;
 import net.neoforged.neoforge.client.gui.IConfigScreenFactory;
 
@@ -100,6 +104,7 @@ public class DarkFantasyClient {
         event.registerEntityRenderer(ModEntities.LIGHTNING_PROJECTILE.get(),
                 net.minecraft.client.renderer.entity.NoopRenderer::new);
         event.registerEntityRenderer(ModEntities.ELECTRO_DRAGON.get(), ElectroDragonRenderer::new);
+        event.registerEntityRenderer(ModEntities.ECLIPSE_KING.get(), EclipseKingRenderer::new);
         event.registerEntityRenderer(ModEntities.GOBLIN.get(), GoblinRenderer::new);
         event.registerEntityRenderer(ModEntities.GNOME.get(), GnomeRenderer::new);
         event.registerEntityRenderer(ModEntities.LYTEBUG.get(), LytebugRenderer::new);
@@ -112,5 +117,24 @@ public class DarkFantasyClient {
         // Frost bolt renders as its mercuryglass core via the same thrown-item path.
         event.registerEntityRenderer(ModEntities.FROST_BOLT.get(),
                 net.minecraft.client.renderer.entity.ThrownItemRenderer::new);
+    }
+
+    /**
+     * Animate the worn dawnmetal and eclipsium armour. Worn-armour textures bypass the atlas, so
+     * {@code .mcmeta} frame animation doesn't apply to them; {@link AnimatedArmorExtensions} instead
+     * swaps the bound frame texture each render via NeoForge's {@code getArmorTexture} hook. Both
+     * sets use six split frames at 6 ticks each (a gentle ping-pong shimmer).
+     */
+    @SubscribeEvent
+    static void onRegisterClientExtensions(RegisterClientExtensionsEvent event) {
+        var dawnmetal = new AnimatedArmorExtensions("dawnmetal", 6, 6);
+        event.registerItem(dawnmetal,
+                ModItems.DAWNMETAL_HELMET.get(), ModItems.DAWNMETAL_CHESTPLATE.get(),
+                ModItems.DAWNMETAL_LEGGINGS.get(), ModItems.DAWNMETAL_BOOTS.get());
+
+        var eclipsium = new AnimatedArmorExtensions("eclipsium", 6, 6);
+        event.registerItem(eclipsium,
+                ModItems.ECLIPSIUM_HELMET.get(), ModItems.ECLIPSIUM_CHESTPLATE.get(),
+                ModItems.ECLIPSIUM_LEGGINGS.get(), ModItems.ECLIPSIUM_BOOTS.get());
     }
 }

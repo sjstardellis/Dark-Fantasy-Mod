@@ -2,12 +2,16 @@ package net.steve.darkfantasy.block.entity;
 
 import net.steve.darkfantasy.block.custom.BrewingKegBlock;
 import net.steve.darkfantasy.init.ModBlockEntities;
+import net.steve.darkfantasy.init.ModRecipes;
 import net.steve.darkfantasy.item.ModItems;
 import net.steve.darkfantasy.menu.BrewingKegMenu;
+import net.steve.darkfantasy.recipe.BrewingRecipe;
+import net.steve.darkfantasy.recipe.BrewingRecipeInput;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.HolderLookup;
 import net.minecraft.core.NonNullList;
 import net.minecraft.nbt.CompoundTag;
+import net.minecraft.server.level.ServerLevel;
 import net.minecraft.network.chat.Component;
 import net.minecraft.network.protocol.Packet;
 import net.minecraft.network.protocol.game.ClientGamePacketListener;
@@ -18,6 +22,8 @@ import net.minecraft.world.inventory.AbstractContainerMenu;
 import net.minecraft.world.inventory.ContainerData;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.Items;
+import net.minecraft.world.item.crafting.RecipeHolder;
+import net.minecraft.world.item.crafting.RecipeManager;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.Blocks;
@@ -31,6 +37,8 @@ import net.neoforged.neoforge.fluids.FluidStack;
 import net.neoforged.neoforge.transfer.fluid.FluidResource;
 import net.neoforged.neoforge.transfer.fluid.FluidStacksResourceHandler;
 import net.neoforged.neoforge.transfer.transaction.Transaction;
+
+import java.util.Optional;
 
 /**
  * Brewing keg block entity. Holds three input slots (hops / wheat / water bucket),
@@ -80,6 +88,13 @@ public class BrewingKegBlockEntity extends BaseContainerBlockEntity {
     private NonNullList<ItemStack> items = NonNullList.withSize(SLOT_COUNT, ItemStack.EMPTY);
     private int progress = 0;
     private int maxProgress = BREW_DURATION_TICKS;
+
+    /** The drink the tank currently holds (count 1); empty when the tank is empty. */
+    private ItemStack currentBrew = ItemStack.EMPTY;
+
+    /** Cached lookup into the brewing recipe registry — matches the two solid slots. */
+    private final RecipeManager.CachedCheck<BrewingRecipeInput, BrewingRecipe> quickCheck =
+            RecipeManager.createCheck(ModRecipes.BREWING_TYPE.get());
 
     /**
      * Beer tank, expressed as a water-fluid resource so the GUI can reuse the
@@ -160,6 +175,11 @@ public class BrewingKegBlockEntity extends BaseContainerBlockEntity {
         return this.tank.getAmountAsInt(TANK_INDEX);
     }
 
+    /** The drink the tank currently holds (count 1), or empty. Synced to the client via the update tag. */
+    public ItemStack getCurrentBrew() {
+        return this.currentBrew;
+    }
+
     public int getProgress() {
         return this.progress;
     }
@@ -170,17 +190,25 @@ public class BrewingKegBlockEntity extends BaseContainerBlockEntity {
 
     /**
      * Called from {@link BrewingKegBlock#useItemOn} when the player right-clicks with a
-     * Stein Glass. Drains one stein's worth ({@link #BEER_PER_STEIN} mB) from the tank.
-     * Returns true if the drain succeeded.
+     * Stein Glass. Drains one stein's worth ({@link #BEER_PER_STEIN} mB) from the tank and
+     * returns the drink to hand back (one of whatever brew the keg holds), or
+     * {@link ItemStack#EMPTY} if there's nothing to pour. Emptying the tank clears the brew
+     * so a different recipe can be started next.
      */
-    public boolean drainOneStein() {
-        if (this.tank.getAmountAsInt(TANK_INDEX) < BEER_PER_STEIN) return false;
+    public ItemStack drainOneStein() {
+        if (this.currentBrew.isEmpty() || this.tank.getAmountAsInt(TANK_INDEX) < BEER_PER_STEIN) {
+            return ItemStack.EMPTY;
+        }
+        ItemStack served = this.currentBrew.copyWithCount(1);
         try (Transaction txn = Transaction.openRoot()) {
             int drained = tank.extract(TANK_INDEX, FluidResource.of(Fluids.WATER), BEER_PER_STEIN, txn);
-            if (drained < BEER_PER_STEIN) return false; // shouldn't happen given the check above
+            if (drained < BEER_PER_STEIN) return ItemStack.EMPTY; // shouldn't happen given the check
             txn.commit();
         }
-        return true;
+        if (this.tank.getAmountAsInt(TANK_INDEX) <= 0) {
+            this.currentBrew = ItemStack.EMPTY;
+        }
+        return served;
     }
 
     // ---- BE sync ------------------------------------------------------------
@@ -219,6 +247,7 @@ public class BrewingKegBlockEntity extends BaseContainerBlockEntity {
         } else {
             tank.set(TANK_INDEX, FluidResource.EMPTY, 0);
         }
+        this.currentBrew = input.read("CurrentBrew", ItemStack.CODEC).orElse(ItemStack.EMPTY);
     }
 
     @Override
@@ -228,6 +257,9 @@ public class BrewingKegBlockEntity extends BaseContainerBlockEntity {
         output.putInt("Progress", this.progress);
         output.putInt("MaxProgress", this.maxProgress);
         output.putInt("BeerAmount", tank.getAmountAsInt(TANK_INDEX));
+        if (!this.currentBrew.isEmpty()) {
+            output.store("CurrentBrew", ItemStack.CODEC, this.currentBrew);
+        }
     }
 
     @Override
@@ -240,8 +272,9 @@ public class BrewingKegBlockEntity extends BaseContainerBlockEntity {
     @Override
     public boolean canPlaceItem(int slot, ItemStack stack) {
         return switch (slot) {
-            case SLOT_HOPS -> stack.is(ModItems.HOPS.get());
-            case SLOT_WHEAT -> stack.is(Items.WHEAT);
+            // The two solid slots accept any non-bucket item; the brewing recipe decides
+            // what actually ferments, so new brews work without touching this validator.
+            case SLOT_HOPS, SLOT_WHEAT -> !stack.is(Items.WATER_BUCKET) && !stack.is(Items.BUCKET);
             case SLOT_BUCKET -> stack.is(Items.WATER_BUCKET) || stack.is(Items.BUCKET);
             default -> false;
         };
@@ -250,16 +283,19 @@ public class BrewingKegBlockEntity extends BaseContainerBlockEntity {
     // ---- Brew loop ----------------------------------------------------------
 
     public static void serverTick(Level level, BlockPos pos, BlockState state, BrewingKegBlockEntity be) {
-        boolean canBrew = be.hasAllIngredients() && be.hasRoomInTank();
+        if (!(level instanceof ServerLevel serverLevel)) {
+            return;
+        }
+
+        BrewingRecipe recipe = be.currentRecipe(serverLevel);
+        boolean canBrew = recipe != null && be.hasRoomInTank();
         boolean heated = isHeatSource(level, pos.below());
 
-        // Update visual stage. Five-state machine driven by ingredient presence + heat:
+        // Update visual stage. Five-state machine driven by a runnable recipe + heat:
         //   STAGE_BREWING when actively cooking (heated + can brew)
-        //   STAGE_READY   when ingredients loaded but no heat
+        //   STAGE_READY   when a recipe is loaded but there's no heat
         //   STAGE_LOADING when at least one slot has something
-        //   STAGE_EMPTY   otherwise (regardless of tank fill — the tank is a separate axis)
-        // STAGE_DONE was used in the previous design; we no longer emit it because the
-        // tank can hold multiple batches and "done" isn't a discrete state any more.
+        //   STAGE_EMPTY   otherwise (tank fill is a separate axis)
         int desiredStage;
         if (canBrew && heated) desiredStage = BrewingKegBlock.STAGE_BREWING;
         else if (canBrew) desiredStage = BrewingKegBlock.STAGE_READY;
@@ -278,18 +314,34 @@ public class BrewingKegBlockEntity extends BaseContainerBlockEntity {
             return;
         }
 
+        be.maxProgress = recipe.brewTime();
         be.progress++;
         if (be.progress >= be.maxProgress) {
-            be.completeBatch();
+            be.completeBatch(recipe);
             be.progress = 0;
         }
         setChanged(level, pos, state);
     }
 
-    private boolean hasAllIngredients() {
-        return items.get(SLOT_HOPS).is(ModItems.HOPS.get())
-                && items.get(SLOT_WHEAT).is(Items.WHEAT)
-                && items.get(SLOT_BUCKET).is(Items.WATER_BUCKET);
+    /**
+     * The brewing recipe currently runnable, or {@code null}. Requires a water bucket in the
+     * bucket slot, a recipe matching the two solid slots, and — so brews never mix — either an
+     * empty tank or one already holding this same drink.
+     */
+    private BrewingRecipe currentRecipe(ServerLevel level) {
+        if (!items.get(SLOT_BUCKET).is(Items.WATER_BUCKET)) {
+            return null;
+        }
+        BrewingRecipeInput input = new BrewingRecipeInput(items.get(SLOT_HOPS), items.get(SLOT_WHEAT));
+        Optional<RecipeHolder<BrewingRecipe>> opt = quickCheck.getRecipeFor(input, level);
+        if (opt.isEmpty()) {
+            return null;
+        }
+        BrewingRecipe recipe = opt.get().value();
+        if (!currentBrew.isEmpty() && !ItemStack.isSameItem(currentBrew, recipe.assemble(input))) {
+            return null;   // tank holds a different brew
+        }
+        return recipe;
     }
 
     private boolean hasAnyIngredient() {
@@ -305,11 +357,13 @@ public class BrewingKegBlockEntity extends BaseContainerBlockEntity {
     }
 
     /**
-     * Consume one of each ingredient, return an empty bucket to the water slot, and
-     * add one batch of beer to the tank. Called only when {@link #hasAllIngredients}
-     * and {@link #hasRoomInTank} are both true.
+     * Consume one from each solid slot, return an empty bucket to the water slot, record the
+     * recipe's drink as the tank's current brew, and add one batch to the tank. Called only
+     * when {@link #currentRecipe} returned non-null and {@link #hasRoomInTank} is true.
      */
-    private void completeBatch() {
+    private void completeBatch(BrewingRecipe recipe) {
+        BrewingRecipeInput input = new BrewingRecipeInput(items.get(SLOT_HOPS), items.get(SLOT_WHEAT));
+        this.currentBrew = recipe.assemble(input).copyWithCount(1);
         items.get(SLOT_HOPS).shrink(1);
         items.get(SLOT_WHEAT).shrink(1);
         // Water bucket → empty bucket, in-place. The slot validator accepts both.

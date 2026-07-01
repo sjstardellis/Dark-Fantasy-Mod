@@ -27,6 +27,19 @@ public class ModPoiTypes {
                     0,
                     1));
 
+    /**
+     * Job site for the Brewer villager ({@link net.steve.darkfantasy.init.ModVillagerProfessions}).
+     * Tracks every brewing-keg block state; {@code maxTickets = 1} so a single villager claims it.
+     * The block is also added to the {@code minecraft:acquirable_job_site} POI tag so jobless
+     * villagers seek it out and take up brewing.
+     */
+    public static final DeferredHolder<PoiType, PoiType> BREWING_KEG = POI_TYPES.register(
+            "brewing_keg",
+            () -> new PoiType(
+                    Set.copyOf(ModBlocks.BREWING_KEG.get().getStateDefinition().getPossibleStates()),
+                    1,
+                    1));
+
     public static void register(IEventBus eventBus) {
         POI_TYPES.register(eventBus);
     }

@@ -28,7 +28,9 @@ public class ModBlockTagsProvider extends BlockTagsProvider {
                 .add(ModBlocks.MOONSILVER_DEEPSLATE_ORE.get())
                 .add(ModBlocks.MERCURYGLASS_ORE.get())
                 .add(ModBlocks.EMBERSTONE_ORE.get())
-                .add(ModBlocks.LARIMAR_PEARL_ORE.get());
+                .add(ModBlocks.LARIMAR_PEARL_ORE.get())
+                .add(ModBlocks.OBSIDIAN_BRICK.get())
+                .add(ModBlocks.OBSIDIAN_GLASS.get());
 
         tag(BlockTags.MINEABLE_WITH_AXE)
                 .add(ModBlocks.ENCHANTED_BOOKSHELF.get())

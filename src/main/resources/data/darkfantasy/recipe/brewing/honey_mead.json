@@ -1,0 +1,12 @@
+{
+  "type": "darkfantasy:brewing",
+  "ingredients": [
+    "minecraft:honey_bottle",
+    "minecraft:wheat"
+  ],
+  "result": {
+    "id": "darkfantasy:honey_mead",
+    "count": 1
+  },
+  "brew_time": 4000
+}

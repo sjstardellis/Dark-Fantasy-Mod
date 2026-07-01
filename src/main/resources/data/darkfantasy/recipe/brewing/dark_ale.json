@@ -1,0 +1,12 @@
+{
+  "type": "darkfantasy:brewing",
+  "ingredients": [
+    "darkfantasy:hops",
+    "minecraft:nether_wart"
+  ],
+  "result": {
+    "id": "darkfantasy:dark_ale",
+    "count": 1
+  },
+  "brew_time": 6000
+}

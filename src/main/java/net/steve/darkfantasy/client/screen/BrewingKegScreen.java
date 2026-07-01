@@ -1,6 +1,7 @@
 package net.steve.darkfantasy.client.screen;
 
 import net.steve.darkfantasy.DarkFantasy;
+import net.steve.darkfantasy.item.ModItems;
 import net.steve.darkfantasy.menu.BrewingKegMenu;
 import net.minecraft.client.gui.GuiGraphicsExtractor;
 import net.minecraft.client.gui.screens.inventory.AbstractContainerScreen;
@@ -8,25 +9,23 @@ import net.minecraft.client.renderer.RenderPipelines;
 import net.minecraft.network.chat.Component;
 import net.minecraft.resources.Identifier;
 import net.minecraft.world.entity.player.Inventory;
+import net.minecraft.world.item.Item;
+import net.minecraft.world.item.ItemStack;
 
 import java.util.List;
 
 /**
  * Screen for the brewing keg.
  *
- * <p>The background PNG provides the static frame (slots, labels, empty arrow,
- * tank well). This class layers the dynamic bits on top:
+ * <p>The background PNG provides the static frame. This class layers the dynamic bits:
  * <ol>
- *   <li>{@link #renderWaterTank} fills the tank well from the bottom up with the
- *       vanilla water-still texture, tiled 16 px at a time.</li>
- *   <li>{@link #renderProgressArrow} fills the horizontal arrow between the
- *       inputs and the tank as a batch cooks.</li>
+ *   <li>{@link #renderBrewingOverlay} draws the bubbles + brew-progress arrow, copied
+ *       verbatim from the vanilla brewing stand at its exact coordinates.</li>
+ *   <li>{@link #renderWaterTank} fills the tank well from the bottom up, tinted to the
+ *       current brew's colour.</li>
+ *   <li>{@link #renderCountdownTimer} shows the time left on the current batch.</li>
  * </ol>
- *
- * <p>Coordinates here mirror the alchemy stand layout — the goal is for the two
- * machines to feel related at a glance. If you make a custom GUI texture, keep the
- * tank well at (12, 18, 14, 50) and the arrow at (84, 39, 24, 17) and these
- * constants stay correct.
+ * The three input slots sit on the brewing stand's bottle arc — (56,51)/(79,51)/(102,51).
  */
 public class BrewingKegScreen extends AbstractContainerScreen<BrewingKegMenu> {
     private static final Identifier BACKGROUND_LOCATION =
@@ -41,26 +40,24 @@ public class BrewingKegScreen extends AbstractContainerScreen<BrewingKegMenu> {
 
     // Tank rectangle within the GUI background. Tall vertical bar on the left side —
     // same coords as the alchemy stand so the two GUIs share a visual language.
-    private static final int TANK_X = 12;
+    private static final int TANK_X = 150;
     private static final int TANK_Y = 18;
     private static final int TANK_W = 14;
     private static final int TANK_H = 50;
 
-    // Progress arrow — placed between the input row (y=17–33) and the tank.
-    // Background PNG includes the empty arrow outline; this overlays the filled
-    // portion from the right-edge "extras" zone of the texture.
-    private static final int ARROW_X = 84;
-    private static final int ARROW_Y = 39;
-    private static final int ARROW_W = 24;
-    private static final int ARROW_H = 17;
-    private static final int ARROW_SRC_U = 176;
-    private static final int ARROW_SRC_V = 0;
+    // Bubbles + brew-progress arrow — copied 1:1 from the vanilla brewing stand
+    // (BrewingStandScreen): same sprites, sprite sizes, and exact coordinates.
+    //   arrow   → sprite 9×28 at (97,16), fills top → bottom
+    //   bubbles → sprite 12×29 at (63,14), rises from the bottom
+    private static final Identifier BREW_PROGRESS_SPRITE =
+            Identifier.withDefaultNamespace("container/brewing_stand/brew_progress");
+    private static final Identifier BUBBLES_SPRITE =
+            Identifier.withDefaultNamespace("container/brewing_stand/bubbles");
+    private static final int[] BUBBLELENGTHS = {29, 24, 20, 16, 11, 6, 0};
 
-    // Countdown timer (MM:SS) — drawn centered below the arrow, only while brewing.
-    // y=58 sits just under the arrow (which ends at 39+17=56) without crowding the
-    // player inventory that starts at y=84.
-    private static final int TIMER_CENTER_X = (ARROW_X- 5) + ARROW_W / 2;
-    private static final int TIMER_Y = 58;
+    // Countdown timer (MM:SS) — drawn only while brewing.
+    private static final int TIMER_CENTER_X = 87;
+    private static final int TIMER_Y = 32;
     private static final int TIMER_COLOR = 0xFF444444;
 
     public BrewingKegScreen(BrewingKegMenu menu, Inventory inventory, Component title) {
@@ -82,7 +79,7 @@ public class BrewingKegScreen extends AbstractContainerScreen<BrewingKegMenu> {
                 xo, yo, 0.0F, 0.0F, this.imageWidth, this.imageHeight, 256, 256);
 
         renderWaterTank(graphics, xo, yo);
-        renderProgressArrow(graphics, xo, yo);
+        renderBrewingOverlay(graphics, xo, yo);
         renderCountdownTimer(graphics, xo, yo);
     }
 
@@ -121,8 +118,12 @@ public class BrewingKegScreen extends AbstractContainerScreen<BrewingKegMenu> {
                 && mouseY >= tankTop && mouseY < tankTop + TANK_H) {
             int beer = this.menu.getBeerAmount();
             int capacity = this.menu.getTankCapacity();
+            ItemStack brew = this.menu.currentBrew();
+            Component title = brew.isEmpty()
+                    ? Component.translatable("tooltip.darkfantasy.brewing_keg.tank")
+                    : brew.getHoverName();
             List<Component> lines = List.of(
-                    Component.translatable("tooltip.darkfantasy.brewing_keg.tank"),
+                    title,
                     Component.translatable("tooltip.darkfantasy.brewing_keg.tank.amount", beer, capacity)
             );
             graphics.setTooltipForNextFrame(
@@ -133,25 +134,29 @@ public class BrewingKegScreen extends AbstractContainerScreen<BrewingKegMenu> {
     }
 
     /**
-     * Overlay the filled portion of the progress arrow on top of the static
-     * empty-arrow outline drawn from the background. Grows top → bottom over the
-     * course of one batch.
+     * Bubbles + brew-progress arrow, copied from the vanilla brewing stand. Shown only
+     * while a batch is actively cooking (progress &gt; 0). The keg's progress counts UP
+     * to maxProgress, so the arrow fills as {@code progress/maxProgress} (vanilla runs a
+     * tick timer down instead); the bubbles cycle through {@link #BUBBLELENGTHS}.
      */
-    private void renderProgressArrow(GuiGraphicsExtractor graphics, int guiX, int guiY) {
+    private void renderBrewingOverlay(GuiGraphicsExtractor graphics, int guiX, int guiY) {
         int progress = this.menu.getProgress();
         int maxProgress = this.menu.getMaxProgress();
         if (progress <= 0 || maxProgress <= 0) return;
 
-        int filledHeight = (int) ((long) progress * ARROW_H / maxProgress);
-        if (filledHeight <= 0) return;
-        filledHeight = Math.min(filledHeight, ARROW_H);
+        // Brew-progress arrow — sprite 9×28 at (97,16), fills top → bottom.
+        int length = Math.min(28, (int) (28.0F * progress / maxProgress));
+        if (length > 0) {
+            graphics.blitSprite(RenderPipelines.GUI_TEXTURED, BREW_PROGRESS_SPRITE,
+                    9, 28, 0, 0, guiX + 97, guiY + 16, 9, length);
+        }
 
-        graphics.blit(RenderPipelines.GUI_TEXTURED, BACKGROUND_LOCATION,
-                guiX + ARROW_X, guiY + ARROW_Y,
-                (float) ARROW_SRC_U, (float) ARROW_SRC_V,
-                ARROW_W, filledHeight,
-                ARROW_W, filledHeight,
-                256, 256);
+        // Bubbles — sprite 12×29 at (63,14), rising from the bottom.
+        length = BUBBLELENGTHS[progress / 2 % 7];
+        if (length > 0) {
+            graphics.blitSprite(RenderPipelines.GUI_TEXTURED, BUBBLES_SPRITE,
+                    12, 29, 0, 29 - length, guiX + 63, guiY + 14 + 29 - length, 12, length);
+        }
     }
 
     /**
@@ -193,5 +198,22 @@ public class BrewingKegScreen extends AbstractContainerScreen<BrewingKegMenu> {
                     WATER_FRAME_SIZE, remainder,
                     WATER_TEX_WIDTH, WATER_TEX_HEIGHT);
         }
+
+        // Tint the fill toward the current brew's colour (beer amber, dark stout, cyan
+        // glowbrew, …). A translucent overlay leaves the animated water shimmer visible.
+        int fillTop = barBottom - filledHeight;
+        graphics.fill(x, fillTop, x + TANK_W, barBottom, 0xC0000000 | brewTint());
+    }
+
+    /** Tint colour (0xRRGGBB) for the tank fill, from whichever brew the keg holds. */
+    private int brewTint() {
+        Item brew = this.menu.currentBrew().getItem();
+        if (brew == ModItems.DARK_ALE.get()) return 0x5A3410;
+        if (brew == ModItems.HONEY_MEAD.get()) return 0xE8B923;
+        if (brew == ModItems.GLOWBREW.get()) return 0x2FD9C4;
+        if (brew == ModItems.MUSHROOM_STOUT.get()) return 0x7A2E1E;
+        if (brew == ModItems.WITHER_STOUT.get()) return 0x2B2B2B;
+        if (brew == ModItems.BATTLE_BREW.get()) return 0xC81E28;
+        return 0xC8811E; // beer amber (default)
     }
 }

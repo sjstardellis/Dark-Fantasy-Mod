@@ -202,6 +202,8 @@ public class ModModelProvider extends ModelProvider {
                                && holder.value() != ModBlocks.HOPS_CROP.get()
                                && holder.value() != ModBlocks.ELIXIR.get()
                                && holder.value() != ModBlocks.GNOME_BURROW.get()
+                               && holder.value() != ModBlocks.OBSIDIAN_BRICK.get()
+                               && holder.value() != ModBlocks.OBSIDIAN_GLASS.get()
                                && holder.value() != ModBlocks.LYTESTONE.get());
     }
 
@@ -220,8 +222,17 @@ public class ModModelProvider extends ModelProvider {
                                && holder.value() != net.steve.darkfantasy.item.ModItems.LYTEBUG_DUST.get()
                                && holder.value() != net.steve.darkfantasy.item.ModItems.ELIXIR_BUCKET.get()
                                && holder.value() != net.steve.darkfantasy.item.ModItems.BEER.get()
+                               && holder.value() != net.steve.darkfantasy.item.ModItems.DARK_ALE.get()
+                               && holder.value() != net.steve.darkfantasy.item.ModItems.HONEY_MEAD.get()
+                               && holder.value() != net.steve.darkfantasy.item.ModItems.GLOWBREW.get()
+                               && holder.value() != net.steve.darkfantasy.item.ModItems.MUSHROOM_STOUT.get()
+                               && holder.value() != net.steve.darkfantasy.item.ModItems.WITHER_STOUT.get()
+                               && holder.value() != net.steve.darkfantasy.item.ModItems.BATTLE_BREW.get()
                                && holder.value() != net.steve.darkfantasy.item.ModItems.STEIN_GLASS.get()
                                && holder.value() != net.steve.darkfantasy.item.ModItems.HOPS.get()
+                               && holder.value() != net.steve.darkfantasy.item.ModItems.ECLIPSE_CROWN.get()
+                               && holder.value() != net.steve.darkfantasy.item.ModItems.ECLIPSE_GREATSWORD.get()
+                               && holder.value() != net.steve.darkfantasy.item.ModItems.ECLIPSE_KING_SPAWN_EGG.get()
                                && holder.value() != net.steve.darkfantasy.item.ModItems.WARDING_TOME.get()
                                && holder.value() != net.steve.darkfantasy.item.ModItems.MAELSTROM_TOME.get()
                                && holder.value() != net.steve.darkfantasy.item.ModItems.WAYFARER_TOME.get()
@@ -231,6 +242,8 @@ public class ModModelProvider extends ModelProvider {
                                && holder.value() != net.steve.darkfantasy.item.ModItems.EVOKER_CLAW_TOME.get()
                                && holder.value() != ModBlocks.BREWING_KEG.get().asItem()
                                && holder.value() != ModBlocks.GNOME_BURROW.get().asItem()
+                               && holder.value() != ModBlocks.OBSIDIAN_BRICK.get().asItem()
+                               && holder.value() != ModBlocks.OBSIDIAN_GLASS.get().asItem()
                                && holder.value() != ModBlocks.LYTESTONE.get().asItem());
     }
 }

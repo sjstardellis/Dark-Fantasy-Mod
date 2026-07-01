@@ -1,0 +1,12 @@
+{
+  "type": "darkfantasy:brewing",
+  "ingredients": [
+    "darkfantasy:hops",
+    "minecraft:wheat"
+  ],
+  "result": {
+    "id": "darkfantasy:beer",
+    "count": 1
+  },
+  "brew_time": 6000
+}

@@ -8,6 +8,8 @@ import net.steve.darkfantasy.block.custom.EnchantedBookshelfBlock;
 import net.steve.darkfantasy.block.custom.GnomeBurrowBlock;
 import net.steve.darkfantasy.block.custom.HopsBlock;
 import net.steve.darkfantasy.block.custom.LytestoneBlock;
+import net.steve.darkfantasy.block.custom.ObsidianWardBlock;
+import net.steve.darkfantasy.block.custom.ObsidianWardGlassBlock;
 import net.steve.darkfantasy.block.custom.SkylandsPortalBlock;
 import net.steve.darkfantasy.block.custom.TwilightPortalBlock;
 import net.steve.darkfantasy.init.ModFluids;
@@ -100,6 +102,25 @@ public class ModBlocks {
     public static final DeferredBlock<Block> GNOME_BURROW = registerBlock("gnome_burrow",
             properties -> new GnomeBurrowBlock(properties.mapColor(MapColor.DIRT)
                     .strength(0.6f).sound(SoundType.WOOD)));
+
+    // ── Eclipse Citadel shell (warded — anti-cheat) ──────────────────────────
+    // Obsidian Brick (and its see-through twin, Obsidian Glass) wall the citadel so a
+    // player can't tunnel past the adventure to the throne. They're TNT-proof and can
+    // ONLY be mined by a netherite or eclipsium pickaxe, and even then take a flat
+    // ~3 minutes per block (see ObsidianWardBlock). A determined endgame player can dig
+    // in; nobody cheats past casually. Hardness is positive (so the warded break-speed
+    // hook is consulted); the blast resistance keeps them explosion-proof.
+    public static final DeferredBlock<Block> OBSIDIAN_BRICK = registerBlock("obsidian_brick",
+            properties -> new ObsidianWardBlock(properties.mapColor(MapColor.COLOR_BLACK)
+                    .strength(50.0F, 3600000.0F)
+                    .sound(SoundType.DEEPSLATE_BRICKS)
+                    .pushReaction(PushReaction.BLOCK)));
+    public static final DeferredBlock<Block> OBSIDIAN_GLASS = registerBlock("obsidian_glass",
+            properties -> new ObsidianWardGlassBlock(properties
+                    .strength(50.0F, 3600000.0F)
+                    .sound(SoundType.GLASS)
+                    .noOcclusion()
+                    .pushReaction(PushReaction.BLOCK)));
 
     // Skylands portal — no BlockItem (not obtainable in survival).
     public static final DeferredBlock<SkylandsPortalBlock> SKYLANDS_PORTAL = BLOCKS.registerBlock("skylands_portal",

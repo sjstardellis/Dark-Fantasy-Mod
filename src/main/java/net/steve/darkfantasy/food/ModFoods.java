@@ -24,6 +24,68 @@ public class ModFoods {
                     new MobEffectInstance(MobEffects.NAUSEA, 6000, 0), 1.0f))
             .build();
 
+    // ── Brewing-keg drinks ───────────────────────────────────────────────────
+    // Each pours from the keg into a stein. Small nourishment (buffs, not meals) and
+    // drinkable anytime. Every brew pairs an upside with a cost, like the base Beer.
+    public static final FoodProperties DRINK = new FoodProperties.Builder()
+            .nutrition(2).saturationModifier(0.2f).alwaysEdible().build();
+
+    /** Dark Ale — the aggressive pint: Strength, but the room spins. */
+    public static final Consumable DARK_ALE_CONSUMABLE = Consumables.defaultDrink()
+            .consumeSeconds(1.6f)
+            .onConsume(new ApplyStatusEffectsConsumeEffect(
+                    new MobEffectInstance(MobEffects.STRENGTH, 3600, 0), 1.0f))
+            .onConsume(new ApplyStatusEffectsConsumeEffect(
+                    new MobEffectInstance(MobEffects.NAUSEA, 3600, 0), 1.0f))
+            .build();
+
+    /** Honey Mead — the comfort drink: Regeneration + Absorption. */
+    public static final Consumable HONEY_MEAD_CONSUMABLE = Consumables.defaultDrink()
+            .consumeSeconds(1.6f)
+            .onConsume(new ApplyStatusEffectsConsumeEffect(
+                    new MobEffectInstance(MobEffects.REGENERATION, 600, 0), 1.0f))
+            .onConsume(new ApplyStatusEffectsConsumeEffect(
+                    new MobEffectInstance(MobEffects.ABSORPTION, 1800, 0), 1.0f))
+            .build();
+
+    /** Glowbrew — the explorer's lager: Night Vision + Speed. */
+    public static final Consumable GLOWBREW_CONSUMABLE = Consumables.defaultDrink()
+            .consumeSeconds(1.6f)
+            .onConsume(new ApplyStatusEffectsConsumeEffect(
+                    new MobEffectInstance(MobEffects.NIGHT_VISION, 6000, 0), 1.0f))
+            .onConsume(new ApplyStatusEffectsConsumeEffect(
+                    new MobEffectInstance(MobEffects.SPEED, 2400, 0), 1.0f))
+            .build();
+
+    /** Mushroom Stout — thick and heavy: Resistance II, but Slowness. */
+    public static final Consumable MUSHROOM_STOUT_CONSUMABLE = Consumables.defaultDrink()
+            .consumeSeconds(1.6f)
+            .onConsume(new ApplyStatusEffectsConsumeEffect(
+                    new MobEffectInstance(MobEffects.RESISTANCE, 3600, 1), 1.0f))
+            .onConsume(new ApplyStatusEffectsConsumeEffect(
+                    new MobEffectInstance(MobEffects.SLOWNESS, 1200, 0), 1.0f))
+            .build();
+
+    /** Wither Stout — high-risk: Strength II, at a Wither cost. */
+    public static final Consumable WITHER_STOUT_CONSUMABLE = Consumables.defaultDrink()
+            .consumeSeconds(1.6f)
+            .onConsume(new ApplyStatusEffectsConsumeEffect(
+                    new MobEffectInstance(MobEffects.STRENGTH, 3600, 1), 1.0f))
+            .onConsume(new ApplyStatusEffectsConsumeEffect(
+                    new MobEffectInstance(MobEffects.WITHER, 200, 0), 1.0f))
+            .build();
+
+    /** Battle Brew — the pre-fight buff: Resistance + Strength + Fire Resistance. */
+    public static final Consumable BATTLE_BREW_CONSUMABLE = Consumables.defaultDrink()
+            .consumeSeconds(1.6f)
+            .onConsume(new ApplyStatusEffectsConsumeEffect(
+                    new MobEffectInstance(MobEffects.RESISTANCE, 3600, 0), 1.0f))
+            .onConsume(new ApplyStatusEffectsConsumeEffect(
+                    new MobEffectInstance(MobEffects.STRENGTH, 3600, 0), 1.0f))
+            .onConsume(new ApplyStatusEffectsConsumeEffect(
+                    new MobEffectInstance(MobEffects.FIRE_RESISTANCE, 3600, 0), 1.0f))
+            .build();
+
     // ── Alchemy elixirs ──────────────────────────────────────────────────────
     // All share one FoodProperties (no nutrition, drinkable anytime); each has its
     // own fixed effect combo. Brewed at the alchemy stand from biome gems + reagents.

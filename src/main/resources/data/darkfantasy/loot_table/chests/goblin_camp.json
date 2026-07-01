@@ -13,7 +13,14 @@
           "name": "minecraft:gold_nugget",
           "weight": 15,
           "functions": [
-            {"function": "minecraft:set_count", "count": {"type": "minecraft:uniform", "min": 2, "max": 6}}
+            {
+              "function": "minecraft:set_count",
+              "count": {
+                "type": "minecraft:uniform",
+                "min": 2,
+                "max": 6
+              }
+            }
           ]
         },
         {
@@ -21,7 +28,14 @@
           "name": "minecraft:gold_ingot",
           "weight": 8,
           "functions": [
-            {"function": "minecraft:set_count", "count": {"type": "minecraft:uniform", "min": 1, "max": 2}}
+            {
+              "function": "minecraft:set_count",
+              "count": {
+                "type": "minecraft:uniform",
+                "min": 1,
+                "max": 2
+              }
+            }
           ]
         },
         {
@@ -29,7 +43,14 @@
           "name": "minecraft:stick",
           "weight": 10,
           "functions": [
-            {"function": "minecraft:set_count", "count": {"type": "minecraft:uniform", "min": 2, "max": 5}}
+            {
+              "function": "minecraft:set_count",
+              "count": {
+                "type": "minecraft:uniform",
+                "min": 2,
+                "max": 5
+              }
+            }
           ]
         },
         {
@@ -37,7 +58,14 @@
           "name": "minecraft:bone",
           "weight": 10,
           "functions": [
-            {"function": "minecraft:set_count", "count": {"type": "minecraft:uniform", "min": 2, "max": 4}}
+            {
+              "function": "minecraft:set_count",
+              "count": {
+                "type": "minecraft:uniform",
+                "min": 2,
+                "max": 4
+              }
+            }
           ]
         },
         {
@@ -45,7 +73,14 @@
           "name": "minecraft:arrow",
           "weight": 10,
           "functions": [
-            {"function": "minecraft:set_count", "count": {"type": "minecraft:uniform", "min": 3, "max": 6}}
+            {
+              "function": "minecraft:set_count",
+              "count": {
+                "type": "minecraft:uniform",
+                "min": 3,
+                "max": 6
+              }
+            }
           ]
         },
         {
@@ -53,7 +88,14 @@
           "name": "minecraft:string",
           "weight": 8,
           "functions": [
-            {"function": "minecraft:set_count", "count": {"type": "minecraft:uniform", "min": 1, "max": 3}}
+            {
+              "function": "minecraft:set_count",
+              "count": {
+                "type": "minecraft:uniform",
+                "min": 1,
+                "max": 3
+              }
+            }
           ]
         },
         {
@@ -61,7 +103,14 @@
           "name": "darkfantasy:beer",
           "weight": 8,
           "functions": [
-            {"function": "minecraft:set_count", "count": {"type": "minecraft:uniform", "min": 1, "max": 2}}
+            {
+              "function": "minecraft:set_count",
+              "count": {
+                "type": "minecraft:uniform",
+                "min": 1,
+                "max": 2
+              }
+            }
           ]
         },
         {
@@ -69,7 +118,14 @@
           "name": "minecraft:gunpowder",
           "weight": 6,
           "functions": [
-            {"function": "minecraft:set_count", "count": {"type": "minecraft:uniform", "min": 1, "max": 2}}
+            {
+              "function": "minecraft:set_count",
+              "count": {
+                "type": "minecraft:uniform",
+                "min": 1,
+                "max": 2
+              }
+            }
           ]
         },
         {
@@ -77,8 +133,39 @@
           "name": "minecraft:emerald",
           "weight": 5,
           "functions": [
-            {"function": "minecraft:set_count", "count": {"type": "minecraft:uniform", "min": 1, "max": 2}}
+            {
+              "function": "minecraft:set_count",
+              "count": {
+                "type": "minecraft:uniform",
+                "min": 1,
+                "max": 2
+              }
+            }
           ]
+        }
+      ]
+    },
+    {
+      "rolls": 1,
+      "entries": [
+        {
+          "type": "minecraft:item",
+          "name": "darkfantasy:hops",
+          "weight": 3,
+          "functions": [
+            {
+              "function": "minecraft:set_count",
+              "count": {
+                "type": "minecraft:uniform",
+                "min": 1,
+                "max": 3
+              }
+            }
+          ]
+        },
+        {
+          "type": "minecraft:empty",
+          "weight": 5
         }
       ]
     }

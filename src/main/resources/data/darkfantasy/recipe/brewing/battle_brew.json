@@ -1,0 +1,12 @@
+{
+  "type": "darkfantasy:brewing",
+  "ingredients": [
+    "darkfantasy:hops",
+    "minecraft:blaze_powder"
+  ],
+  "result": {
+    "id": "darkfantasy:battle_brew",
+    "count": 1
+  },
+  "brew_time": 8000
+}

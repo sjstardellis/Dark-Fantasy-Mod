@@ -37,8 +37,11 @@ public class WaterAvoidingJigsawStructure extends Structure {
     /**
      * Max height difference allowed across the probe cross. Anything steeper is a
      * hillside/cliff where a heightmap-projected start would half-bury the build.
+     * Kept generous because the structure's {@code beard_thin} terrain adaptation
+     * carves a foundation — too tight a value makes it near-unspawnable in the
+     * mountain biomes this structure is restricted to.
      */
-    private static final int MAX_SURFACE_SPREAD = 6;
+    private static final int MAX_SURFACE_SPREAD = 10;
 
     @Override
     public Optional<GenerationStub> findGenerationPoint(GenerationContext context) {

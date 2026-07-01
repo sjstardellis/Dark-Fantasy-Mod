@@ -46,6 +46,10 @@ public class ModCreativeModeTabs {
                         output.accept(ModItems.ECLIPSIUM_CHESTPLATE);
                         output.accept(ModItems.ECLIPSIUM_LEGGINGS);
                         output.accept(ModItems.ECLIPSIUM_BOOTS);
+                        output.accept(ModItems.ECLIPSE_CROWN);
+                        output.accept(ModItems.ECLIPSE_GREATSWORD);
+                        output.accept(ModBlocks.OBSIDIAN_BRICK);
+                        output.accept(ModBlocks.OBSIDIAN_GLASS);
 
                         output.accept(ModItems.MOONSILVER);
                         output.accept(ModItems.RAW_MOONSILVER);
@@ -105,6 +109,12 @@ public class ModCreativeModeTabs {
                         output.accept(ModItems.ELIXIR_BUCKET);
                         output.accept(ModItems.HOPS);
                         output.accept(ModItems.BEER);
+                        output.accept(ModItems.DARK_ALE);
+                        output.accept(ModItems.HONEY_MEAD);
+                        output.accept(ModItems.GLOWBREW);
+                        output.accept(ModItems.MUSHROOM_STOUT);
+                        output.accept(ModItems.WITHER_STOUT);
+                        output.accept(ModItems.BATTLE_BREW);
                         output.accept(ModItems.STEIN_GLASS);
                         output.accept(ModBlocks.BREWING_KEG);
                         output.accept(ModItems.LIGHTNING_STAFF);
@@ -125,6 +135,7 @@ public class ModCreativeModeTabs {
                         output.accept(ModItems.GOBLIN_SPAWN_EGG);
                         output.accept(ModItems.GNOME_SPAWN_EGG);
                         output.accept(ModItems.LYTEBUG_SPAWN_EGG);
+                        output.accept(ModItems.ECLIPSE_KING_SPAWN_EGG);
 
                         // Ghostwillow wood set
                         output.accept(ModBlocks.GHOSTWILLOW_LOG);

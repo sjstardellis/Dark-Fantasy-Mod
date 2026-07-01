@@ -1,0 +1,12 @@
+{
+  "wants": {
+    "id": "darkfantasy:hops",
+    "count": 14.0
+  },
+  "gives": {
+    "id": "minecraft:emerald"
+  },
+  "max_uses": 16.0,
+  "xp": 5.0,
+  "reputation_discount": 0.05
+}

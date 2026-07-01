@@ -133,4 +133,21 @@ public final class ModMaterials {
             0.1F,   // knockback resistance (netherite 0.1)
             ModTags.Items.ECLIPSIUM_REPAIR,
             ECLIPSIUM_ARMOR_ASSET);
+
+    // ---- Eclipse Crown (boss drop; helmet-only, no repair material) ---------
+    // Its own equipment asset so the worn crown texture is separate from the
+    // eclipsium armor set. Drives assets/darkfantasy/equipment/eclipse_crown.json.
+    public static final ResourceKey<EquipmentAsset> ECLIPSE_CROWN_ASSET =
+            ResourceKey.create(EquipmentAssets.ROOT_ID,
+                    Identifier.fromNamespaceAndPath(DarkFantasy.MOD_ID, "eclipse_crown"));
+
+    public static final ArmorMaterial ECLIPSE_CROWN_ARMOR = new ArmorMaterial(
+            45,     // durability multiplier — a regal, sturdy relic
+            Map.of(ArmorType.HELMET, 4),   // helmet-only, strong head defense
+            18,     // enchantability
+            SoundEvents.ARMOR_EQUIP_NETHERITE,
+            3.0F,   // toughness
+            0.1F,   // knockback resistance
+            ModTags.Items.ECLIPSIUM_REPAIR,  // repaired with eclipsium, fitting its tier
+            ECLIPSE_CROWN_ASSET);
 }

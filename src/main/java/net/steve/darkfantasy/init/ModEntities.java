@@ -1,6 +1,7 @@
 package net.steve.darkfantasy.init;
 
 import net.steve.darkfantasy.DarkFantasy;
+import net.steve.darkfantasy.entity.custom.EclipseKingEntity;
 import net.steve.darkfantasy.entity.custom.ElectroDragonEntity;
 import net.steve.darkfantasy.entity.custom.FairyEntity;
 import net.steve.darkfantasy.entity.custom.FrostBoltProjectile;
@@ -41,6 +42,8 @@ public class ModEntities {
             Registries.ENTITY_TYPE, Identifier.fromNamespaceAndPath(DarkFantasy.MOD_ID, "gnome"));
     private static final ResourceKey<EntityType<?>> LYTEBUG_KEY = ResourceKey.create(
             Registries.ENTITY_TYPE, Identifier.fromNamespaceAndPath(DarkFantasy.MOD_ID, "lytebug"));
+    private static final ResourceKey<EntityType<?>> ECLIPSE_KING_KEY = ResourceKey.create(
+            Registries.ENTITY_TYPE, Identifier.fromNamespaceAndPath(DarkFantasy.MOD_ID, "eclipse_king"));
 
     public static final DeferredHolder<EntityType<?>, EntityType<FairyEntity>> FAIRY =
             ENTITY_TYPES.register("fairy",
@@ -88,6 +91,20 @@ public class ModEntities {
                             .sized(0.6F, 1.2F)
                             .clientTrackingRange(8)
                             .build(GOBLIN_KEY));
+
+    /**
+     * Eclipse King — the celestial capstone boss. Rendered on the player model
+     * ({@link net.steve.darkfantasy.client.renderer.EclipseKingRenderer}); the SCALE
+     * attribute (1.2) makes him larger than a player. Tracked at a generous range so the
+     * boss bar appears from afar.
+     */
+    public static final DeferredHolder<EntityType<?>, EntityType<EclipseKingEntity>> ECLIPSE_KING =
+            ENTITY_TYPES.register("eclipse_king",
+                    () -> EntityType.Builder.<EclipseKingEntity>of(EclipseKingEntity::new, MobCategory.MONSTER)
+                            .sized(0.6F, 1.95F)
+                            .clientTrackingRange(16)
+                            .fireImmune()
+                            .build(ECLIPSE_KING_KEY));
 
     /**
      * Gnome — tiny splash-potion-throwing menace that uses the witch model at 5%

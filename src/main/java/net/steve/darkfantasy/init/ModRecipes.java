@@ -2,6 +2,7 @@ package net.steve.darkfantasy.init;
 
 import net.steve.darkfantasy.DarkFantasy;
 import net.steve.darkfantasy.recipe.AlchemyRecipe;
+import net.steve.darkfantasy.recipe.BrewingRecipe;
 import net.minecraft.core.registries.Registries;
 import net.minecraft.resources.Identifier;
 import net.minecraft.world.item.crafting.RecipeSerializer;
@@ -25,6 +26,14 @@ public class ModRecipes {
     public static final Supplier<RecipeType<AlchemyRecipe>> ALCHEMY_TYPE =
             TYPES.register("alchemy", () -> RecipeType.simple(
                     Identifier.fromNamespaceAndPath(DarkFantasy.MOD_ID, "alchemy")));
+
+    public static final Supplier<RecipeSerializer<BrewingRecipe>> BREWING_SERIALIZER =
+            SERIALIZERS.register("brewing",
+                    () -> new RecipeSerializer<>(BrewingRecipe.MAP_CODEC, BrewingRecipe.STREAM_CODEC));
+
+    public static final Supplier<RecipeType<BrewingRecipe>> BREWING_TYPE =
+            TYPES.register("brewing", () -> RecipeType.simple(
+                    Identifier.fromNamespaceAndPath(DarkFantasy.MOD_ID, "brewing")));
 
     public static void register(IEventBus eventBus) {
         SERIALIZERS.register(eventBus);

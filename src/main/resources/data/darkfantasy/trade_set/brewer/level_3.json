@@ -1,0 +1,8 @@
+{
+  "amount": 2.0,
+  "random_sequence": "darkfantasy:trade_set/brewer/level_3",
+  "trades": [
+    "darkfantasy:brewer/3/emerald_hops_bulk",
+    "darkfantasy:brewer/3/wheat_emerald"
+  ]
+}

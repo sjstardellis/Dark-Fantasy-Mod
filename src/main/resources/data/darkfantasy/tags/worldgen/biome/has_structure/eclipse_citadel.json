@@ -1,0 +1,8 @@
+{
+  "values": [
+    "minecraft:ice_spikes",
+    "#minecraft:is_mountain",
+    "minecraft:windswept_hills",
+    "minecraft:windswept_gravelly_hills"
+  ]
+}
