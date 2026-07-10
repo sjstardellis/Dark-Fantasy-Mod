@@ -1,0 +1,6 @@
+{
+  "parent": "darkfantasy:item/dawnmetal_arbalest",
+  "textures": {
+    "layer0": "darkfantasy:item/dawnmetal_arbalest_pulling_2"
+  }
+}

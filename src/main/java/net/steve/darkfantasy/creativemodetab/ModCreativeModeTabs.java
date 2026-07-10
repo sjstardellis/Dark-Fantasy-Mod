@@ -78,6 +78,10 @@ public class ModCreativeModeTabs {
                         output.accept(ModItems.DAWNMETAL_BOOTS);
                         output.accept(ModItems.DAWNMETAL_SUNLANCE);
 
+                        output.accept(ModItems.CRESCENT_BOW);
+                        output.accept(ModItems.THROWING_DAGGER);
+                        output.accept(ModItems.DAWNMETAL_ARBALEST);
+
                         output.accept(ModBlocks.SHADOWSTEEL_ORE);
                         output.accept(ModBlocks.SHADOWSTEEL_DEEPSLATE_ORE);
 
@@ -91,10 +95,18 @@ public class ModCreativeModeTabs {
                         output.accept(ModItems.LARIMAR_PEARL);
                         output.accept(ModItems.ARCANE_ASH);
                         output.accept(ModItems.STORM_SCALE);
+                        output.accept(ModItems.FALLEN_STAR);
+                        output.accept(ModItems.UMBRA_ESSENCE);
+                        output.accept(ModItems.CINDER_FANG);
+                        output.accept(ModItems.HAG_ICHOR);
                         output.accept(ModItems.MOONLIGHT_ELIXIR);
                         output.accept(ModItems.STONESKIN_ELIXIR);
                         output.accept(ModItems.EMBERBLOOD_ELIXIR);
                         output.accept(ModItems.WISPSTEP_ELIXIR);
+                        output.accept(ModItems.STARLIGHT_ELIXIR);
+                        output.accept(ModItems.UMBRAL_ELIXIR);
+                        output.accept(ModItems.HOUNDSBLOOD_ELIXIR);
+                        output.accept(ModItems.WITCHBANE_ELIXIR);
                         output.accept(ModBlocks.MERCURYGLASS_ORE);
                         output.accept(ModBlocks.EMBERSTONE_ORE);
                         output.accept(ModBlocks.LARIMAR_PEARL_ORE);
@@ -129,6 +141,7 @@ public class ModCreativeModeTabs {
                         output.accept(ModItems.PROSPECTOR_TOME);
                         output.accept(ModItems.STASIS_TOME);
                         output.accept(ModItems.EVOKER_CLAW_TOME);
+                        output.accept(ModItems.ECLIPSE_TOME);
                         output.accept(ModItems.FAIRY_SPAWN_EGG);
                         output.accept(ModItems.WIZARD_SPAWN_EGG);
                         output.accept(ModItems.ELECTRO_DRAGON_SPAWN_EGG);
@@ -136,6 +149,9 @@ public class ModCreativeModeTabs {
                         output.accept(ModItems.GNOME_SPAWN_EGG);
                         output.accept(ModItems.LYTEBUG_SPAWN_EGG);
                         output.accept(ModItems.ECLIPSE_KING_SPAWN_EGG);
+                        output.accept(ModItems.CINDER_HOUND_SPAWN_EGG);
+                        output.accept(ModItems.UMBRAL_WRAITH_SPAWN_EGG);
+                        output.accept(ModItems.BOG_HAG_SPAWN_EGG);
 
                         // Ghostwillow wood set
                         output.accept(ModBlocks.GHOSTWILLOW_LOG);

@@ -1,0 +1,15 @@
+{
+  "structures": [
+    {
+      "structure": "darkfantasy:fairy_ring",
+      "weight": 1
+    }
+  ],
+  "placement": {
+    "type": "minecraft:random_spread",
+    "spread_type": "linear",
+    "spacing": 18,
+    "separation": 7,
+    "salt": 40331875
+  }
+}

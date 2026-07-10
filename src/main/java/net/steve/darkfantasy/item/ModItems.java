@@ -7,10 +7,14 @@ import net.steve.darkfantasy.init.ModEntities;
 import net.steve.darkfantasy.init.ModFluids;
 import net.steve.darkfantasy.item.custom.BlinkStaffItem;
 import net.steve.darkfantasy.item.custom.CinderStaffItem;
+import net.steve.darkfantasy.item.custom.CrescentBowItem;
 import net.steve.darkfantasy.item.custom.DaggerItem;
+import net.steve.darkfantasy.item.custom.DawnmetalArbalestItem;
+import net.steve.darkfantasy.item.custom.ThrowingDaggerItem;
 import net.steve.darkfantasy.item.custom.FireballStaffItem;
 import net.steve.darkfantasy.item.custom.FrostStaffItem;
 import net.steve.darkfantasy.item.custom.EclipseGreatswordItem;
+import net.steve.darkfantasy.item.custom.EclipseTomeItem;
 import net.steve.darkfantasy.item.custom.EvokerClawTomeItem;
 import net.steve.darkfantasy.item.custom.LightningStaffItem;
 import net.steve.darkfantasy.item.custom.MaelstromTomeItem;
@@ -155,6 +159,17 @@ public class ModItems {
     public static final DeferredItem<SunlanceItem> DAWNMETAL_SUNLANCE = ITEMS.registerItem("dawnmetal_sunlance",
             p -> new SunlanceItem(SunlanceItem.applyProperties(p)));
 
+    // ---- Ranged line: one per metal identity (lunar bow / stealth thrown / solar crossbow) ----
+    public static final DeferredItem<CrescentBowItem> CRESCENT_BOW = ITEMS.registerItem("crescent_bow",
+            p -> new CrescentBowItem(p.durability(420).enchantable(1)));
+    public static final DeferredItem<ThrowingDaggerItem> THROWING_DAGGER = ITEMS.registerItem("throwing_dagger",
+            p -> new ThrowingDaggerItem(p.stacksTo(16)));
+    public static final DeferredItem<DawnmetalArbalestItem> DAWNMETAL_ARBALEST = ITEMS.registerItem("dawnmetal_arbalest",
+            p -> new DawnmetalArbalestItem(p.stacksTo(1).durability(520)
+                    .component(net.minecraft.core.component.DataComponents.CHARGED_PROJECTILES,
+                            net.minecraft.world.item.component.ChargedProjectiles.EMPTY)
+                    .enchantable(1)));
+
     // ---- Biome gems (each mined only in its rare biome; staff cores + alchemy reagents) ----
     public static final DeferredItem<Item> MERCURYGLASS = ITEMS.registerSimpleItem("mercuryglass");
     public static final DeferredItem<Item> EMBERSTONE = ITEMS.registerSimpleItem("emberstone");
@@ -163,6 +178,15 @@ public class ModItems {
     // ---- Alchemy reagents (mob drops) ----
     public static final DeferredItem<Item> ARCANE_ASH = ITEMS.registerSimpleItem("arcane_ash");
     public static final DeferredItem<Item> STORM_SCALE = ITEMS.registerSimpleItem("storm_scale");
+    /** Falls from the night sky during a starfall (see StarfallHandler). */
+    public static final DeferredItem<Item> FALLEN_STAR = ITEMS.registerItem("fallen_star",
+            p -> new Item(p.rarity(Rarity.UNCOMMON)));
+    /** Dropped by umbral wraiths. */
+    public static final DeferredItem<Item> UMBRA_ESSENCE = ITEMS.registerSimpleItem("umbra_essence");
+    /** Dropped by cinder hounds. */
+    public static final DeferredItem<Item> CINDER_FANG = ITEMS.registerSimpleItem("cinder_fang");
+    /** Dropped by bog hags. */
+    public static final DeferredItem<Item> HAG_ICHOR = ITEMS.registerSimpleItem("hag_ichor");
 
     // ---- Drinkable elixirs (brewed at the alchemy stand) ----
     public static final DeferredItem<Item> MOONLIGHT_ELIXIR = ITEMS.registerItem("moonlight_elixir",
@@ -173,6 +197,14 @@ public class ModItems {
             p -> new Item(p.stacksTo(8).food(ModFoods.ELIXIR, ModFoods.EMBERBLOOD_ELIXIR)));
     public static final DeferredItem<Item> WISPSTEP_ELIXIR = ITEMS.registerItem("wispstep_elixir",
             p -> new Item(p.stacksTo(8).food(ModFoods.ELIXIR, ModFoods.WISPSTEP_ELIXIR)));
+    public static final DeferredItem<Item> STARLIGHT_ELIXIR = ITEMS.registerItem("starlight_elixir",
+            p -> new Item(p.stacksTo(8).food(ModFoods.ELIXIR, ModFoods.STARLIGHT_ELIXIR)));
+    public static final DeferredItem<Item> UMBRAL_ELIXIR = ITEMS.registerItem("umbral_elixir",
+            p -> new Item(p.stacksTo(8).food(ModFoods.ELIXIR, ModFoods.UMBRAL_ELIXIR)));
+    public static final DeferredItem<Item> HOUNDSBLOOD_ELIXIR = ITEMS.registerItem("houndsblood_elixir",
+            p -> new Item(p.stacksTo(8).food(ModFoods.ELIXIR, ModFoods.HOUNDSBLOOD_ELIXIR)));
+    public static final DeferredItem<Item> WITCHBANE_ELIXIR = ITEMS.registerItem("witchbane_elixir",
+            p -> new Item(p.stacksTo(8).food(ModFoods.ELIXIR, ModFoods.WITCHBANE_ELIXIR)));
 
     public static final DeferredItem<Item> FAIRY_DUST = ITEMS.registerSimpleItem("fairy_dust");
 
@@ -251,6 +283,10 @@ public class ModItems {
             properties -> new StasisTomeItem(properties.durability(30).stacksTo(1)));
     public static final DeferredItem<Item> EVOKER_CLAW_TOME = ITEMS.registerItem("evoker_claw_tome",
             properties -> new EvokerClawTomeItem(properties.durability(30).stacksTo(1)));
+    /** Boss loot only — dropped by the Eclipse King, no recipe. */
+    public static final DeferredItem<Item> ECLIPSE_TOME = ITEMS.registerItem("eclipse_tome",
+            properties -> new EclipseTomeItem(properties.durability(40).stacksTo(1)
+                    .fireResistant().rarity(Rarity.EPIC)));
 
     // Spawn egg is tinted automatically via Item.Properties.spawnEgg(EntityType).
     public static final DeferredItem<SpawnEggItem> FAIRY_SPAWN_EGG = ITEMS.registerItem(
@@ -280,6 +316,18 @@ public class ModItems {
     public static final DeferredItem<SpawnEggItem> ECLIPSE_KING_SPAWN_EGG = ITEMS.registerItem(
             "eclipse_king_spawn_egg",
             properties -> new SpawnEggItem(properties.spawnEgg(ModEntities.ECLIPSE_KING.get())));
+
+    public static final DeferredItem<SpawnEggItem> CINDER_HOUND_SPAWN_EGG = ITEMS.registerItem(
+            "cinder_hound_spawn_egg",
+            properties -> new SpawnEggItem(properties.spawnEgg(ModEntities.CINDER_HOUND.get())));
+
+    public static final DeferredItem<SpawnEggItem> UMBRAL_WRAITH_SPAWN_EGG = ITEMS.registerItem(
+            "umbral_wraith_spawn_egg",
+            properties -> new SpawnEggItem(properties.spawnEgg(ModEntities.UMBRAL_WRAITH.get())));
+
+    public static final DeferredItem<SpawnEggItem> BOG_HAG_SPAWN_EGG = ITEMS.registerItem(
+            "bog_hag_spawn_egg",
+            properties -> new SpawnEggItem(properties.spawnEgg(ModEntities.BOG_HAG.get())));
 
 
     public static void register(IEventBus eventBus) {

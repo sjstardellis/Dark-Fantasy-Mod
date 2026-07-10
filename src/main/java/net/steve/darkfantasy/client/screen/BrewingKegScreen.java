@@ -57,7 +57,7 @@ public class BrewingKegScreen extends AbstractContainerScreen<BrewingKegMenu> {
 
     // Countdown timer (MM:SS) — drawn only while brewing.
     private static final int TIMER_CENTER_X = 87;
-    private static final int TIMER_Y = 32;
+    private static final int TIMER_Y = 25;
     private static final int TIMER_COLOR = 0xFF444444;
 
     public BrewingKegScreen(BrewingKegMenu menu, Inventory inventory, Component title) {
@@ -148,14 +148,14 @@ public class BrewingKegScreen extends AbstractContainerScreen<BrewingKegMenu> {
         int length = Math.min(28, (int) (28.0F * progress / maxProgress));
         if (length > 0) {
             graphics.blitSprite(RenderPipelines.GUI_TEXTURED, BREW_PROGRESS_SPRITE,
-                    9, 28, 0, 0, guiX + 97, guiY + 16, 9, length);
+                    9, 28, 0, 0, guiX + 105, guiY + 16, 9, length);
         }
 
         // Bubbles — sprite 12×29 at (63,14), rising from the bottom.
         length = BUBBLELENGTHS[progress / 2 % 7];
         if (length > 0) {
             graphics.blitSprite(RenderPipelines.GUI_TEXTURED, BUBBLES_SPRITE,
-                    12, 29, 0, 29 - length, guiX + 63, guiY + 14 + 29 - length, 12, length);
+                    12, 29, 0, 29 - length, guiX + 57, guiY + 14 + 29 - length, 12, length);
         }
     }
 

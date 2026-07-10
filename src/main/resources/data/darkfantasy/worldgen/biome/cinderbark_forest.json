@@ -104,9 +104,12 @@
   "spawners": {
     "ambient": [],
     "axolotls": [],
-    "creature": [],
+    "creature": [
+      {"type": "darkfantasy:cinder_hound", "maxCount": 4, "minCount": 2, "weight": 10}
+    ],
     "misc": [],
     "monster": [
+      {"type": "darkfantasy:umbral_wraith", "maxCount": 2, "minCount": 1, "weight": 10},
       {"type": "minecraft:zombie", "maxCount": 4, "minCount": 1, "weight": 30},
       {"type": "minecraft:skeleton", "maxCount": 2, "minCount": 1, "weight": 20},
       {"type": "minecraft:magma_cube", "maxCount": 4, "minCount": 2, "weight": 15},

@@ -1,0 +1,14 @@
+{
+  "type": "darkfantasy:alchemy",
+  "ingredients": [
+    "darkfantasy:cinder_fang",
+    "darkfantasy:hops",
+    "minecraft:glass_bottle"
+  ],
+  "result": {
+    "id": "darkfantasy:houndsblood_elixir",
+    "count": 1
+  },
+  "elixir": 150,
+  "cook_time": 200
+}

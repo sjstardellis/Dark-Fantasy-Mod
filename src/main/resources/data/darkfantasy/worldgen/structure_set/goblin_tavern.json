@@ -1,0 +1,15 @@
+{
+  "structures": [
+    {
+      "structure": "darkfantasy:goblin_tavern",
+      "weight": 1
+    }
+  ],
+  "placement": {
+    "type": "minecraft:random_spread",
+    "spread_type": "linear",
+    "spacing": 34,
+    "separation": 14,
+    "salt": 48120397
+  }
+}

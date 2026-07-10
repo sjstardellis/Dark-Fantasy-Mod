@@ -59,6 +59,8 @@ public class ModBlockLootTableProvider extends BlockLootSubProvider {
         // getKnownBlocks validation automatically.)
         add(ModBlocks.SKYLANDS_PORTAL.get(), noDrop());
         add(ModBlocks.TWILIGHT_PORTAL.get(), noDrop());
+        // OBSIDIAN_BRICK / OBSIDIAN_GLASS use hand-written loot tables under
+        // src/main/resources — excluded from getKnownBlocks below.
 
         // Wood sets — every block drops itself by default. Leaves use vanilla
         // leaves-drop logic (sapling chance + shears/silk-touch override).
@@ -117,7 +119,9 @@ public class ModBlockLootTableProvider extends BlockLootSubProvider {
                 .filter(b -> b != ModBlocks.BREWING_KEG.get()
                           && b != ModBlocks.HOPS_CROP.get()
                           && b != ModBlocks.GNOME_BURROW.get()
-                          && b != ModBlocks.LYTESTONE.get())
+                          && b != ModBlocks.LYTESTONE.get()
+                          && b != ModBlocks.OBSIDIAN_BRICK.get()
+                          && b != ModBlocks.OBSIDIAN_GLASS.get())
                 .toList();
     }
 

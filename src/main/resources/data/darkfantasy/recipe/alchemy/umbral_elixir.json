@@ -1,0 +1,14 @@
+{
+  "type": "darkfantasy:alchemy",
+  "ingredients": [
+    "darkfantasy:umbra_essence",
+    "darkfantasy:arcane_ash",
+    "minecraft:glass_bottle"
+  ],
+  "result": {
+    "id": "darkfantasy:umbral_elixir",
+    "count": 1
+  },
+  "elixir": 150,
+  "cook_time": 200
+}

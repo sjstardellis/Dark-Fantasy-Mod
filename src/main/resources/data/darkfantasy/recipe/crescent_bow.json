@@ -1,0 +1,16 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "pattern": [
+    " MS",
+    "M S",
+    " MS"
+  ],
+  "key": {
+    "M": "darkfantasy:moonsilver",
+    "S": "minecraft:string"
+  },
+  "result": {
+    "id": "darkfantasy:crescent_bow",
+    "count": 1
+  }
+}

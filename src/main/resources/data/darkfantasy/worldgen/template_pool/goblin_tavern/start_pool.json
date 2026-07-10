@@ -1,0 +1,15 @@
+{
+  "name": "darkfantasy:goblin_tavern/start_pool",
+  "fallback": "minecraft:empty",
+  "elements": [
+    {
+      "weight": 1,
+      "element": {
+        "element_type": "minecraft:single_pool_element",
+        "location": "darkfantasy:goblin_tavern",
+        "processors": "minecraft:empty",
+        "projection": "rigid"
+      }
+    }
+  ]
+}

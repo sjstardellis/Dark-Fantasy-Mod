@@ -76,7 +76,14 @@ Four metal tiers, each with a full tool + armor set and a unique **signature wea
 Naturally generated, biome-gated landmarks:
 
 - **Grand Archive** — a giant multi-floor gothic library with a basement vault, corner towers, hundreds of bookshelves (23 of them *enchanted*), guardians, and treasure.
+- **Eclipse Citadel** — the Eclipse King's cathedral-fortress: a gatehouse undercroft, a great cathedral nave with triforium galleries and an organ loft, chapter halls around a cloister, a gallery of entombed kings — and at the top, the King's own boss arena: an octagonal domed sanctum lit through a tinted-glass eclipse in its apex.
 - **Eclipse Temple**, **Wizard Tower**, **Crypt**, **Ring Ruins**, **Charred Spire**, and **Ruined Church** — themed ruins with their own loot and inhabitants.
+- **Sunken Belfry** — a leaning, half-drowned bell tower in the Ghostwillow Marsh; larimar treasure waits in its flooded crypt.
+- **Moonwell Sanctum** — a ruined moon-cult observatory in the Gravewood Grove: a glowing crescent pool, standing stones, and wizard astronomers.
+- **Cinderforge Bastion** — a goblin forge-fort in the Cinderbark Forest, built around an emberstone furnace heart and a live lava channel.
+- **Fairy Ring** — a Twilight Forest glade of giant mushrooms and dew-lights where the fairies dance.
+- **Gibbet Crossroads** — grim little waypoints scattered through the dark forests: a gallows, a swinging cage, a jailer's shack.
+- **Umbral Obelisk** — lone monoliths guarded by wither skeletons; each holds a star chart pointing toward the Eclipse Citadel.
 - **Gnome Hollow** & **Goblin Camp** — dwellings for the mod's namesake creatures.
 
 ## 🧱 Blocks & Worldbuilding

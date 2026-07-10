@@ -117,6 +117,21 @@ public class DarkFantasyClient {
         // Frost bolt renders as its mercuryglass core via the same thrown-item path.
         event.registerEntityRenderer(ModEntities.FROST_BOLT.get(),
                 net.minecraft.client.renderer.entity.ThrownItemRenderer::new);
+
+        event.registerEntityRenderer(ModEntities.CINDER_HOUND.get(),
+                net.steve.darkfantasy.client.renderer.CinderHoundRenderer::new);
+        event.registerEntityRenderer(ModEntities.UMBRAL_WRAITH.get(),
+                net.steve.darkfantasy.client.renderer.UmbralWraithRenderer::new);
+        event.registerEntityRenderer(ModEntities.BOG_HAG.get(),
+                net.steve.darkfantasy.client.renderer.BogHagRenderer::new);
+        // Thrown-item visuals: the dagger spins as its own item, the umbral bolt as a
+        // mote of umbra essence, the falling star as the fallen-star reagent.
+        event.registerEntityRenderer(ModEntities.THROWING_DAGGER.get(),
+                net.minecraft.client.renderer.entity.ThrownItemRenderer::new);
+        event.registerEntityRenderer(ModEntities.UMBRAL_BOLT.get(),
+                net.minecraft.client.renderer.entity.ThrownItemRenderer::new);
+        event.registerEntityRenderer(ModEntities.FALLEN_STAR.get(),
+                net.minecraft.client.renderer.entity.ThrownItemRenderer::new);
     }
 
     /**

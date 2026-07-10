@@ -1,0 +1,15 @@
+{
+  "structures": [
+    {
+      "structure": "darkfantasy:cinderforge_bastion",
+      "weight": 1
+    }
+  ],
+  "placement": {
+    "type": "minecraft:random_spread",
+    "spread_type": "linear",
+    "spacing": 26,
+    "separation": 11,
+    "salt": 66019217
+  }
+}

@@ -1,0 +1,15 @@
+{
+  "structures": [
+    {
+      "structure": "darkfantasy:umbral_obelisk",
+      "weight": 1
+    }
+  ],
+  "placement": {
+    "type": "minecraft:random_spread",
+    "spread_type": "linear",
+    "spacing": 30,
+    "separation": 13,
+    "salt": 53321169
+  }
+}

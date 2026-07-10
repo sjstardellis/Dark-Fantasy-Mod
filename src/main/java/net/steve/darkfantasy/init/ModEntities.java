@@ -1,15 +1,21 @@
 package net.steve.darkfantasy.init;
 
 import net.steve.darkfantasy.DarkFantasy;
+import net.steve.darkfantasy.entity.custom.BogHagEntity;
+import net.steve.darkfantasy.entity.custom.CinderHoundEntity;
 import net.steve.darkfantasy.entity.custom.EclipseKingEntity;
 import net.steve.darkfantasy.entity.custom.ElectroDragonEntity;
 import net.steve.darkfantasy.entity.custom.FairyEntity;
+import net.steve.darkfantasy.entity.custom.FallenStarEntity;
 import net.steve.darkfantasy.entity.custom.FrostBoltProjectile;
 import net.steve.darkfantasy.entity.custom.GnomeEntity;
 import net.steve.darkfantasy.entity.custom.GoblinEntity;
 import net.steve.darkfantasy.entity.custom.GoblinRockProjectile;
 import net.steve.darkfantasy.entity.custom.LightningBoltProjectile;
 import net.steve.darkfantasy.entity.custom.LytebugEntity;
+import net.steve.darkfantasy.entity.custom.ThrowingDaggerProjectile;
+import net.steve.darkfantasy.entity.custom.UmbralBoltProjectile;
+import net.steve.darkfantasy.entity.custom.UmbralWraithEntity;
 import net.steve.darkfantasy.entity.custom.WizardEntity;
 import net.minecraft.core.registries.Registries;
 import net.minecraft.resources.Identifier;
@@ -155,6 +161,75 @@ public class ModEntities {
                             .clientTrackingRange(4)
                             .updateInterval(10)
                             .build(FROST_BOLT_KEY));
+
+    private static final ResourceKey<EntityType<?>> CINDER_HOUND_KEY = ResourceKey.create(
+            Registries.ENTITY_TYPE, Identifier.fromNamespaceAndPath(DarkFantasy.MOD_ID, "cinder_hound"));
+    private static final ResourceKey<EntityType<?>> UMBRAL_WRAITH_KEY = ResourceKey.create(
+            Registries.ENTITY_TYPE, Identifier.fromNamespaceAndPath(DarkFantasy.MOD_ID, "umbral_wraith"));
+    private static final ResourceKey<EntityType<?>> BOG_HAG_KEY = ResourceKey.create(
+            Registries.ENTITY_TYPE, Identifier.fromNamespaceAndPath(DarkFantasy.MOD_ID, "bog_hag"));
+    private static final ResourceKey<EntityType<?>> UMBRAL_BOLT_KEY = ResourceKey.create(
+            Registries.ENTITY_TYPE, Identifier.fromNamespaceAndPath(DarkFantasy.MOD_ID, "umbral_bolt"));
+    private static final ResourceKey<EntityType<?>> THROWING_DAGGER_KEY = ResourceKey.create(
+            Registries.ENTITY_TYPE, Identifier.fromNamespaceAndPath(DarkFantasy.MOD_ID, "throwing_dagger"));
+    private static final ResourceKey<EntityType<?>> FALLEN_STAR_KEY = ResourceKey.create(
+            Registries.ENTITY_TYPE, Identifier.fromNamespaceAndPath(DarkFantasy.MOD_ID, "fallen_star"));
+
+    /**
+     * Cinder Hound — the Cinderbark Forest's ember-wolf, tamable with emberstone.
+     * Wolf-sized; CREATURE category so packs roam by day like vanilla wolves.
+     */
+    public static final DeferredHolder<EntityType<?>, EntityType<CinderHoundEntity>> CINDER_HOUND =
+            ENTITY_TYPES.register("cinder_hound",
+                    () -> EntityType.Builder.<CinderHoundEntity>of(CinderHoundEntity::new, MobCategory.CREATURE)
+                            .sized(0.6F, 0.85F)
+                            .clientTrackingRange(10)
+                            .fireImmune()
+                            .build(CINDER_HOUND_KEY));
+
+    /** Umbral Wraith — night-stalking shade with blink and blinding bolts. */
+    public static final DeferredHolder<EntityType<?>, EntityType<UmbralWraithEntity>> UMBRAL_WRAITH =
+            ENTITY_TYPES.register("umbral_wraith",
+                    () -> EntityType.Builder.<UmbralWraithEntity>of(UmbralWraithEntity::new, MobCategory.MONSTER)
+                            .sized(0.6F, 1.95F)
+                            .clientTrackingRange(8)
+                            .build(UMBRAL_WRAITH_KEY));
+
+    /** Bog Hag — the marsh's potion-slinging crone (witch brain, hag hide). */
+    public static final DeferredHolder<EntityType<?>, EntityType<BogHagEntity>> BOG_HAG =
+            ENTITY_TYPES.register("bog_hag",
+                    () -> EntityType.Builder.<BogHagEntity>of(BogHagEntity::new, MobCategory.MONSTER)
+                            .sized(0.6F, 1.95F)
+                            .clientTrackingRange(8)
+                            .build(BOG_HAG_KEY));
+
+    /** Blinding shadow bolt spat by the umbral wraith. */
+    public static final DeferredHolder<EntityType<?>, EntityType<UmbralBoltProjectile>> UMBRAL_BOLT =
+            ENTITY_TYPES.register("umbral_bolt",
+                    () -> EntityType.Builder.<UmbralBoltProjectile>of(UmbralBoltProjectile::new, MobCategory.MISC)
+                            .sized(0.25F, 0.25F)
+                            .clientTrackingRange(4)
+                            .updateInterval(10)
+                            .build(UMBRAL_BOLT_KEY));
+
+    /** Player-thrown shadowsteel dagger. */
+    public static final DeferredHolder<EntityType<?>, EntityType<ThrowingDaggerProjectile>> THROWING_DAGGER =
+            ENTITY_TYPES.register("throwing_dagger",
+                    () -> EntityType.Builder.<ThrowingDaggerProjectile>of(ThrowingDaggerProjectile::new, MobCategory.MISC)
+                            .sized(0.25F, 0.25F)
+                            .clientTrackingRange(4)
+                            .updateInterval(10)
+                            .build(THROWING_DAGGER_KEY));
+
+    /** The starfall event's falling star (see StarfallHandler). */
+    public static final DeferredHolder<EntityType<?>, EntityType<FallenStarEntity>> FALLEN_STAR =
+            ENTITY_TYPES.register("fallen_star",
+                    () -> EntityType.Builder.<FallenStarEntity>of(FallenStarEntity::new, MobCategory.MISC)
+                            .sized(0.5F, 0.5F)
+                            .clientTrackingRange(32)
+                            .updateInterval(10)
+                            .fireImmune()
+                            .build(FALLEN_STAR_KEY));
 
     public static void register(IEventBus eventBus) {
         ENTITY_TYPES.register(eventBus);

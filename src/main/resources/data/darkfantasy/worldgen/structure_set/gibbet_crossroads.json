@@ -1,0 +1,15 @@
+{
+  "structures": [
+    {
+      "structure": "darkfantasy:gibbet_crossroads",
+      "weight": 1
+    }
+  ],
+  "placement": {
+    "type": "minecraft:random_spread",
+    "spread_type": "linear",
+    "spacing": 16,
+    "separation": 6,
+    "salt": 28479911
+  }
+}

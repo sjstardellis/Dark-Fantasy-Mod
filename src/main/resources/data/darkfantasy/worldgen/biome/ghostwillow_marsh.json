@@ -128,7 +128,9 @@
       {"type": "minecraft:slime", "maxCount": 2, "minCount": 1, "weight": 40},
       {"type": "minecraft:witch", "maxCount": 1, "minCount": 1, "weight": 20},
       {"type": "minecraft:zombie", "maxCount": 2, "minCount": 1, "weight": 25},
-      {"type": "minecraft:spider", "maxCount": 2, "minCount": 1, "weight": 20}
+      {"type": "minecraft:spider", "maxCount": 2, "minCount": 1, "weight": 20},
+      {"type": "darkfantasy:umbral_wraith", "maxCount": 2, "minCount": 1, "weight": 10},
+      {"type": "darkfantasy:bog_hag", "maxCount": 1, "minCount": 1, "weight": 18}
     ],
     "underground_water_creature": [],
     "water_ambient": [],

@@ -33,6 +33,15 @@ public class ModModelProvider extends ModelProvider {
         itemModels.generateFlatItem(ModItems.LARIMAR_PEARL.get(), ModelTemplates.FLAT_ITEM);
         itemModels.generateFlatItem(ModItems.ARCANE_ASH.get(), ModelTemplates.FLAT_ITEM);
         itemModels.generateFlatItem(ModItems.STORM_SCALE.get(), ModelTemplates.FLAT_ITEM);
+        itemModels.generateFlatItem(ModItems.FALLEN_STAR.get(), ModelTemplates.FLAT_ITEM);
+        itemModels.generateFlatItem(ModItems.UMBRA_ESSENCE.get(), ModelTemplates.FLAT_ITEM);
+        itemModels.generateFlatItem(ModItems.CINDER_FANG.get(), ModelTemplates.FLAT_ITEM);
+        itemModels.generateFlatItem(ModItems.HAG_ICHOR.get(), ModelTemplates.FLAT_ITEM);
+        itemModels.generateFlatItem(ModItems.STARLIGHT_ELIXIR.get(), ModelTemplates.FLAT_ITEM);
+        itemModels.generateFlatItem(ModItems.UMBRAL_ELIXIR.get(), ModelTemplates.FLAT_ITEM);
+        itemModels.generateFlatItem(ModItems.HOUNDSBLOOD_ELIXIR.get(), ModelTemplates.FLAT_ITEM);
+        itemModels.generateFlatItem(ModItems.WITCHBANE_ELIXIR.get(), ModelTemplates.FLAT_ITEM);
+        itemModels.generateFlatItem(ModItems.THROWING_DAGGER.get(), ModelTemplates.FLAT_HANDHELD_ITEM);
         itemModels.generateFlatItem(ModItems.MOONLIGHT_ELIXIR.get(), ModelTemplates.FLAT_ITEM);
         itemModels.generateFlatItem(ModItems.STONESKIN_ELIXIR.get(), ModelTemplates.FLAT_ITEM);
         itemModels.generateFlatItem(ModItems.EMBERBLOOD_ELIXIR.get(), ModelTemplates.FLAT_ITEM);
@@ -240,6 +249,12 @@ public class ModModelProvider extends ModelProvider {
                                && holder.value() != net.steve.darkfantasy.item.ModItems.PROSPECTOR_TOME.get()
                                && holder.value() != net.steve.darkfantasy.item.ModItems.STASIS_TOME.get()
                                && holder.value() != net.steve.darkfantasy.item.ModItems.EVOKER_CLAW_TOME.get()
+                               && holder.value() != net.steve.darkfantasy.item.ModItems.ECLIPSE_TOME.get()
+                               && holder.value() != net.steve.darkfantasy.item.ModItems.CRESCENT_BOW.get()
+                               && holder.value() != net.steve.darkfantasy.item.ModItems.DAWNMETAL_ARBALEST.get()
+                               && holder.value() != net.steve.darkfantasy.item.ModItems.CINDER_HOUND_SPAWN_EGG.get()
+                               && holder.value() != net.steve.darkfantasy.item.ModItems.UMBRAL_WRAITH_SPAWN_EGG.get()
+                               && holder.value() != net.steve.darkfantasy.item.ModItems.BOG_HAG_SPAWN_EGG.get()
                                && holder.value() != ModBlocks.BREWING_KEG.get().asItem()
                                && holder.value() != ModBlocks.GNOME_BURROW.get().asItem()
                                && holder.value() != ModBlocks.OBSIDIAN_BRICK.get().asItem()

@@ -1,0 +1,6 @@
+{
+  "parent": "darkfantasy:item/crescent_bow",
+  "textures": {
+    "layer0": "darkfantasy:item/crescent_bow_pulling_0"
+  }
+}

@@ -129,6 +129,9 @@ public class DarkFantasy {
         event.put(ModEntities.GNOME.get(), GnomeEntity.createAttributes().build());
         event.put(ModEntities.LYTEBUG.get(), LytebugEntity.createAttributes().build());
         event.put(ModEntities.ECLIPSE_KING.get(), net.steve.darkfantasy.entity.custom.EclipseKingEntity.createAttributes().build());
+        event.put(ModEntities.CINDER_HOUND.get(), net.steve.darkfantasy.entity.custom.CinderHoundEntity.createAttributes().build());
+        event.put(ModEntities.UMBRAL_WRAITH.get(), net.steve.darkfantasy.entity.custom.UmbralWraithEntity.createAttributes().build());
+        event.put(ModEntities.BOG_HAG.get(), net.steve.darkfantasy.entity.custom.BogHagEntity.createAttributes().build());
     }
 
     /**
@@ -140,6 +143,24 @@ public class DarkFantasy {
     private static void onRegisterSpawnPlacements(RegisterSpawnPlacementsEvent event) {
         event.register(ModEntities.FAIRY.get(),
                 SpawnPlacementTypes.NO_RESTRICTIONS,
+                Heightmap.Types.MOTION_BLOCKING_NO_LEAVES,
+                Monster::checkAnyLightMonsterSpawnRules,
+                RegisterSpawnPlacementsEvent.Operation.REPLACE);
+        // Cinder hounds roam like wolves: on solid ground (enforced by ON_GROUND),
+        // no light gate — packs prowl the ashen woods by day.
+        event.register(ModEntities.CINDER_HOUND.get(),
+                SpawnPlacementTypes.ON_GROUND,
+                Heightmap.Types.MOTION_BLOCKING_NO_LEAVES,
+                (type, level, reason, pos, random) -> true,
+                RegisterSpawnPlacementsEvent.Operation.REPLACE);
+        // Wraiths and hags follow standard darkness-gated monster placement.
+        event.register(ModEntities.UMBRAL_WRAITH.get(),
+                SpawnPlacementTypes.ON_GROUND,
+                Heightmap.Types.MOTION_BLOCKING_NO_LEAVES,
+                Monster::checkAnyLightMonsterSpawnRules,
+                RegisterSpawnPlacementsEvent.Operation.REPLACE);
+        event.register(ModEntities.BOG_HAG.get(),
+                SpawnPlacementTypes.ON_GROUND,
                 Heightmap.Types.MOTION_BLOCKING_NO_LEAVES,
                 Monster::checkAnyLightMonsterSpawnRules,
                 RegisterSpawnPlacementsEvent.Operation.REPLACE);

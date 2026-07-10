@@ -27,6 +27,16 @@
       "entries": [
         {
           "type": "minecraft:item",
+          "name": "darkfantasy:eclipse_tome"
+        }
+      ]
+    },
+    {
+      "rolls": 1.0,
+      "bonus_rolls": 0.0,
+      "entries": [
+        {
+          "type": "minecraft:item",
           "name": "darkfantasy:eclipsium",
           "functions": [
             {

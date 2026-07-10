@@ -1,0 +1,14 @@
+{
+  "type": "darkfantasy:alchemy",
+  "ingredients": [
+    "darkfantasy:fallen_star",
+    "darkfantasy:lytebug_dust",
+    "minecraft:glass_bottle"
+  ],
+  "result": {
+    "id": "darkfantasy:starlight_elixir",
+    "count": 1
+  },
+  "elixir": 150,
+  "cook_time": 200
+}

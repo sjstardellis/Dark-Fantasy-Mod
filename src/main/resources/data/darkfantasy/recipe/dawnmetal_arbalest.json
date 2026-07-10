@@ -1,0 +1,18 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "pattern": [
+    "SDS",
+    "THT",
+    " T "
+  ],
+  "key": {
+    "S": "minecraft:stick",
+    "D": "darkfantasy:dawnmetal",
+    "T": "minecraft:string",
+    "H": "minecraft:tripwire_hook"
+  },
+  "result": {
+    "id": "darkfantasy:dawnmetal_arbalest",
+    "count": 1
+  }
+}

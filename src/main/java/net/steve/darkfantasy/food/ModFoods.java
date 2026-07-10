@@ -125,4 +125,40 @@ public class ModFoods {
             .onConsume(new ApplyStatusEffectsConsumeEffect(
                     new MobEffectInstance(MobEffects.JUMP_BOOST, 2400, 1), 1.0f))
             .build();
+
+    /** Fallen star + lytebug dust — drift down like starlight. */
+    public static final Consumable STARLIGHT_ELIXIR = Consumables.defaultDrink()
+            .consumeSeconds(1.6f)
+            .onConsume(new ApplyStatusEffectsConsumeEffect(
+                    new MobEffectInstance(MobEffects.SLOW_FALLING, 3600, 0), 1.0f))
+            .onConsume(new ApplyStatusEffectsConsumeEffect(
+                    new MobEffectInstance(MobEffects.ABSORPTION, 2400, 1), 1.0f))
+            .build();
+
+    /** Umbra essence + arcane ash — melt into the dark and move like it. */
+    public static final Consumable UMBRAL_ELIXIR = Consumables.defaultDrink()
+            .consumeSeconds(1.6f)
+            .onConsume(new ApplyStatusEffectsConsumeEffect(
+                    new MobEffectInstance(MobEffects.INVISIBILITY, 2400, 0), 1.0f))
+            .onConsume(new ApplyStatusEffectsConsumeEffect(
+                    new MobEffectInstance(MobEffects.SPEED, 1200, 0), 1.0f))
+            .build();
+
+    /** Cinder fang + hops — the pack's fury in a bottle. */
+    public static final Consumable HOUNDSBLOOD_ELIXIR = Consumables.defaultDrink()
+            .consumeSeconds(1.6f)
+            .onConsume(new ApplyStatusEffectsConsumeEffect(
+                    new MobEffectInstance(MobEffects.STRENGTH, 2400, 0), 1.0f))
+            .onConsume(new ApplyStatusEffectsConsumeEffect(
+                    new MobEffectInstance(MobEffects.SPEED, 2400, 0), 1.0f))
+            .build();
+
+    /** Hag ichor + fairy dust — foul to brew, kind to the blood. */
+    public static final Consumable WITCHBANE_ELIXIR = Consumables.defaultDrink()
+            .consumeSeconds(1.6f)
+            .onConsume(new ApplyStatusEffectsConsumeEffect(
+                    new MobEffectInstance(MobEffects.REGENERATION, 1200, 0), 1.0f))
+            .onConsume(new ApplyStatusEffectsConsumeEffect(
+                    new MobEffectInstance(MobEffects.LUCK, 6000, 0), 1.0f))
+            .build();
 }
